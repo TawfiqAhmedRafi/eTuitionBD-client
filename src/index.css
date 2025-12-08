@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Sora:wght@100..800&display=swap");
+@import "tailwindcss";
+@plugin "daisyui";
+@tailwind utilities;
+@plugin "daisyui/theme" {
+  name: "etuitionbd_dark";
+
+  /* Brand */
+  --color-primary: #1e40af;
+  --color-secondary: #06b6d4;
+  --color-accent: #06b6d4;
+
+  /* Backgrounds */
+  --color-base-100: #0b1120; /* main bg */
+  --color-base-200: #1e293b; /* card */
+  --color-base-300: #0f172a; /* deep surface */
+
+  /* Text */
+  --color-neutral: #f1f5f9;
+  --color-primary-content: #ffffff;
+  --color-secondary-content: #ffffff;
+  --color-accent-content: #ffffff;
+  --color-base-content: #cbd5e1;
+  --color-neutral-content: #64748b;
+
+  /* Semantic */
+  --color-info: #38bdf8;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+@plugin "daisyui/theme" {
+  name: "etuitionbd_light";
+  default: true;
+
+  /* Brand */
+  --color-primary: #1e40af;
+  --color-secondary: #06b6d4;
+  --color-accent: #06b6d4;
+
+  /* Backgrounds */
+  --color-base-100: #f1f5f9; /* page background */
+  --color-base-200: #ffffff; /* cards */
+  --color-base-300: #e2e8f0; /* borders */
+
+  /* Text */
+  --color-neutral: #0f172a;
+  --color-primary-content: #ffffff;
+  --color-secondary-content: #ffffff;
+  --color-accent-content: #ffffff;
+  --color-base-content: #334155;
+  --color-neutral-content: #334155;
+
+  /* Semantic */
+  --color-info: #3b82f6;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+@layer components {
+  /* Gradient Primary Button */
+  .btn-gradient {
+    @apply text-white font-semibold rounded-lg shadow-md border-none;
+    background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .btn-gradient:hover {
+    background: linear-gradient(135deg, #1e3a8a 0%, #22c7e5 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Dark mode gradient refinement */
+  [data-theme="dark"] .btn-gradient {
+    background: linear-gradient(135deg, #3154ca 0%, #22c7e5 100%);
+  }
+
+  [data-theme="dark"] .btn-gradient:hover {
+    background: linear-gradient(135deg, #2a4dba 0%, #35d3f6 100%);
+  }
+}
+
+.jakarta {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+.outfit {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+}
+.sora {
+  font-family: "Sora", sans-serif;
+  font-optical-sizing: auto;
+}
