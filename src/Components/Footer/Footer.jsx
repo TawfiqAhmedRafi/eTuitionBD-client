@@ -2,6 +2,7 @@ import React from "react";
 import { FaFacebookF, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Logo from "../Logo/Logo";
+import { Link } from "react-router";
 
 const Footer = () => {
   return (
@@ -11,9 +12,11 @@ const Footer = () => {
           <aside className="flex flex-col items-center relative">
             {/* Logo container */}
             <div className="md:relative -mt-4 w-32 h-32">
-              <div className="md:absolute inset-0 flex justify-center items-center">
+              <Link to='/'> <div className="md:absolute inset-0 flex justify-center items-center">
+                
                 <Logo width="100%" height="100%" scale={1.8} />
-              </div>
+              </div></Link>
+             
             </div>
 
             {/* Paragraph right below */}
@@ -35,10 +38,10 @@ const Footer = () => {
           {/* Company */}
           <nav className="flex flex-col gap-2">
             <h6 className="footer-title">Company</h6>
-            <a className="link link-hover">About Us</a>
+            <Link to='/aboutUs' className="link link-hover">About Us</Link>
             <a className="link link-hover">Blog</a>
             <a className="link link-hover">Careers</a>
-            <a className="link link-hover">Contact</a>
+            <Link to='/contact' className="link link-hover">Contact</Link>
           </nav>
 
           {/* Legal */}
