@@ -36,7 +36,7 @@ const LatestTutors = () => {
   }, []);
 
   return (
-    <section className="py-12 ">
+    <section className="py-10 md:py-12 bg-base-200 rounded-2xl my-10">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader title="Top Tutors This Week" subtitle="Experienced tutors recently joined" right={<a className="text-sm link" href="/tutors">Explore all</a>} />
 

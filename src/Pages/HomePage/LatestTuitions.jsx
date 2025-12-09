@@ -30,7 +30,7 @@ const LatestTuitions = () => {
   }, []);
 
   return (
-    <section className="py-12 max-w-7xl mx-auto px-6">
+    <section className="py-10 md:py-12 bg-base-200 rounded-2xl max-w-7xl mx-auto px-6">
       <SectionHeader title="Latest Tuition Posts" subtitle="Recently posted and approved tuitions" right={<a className="text-sm link" href="/tuitions">View all</a>} />
 
       {loading ? (
