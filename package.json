@@ -15,6 +15,7 @@
     "axios": "^1.13.2",
     "daisyui": "^5.5.8",
     "date-fns": "^4.1.0",
+    "firebase": "^12.6.0",
     "framer-motion": "^12.23.25",
     "lottie-react": "^2.4.1",
     "react": "^19.2.0",
@@ -23,6 +24,7 @@
     "react-icons": "^5.5.0",
     "react-router": "^7.10.1",
     "react-toastify": "^11.0.5",
+    "sweetalert2": "^11.26.4",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {

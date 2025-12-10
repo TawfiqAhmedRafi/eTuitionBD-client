@@ -60,8 +60,8 @@
 }
 
 
-
-.jakarta {
+@layer utilities {
+  .jakarta {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
 }
@@ -73,8 +73,11 @@
   font-family: "Sora", sans-serif;
   font-optical-sizing: auto;
 }
+}
+
 body {
-  @apply jakarta;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
 }
 body {
   overflow-x: hidden;

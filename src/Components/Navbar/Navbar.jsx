@@ -6,7 +6,9 @@ import GradientButton from "../GradientButton/GradientButton";
 const Navbar = () => {
   const getLinkClass = ({ isActive }) =>
     `px-3 py-2 rounded-3xl font-medium  ${
-      isActive ? "bg-primary text-white" : "text-base-content transition-transform duration-200 hover:-translate-y-1 hover:scale-105"
+      isActive
+        ? "bg-primary text-white"
+        : "text-base-content transition-transform duration-200 hover:-translate-y-1 hover:scale-105"
     }`;
   const links = (
     <>
@@ -66,12 +68,16 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end hidden md:flex gap-5">
-        <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-          Login
-        </GradientButton>
-        <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-          Register
-        </GradientButton>
+        <Link to="/login">
+          <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+            Login
+          </GradientButton>
+        </Link>
+        <Link to="/register">
+          <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+            Register
+          </GradientButton>
+        </Link>
       </div>
       <div className="navbar-end dropdown dropdown-end relative md:hidden">
         <label tabIndex={0} className="outline-0 shadow-none">
@@ -94,12 +100,18 @@ const Navbar = () => {
     "
         >
           <div className="flex flex-col justify-center gap-3 w-full px-2">
-            <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-          Login
-        </GradientButton>
-        <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-          Register
-        </GradientButton>
+            <Link to="/login">
+              {" "}
+              <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+                Login
+              </GradientButton>
+            </Link>
+            <Link to="/register">
+              {" "}
+              <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+                Register
+              </GradientButton>
+            </Link>
           </div>
         </ul>
       </div>
