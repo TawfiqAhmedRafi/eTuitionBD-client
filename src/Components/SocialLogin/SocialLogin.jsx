@@ -3,13 +3,17 @@ import { FcGoogle } from "react-icons/fc";
 import AccentGradientButton from "../GradientButton/AccentGradientButton";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router";
 const SocialLogin = () => {
   const { googleSignIn } = useAuth();
+    const navigate = useNavigate();
+  const location = useLocation();
   const handleGoogle = () => {
     return googleSignIn()
       .then((result) => {
         toast.success("Google sign-in successful!");
         console.log(result.user);
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         toast.error(`Google sign-in failed: ${error.message}`);

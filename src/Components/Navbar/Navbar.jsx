@@ -3,14 +3,28 @@ import { Link, NavLink } from "react-router";
 import logoImg from "../../assets/logo.png";
 import GradientButton from "../GradientButton/GradientButton";
 import AccentGradientButton from "../GradientButton/AccentGradientButton";
+import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const { user, logOut, loading } = useAuth();
   const getLinkClass = ({ isActive }) =>
     `px-3 py-2 rounded-3xl font-medium  ${
       isActive
         ? "bg-primary text-white"
         : "text-base-content transition-transform duration-200 hover:-translate-y-1 hover:scale-105"
     }`;
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast("logged out succesfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const links = (
     <>
       <NavLink to="/" className={getLinkClass}>
@@ -79,18 +93,43 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
-      <div className="navbar-end hidden md:flex gap-5">
-        <Link to="/login">
-          <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-            Login
-          </GradientButton>
-        </Link>
-        <Link to="/register">
-          <AccentGradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-            Register
-          </AccentGradientButton>
-        </Link>
+      <div className="navbar-end">
+        <div className=" hidden md:flex gap-5">
+          {loading ? (
+            <span className="loading loading-bars text-primary loading-xl"></span>
+          ) : user ? (
+            <>
+              <div
+                className="tooltip tooltip-bottom tooltip-secondary font-semibold "
+                data-tip={user.displayName}
+              >
+                <img
+                  src={user.photoURL}
+                  alt="User"
+                  className="w-10 h-10 rounded-full cursor-pointer"
+                />
+              </div>
+              <GradientButton onClick={handleLogOut} className="btn ">
+                Log Out
+              </GradientButton>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+                  Login
+                </GradientButton>
+              </Link>
+              <Link to="/register">
+                <AccentGradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+                  Register
+                </AccentGradientButton>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
+
       <div className="navbar-end dropdown dropdown-end relative md:hidden">
         <label tabIndex={0} className="outline-0 shadow-none">
           <GradientButton>Menu</GradientButton>
@@ -111,20 +150,51 @@ const Navbar = () => {
             rounded-box
             "
         >
-          <div className="flex flex-col justify-center gap-3 w-full px-2">
-            <Link to="/login">
+          {loading ? (
+            <span className="loading loading-bars text-primary loading-xl"></span>
+          ) : user ? (
+            <>
               {" "}
-              <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-                Login
-              </GradientButton>
-            </Link>
-            <Link to="/register">
-              {" "}
-              <AccentGradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
-                Register
-              </AccentGradientButton>
-            </Link>
-          </div>
+              <div className="flex flex-col justify-center items-center gap-3">
+                <div
+                  className="tooltip tooltip-left tooltip-secondary font-semibold fredoka-font "
+                  data-tip={user.displayName}
+                >
+                  <img
+                    src={user.photoURL}
+                    alt="User"
+                    className="  w-10 h-10 rounded-full cursor-pointer "
+                  />
+                </div>
+                <GradientButton
+                  onClick={handleLogOut}
+                  className="btn m-0.5 outline-0 shadow-none"
+                >
+                  Logout
+                </GradientButton>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col justify-center gap-3 w-full px-2">
+                <Link to="/login">
+                  {" "}
+                  <GradientButton className="transition-transform w-full duration-200 hover:-translate-y-1 ">
+                    Login
+                  </GradientButton>
+                </Link>
+                <Link to="/register">
+                  {" "}
+                  <AccentGradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+                    Register
+                  </AccentGradientButton>
+                </Link>
+              </div>
+            </>
+          )}
+          {/* <div className="flex flex-col justify-center gap-3 w-full px-2">
+           
+          </div> */}
         </ul>
       </div>
 
