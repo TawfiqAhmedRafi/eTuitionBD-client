@@ -5,6 +5,7 @@ import AboutUs from "../Pages/AboutUs/AboutUs";
 import Contact from "../Pages/Contact/Contact";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/AuthPages/Login/Login";
+import Register from "../Pages/AuthPages/Register/Register";
 
 export  const router = createBrowserRouter([
   {
@@ -32,7 +33,11 @@ export  const router = createBrowserRouter([
         {
           path : 'login',
           Component: Login
-        }
+        },
+        {
+          path : 'register',
+          Component: Register
+        },
     ]
   }
 ]);
