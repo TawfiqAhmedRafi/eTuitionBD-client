@@ -3,18 +3,23 @@
 @plugin "daisyui";
 @tailwind utilities;
 @plugin "daisyui/theme" {
+  name: "etuitionbd_light";
+  default: true;
+}
+@plugin "daisyui/theme" {
   name: "etuitionbd_dark";
 
   /* Brand */
-  --color-primary: #1e40af;
-  --color-secondary: #0891b2;
-  --color-accent: #f59e0b;
+  --color-primary: #0043c1;
+  --color-secondary: #0297f3;
+  --color-accent: #11c4dc;
+  /* --color-authBg : #162447  */
 
   /* Backgrounds */
-  --color-base-100: #0b1120; /* main bg */
-  --color-base-200: #1e293b; /* card */
-  --color-base-300: #0f172a; /* deep surface */
-
+  --color-base-100: #0b1120;
+  --color-base-200: #0b1b37; /* use your logo navy */
+  --color-base-300: #1e293b;
+  --color-base-400: #162447; /* auth page bg */
   /* Text */
   --color-neutral: #f1f5f9;
   --color-primary-content: #ffffff;
@@ -35,14 +40,17 @@
   default: true;
 
   /* Brand */
-  --color-primary: #1e40af;
-  --color-secondary: #0891b2;
-  --color-accent: #f59e0b;
+  --color-primary: #0043c1;
+  --color-secondary: #0297f3;
+  --color-accent: #11c4dc;
+  
+   /* --color-authBg : #e8f1ff */
 
   /* Backgrounds */
   --color-base-100: #f1f5f9; /* page background */
   --color-base-200: #ffffff; /* cards */
   --color-base-300: #e2e8f0; /* borders */
+  --color-base-400: #e8f1ff; /* auth page bg */
 
   /* Text */
   --color-neutral: #0f172a;
@@ -59,20 +67,19 @@
   --color-error: #ef4444;
 }
 
-
 @layer utilities {
   .jakarta {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-optical-sizing: auto;
-}
-.outfit {
-  font-family: "Outfit", sans-serif;
-  font-optical-sizing: auto;
-}
-.sora {
-  font-family: "Sora", sans-serif;
-  font-optical-sizing: auto;
-}
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+  }
+  .outfit {
+    font-family: "Outfit", sans-serif;
+    font-optical-sizing: auto;
+  }
+  .sora {
+    font-family: "Sora", sans-serif;
+    font-optical-sizing: auto;
+  }
 }
 
 body {

@@ -14,14 +14,15 @@ const AccentGradientButton = ({
         px-5 py-2 rounded-lg outfit font-semibold text-white
         transition-all duration-300 shadow-md hover:shadow-xl active:scale-95
         border-none
+        text-center
 
-        /* Light mode: warm amber → golden yellow */
-        bg-gradient-to-br from-[#f59e0b] to-[#fbbf24]
-        hover:from-[#d97706] hover:to-[#fcd34d]
+        /* Light mode: accent → secondary */
+        bg-linear-to-br from-[#11c4dc] to-[#0297f3]
+        hover:from-[#0fb4cc] hover:to-[#04a2dd]
 
-        /* Dark mode: deeper accented gold */
-        dark:from-[#b46f0a] dark:to-[#e0a411]
-        dark:hover:from-[#9a5f08] dark:hover:to-[#f5bf26]
+        /* Dark mode: deeper aqua → primary */
+        dark:from-[#0b1b37] dark:to-[#11c4dc]
+        dark:hover:from-[#11274f] dark:hover:to-[#17d3ef]
 
         ${className}
       `}

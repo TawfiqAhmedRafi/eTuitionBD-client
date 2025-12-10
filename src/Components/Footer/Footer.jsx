@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           <aside className="flex flex-col items-center relative">
             {/* Logo container */}
-            <div className="md:relative -mt-4 w-32 h-32">
+            <div className="md:relative mt-7 w-32 h-32">
               <Link to='/'> <div className="md:absolute inset-0 flex justify-center items-center">
                 
                 <Logo width="100%" height="100%" scale={1.8} />

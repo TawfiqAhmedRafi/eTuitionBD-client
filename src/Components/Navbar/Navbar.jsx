@@ -2,6 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router";
 import logoImg from "../../assets/logo.png";
 import GradientButton from "../GradientButton/GradientButton";
+import AccentGradientButton from "../GradientButton/AccentGradientButton";
 
 const Navbar = () => {
   const getLinkClass = ({ isActive }) =>
@@ -60,7 +61,18 @@ const Navbar = () => {
         <Link to="/" className=" text-xl">
           <div className="flex  justify-center items-center">
             <img src={logoImg} alt="Logo" className="w-12 h-12" />
-            <p className="font-bold ">eTuitionBD</p>
+            <p
+              className="
+              font-bold 
+              bg-linear-to-r 
+                from-[#0043c1] via-[#11c4dc] to-[#0297f3]
+              dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]
+              bg-clip-text 
+              text-transparent
+  "
+            >
+              ETUITIONBD
+            </p>
           </div>
         </Link>
       </div>
@@ -74,9 +86,9 @@ const Navbar = () => {
           </GradientButton>
         </Link>
         <Link to="/register">
-          <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+          <AccentGradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
             Register
-          </GradientButton>
+          </AccentGradientButton>
         </Link>
       </div>
       <div className="navbar-end dropdown dropdown-end relative md:hidden">
@@ -87,17 +99,17 @@ const Navbar = () => {
         <ul
           tabIndex={0}
           className="
-      dropdown-content
-      absolute
-      top-full
-      right-0
-      mt-2
-      menu
-      p-2
-      shadow
-      bg-base-100
-      rounded-box
-    "
+            dropdown-content
+            absolute
+            top-full
+            right-0
+            mt-2
+            menu
+            p-2
+            shadow
+            bg-base-100
+            rounded-box
+            "
         >
           <div className="flex flex-col justify-center gap-3 w-full px-2">
             <Link to="/login">
@@ -108,9 +120,9 @@ const Navbar = () => {
             </Link>
             <Link to="/register">
               {" "}
-              <GradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
+              <AccentGradientButton className="transition-transform duration-200 hover:-translate-y-1 ">
                 Register
-              </GradientButton>
+              </AccentGradientButton>
             </Link>
           </div>
         </ul>

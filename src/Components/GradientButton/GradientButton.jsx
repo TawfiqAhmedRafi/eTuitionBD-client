@@ -11,17 +11,17 @@ const GradientButton = ({
       type={type}
       onClick={onClick}
       className={`
-        px-5 py-2 rounded-lg outfit font-semibold text-white 
+        px-5 py-2 rounded-lg outfit font-semibold text-white
         transition-all duration-300 shadow-md hover:shadow-xl active:scale-95
         border-none
 
-        /* Light mode gradient */
-        bg-linear-to-br from-[#1e40af] to-[#0ea5e9]
-        hover:from-[#1e3a8a] hover:to-[#38bdf8]
+        /* Light mode: primary → secondary */
+        bg-linear-to-br from-[#0059ed] to-[#0297f3]
+        hover:from-[#004ed5] hover:to-[#02a3e2]
 
-        /* Dark mode gradient */
-        dark:from-[#3154ca] dark:to-[#22c7e5]
-        dark:hover:from-[#2a4dba] dark:hover:to-[#35d3f6]
+        /* Dark mode: deep navy → primary */
+        dark:from-[#0b1b37] dark:to-[#0059ed]
+        dark:hover:from-[#0f234a] dark:hover:to-[#0276ff]
 
         ${className}
       `}
