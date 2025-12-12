@@ -6,6 +6,8 @@ import { useLocation, useNavigate, Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import GradientButton from "../../../Components/GradientButton/GradientButton";
 import axios from "axios";
+import useAxios from "../../../hooks/useAxios";
+import SocialRegister from "../../../Components/SocialRegister/SocialRegister";
 
 const Register = () => {
   const {
@@ -17,8 +19,9 @@ const Register = () => {
   const { registerUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosInstance = useAxios();
 
-  const handleRegistration = (data,e) => {
+  const handleRegistration = (data, e) => {
     e.preventDefault();
     const profileImg = data.photo[0];
     registerUser(data.email, data.password)
@@ -33,7 +36,7 @@ const Register = () => {
 
         axios.post(image_API_URL, formData).then((res) => {
           const photoURL = res.data.data.url;
-         
+
           // update user profile
           const userProfile = {
             displayName: data.name,
@@ -41,7 +44,22 @@ const Register = () => {
           };
           updateUserProfile(userProfile)
             .then(() => {
-              navigate(location.state || "/");
+              axiosInstance
+                .post("/users", {
+                  name: data.name,
+                  email: data.email,
+                  password: data.password,
+                  role: data.role,
+                  phone: data.phone,
+                  photoURL: photoURL,
+                })
+                .then((res) => {
+                  console.log("Backend saved:", res.data);
+                  navigate(location.state || "/");
+                })
+                .catch((err) => {
+                  console.error("Backend error:", err);
+                });
             })
             .catch((error) => {
               console.log(error);
@@ -54,12 +72,16 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-4xl font-bold  bg-linear-to-r 
+    <div className="my-20">
+      <h2
+        className="text-4xl font-bold  bg-linear-to-r 
                 from-[#0043c1] via-[#11c4dc] to-[#0297f3]
               dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]
               bg-clip-text 
-              text-transparent">Create an Account</h2>
+              text-transparent"
+      >
+        Create an Account
+      </h2>
 
       <form onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
@@ -86,6 +108,31 @@ const Register = () => {
           {errors.email?.type === "required" && (
             <p className="text-red-500">Photo is Required</p>
           )}
+          {/* Role Selection */}
+          <label className="label">Register As</label>
+          <div className="flex gap-4 mb-3">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                value="student"
+                {...register("role", { required: true })}
+                className="radio radio-primary"
+              />
+              <span>Student</span>
+            </label>
+
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                value="tutor"
+                {...register("role", { required: true })}
+                className="radio radio-primary"
+              />
+              <span>Tutor</span>
+            </label>
+          </div>
+
+          {errors.role && <p className="text-red-500">Please select a role</p>}
           {/* email */}
           <label className="label">Email</label>
           <input
@@ -93,6 +140,17 @@ const Register = () => {
             {...register("email", { required: true })}
             className="input w-full"
             placeholder="Email"
+          />
+          {errors.email?.type === "required" && (
+            <p className="text-red-500">Email is Required</p>
+          )}
+          {/* phone */}
+          <label className="label">Phone Number </label>
+          <input
+            type="text"
+            {...register("phone", { required: true })}
+            className="input w-full"
+            placeholder="Phone Number"
           />
           {errors.email?.type === "required" && (
             <p className="text-red-500">Email is Required</p>
@@ -131,7 +189,9 @@ const Register = () => {
             </p>
           )}
 
-          <GradientButton type="submit" className="btn btn-primary mt-4">Register</GradientButton>
+          <GradientButton type="submit" className="btn btn-primary mt-4">
+            Register
+          </GradientButton>
         </fieldset>
         <p>
           Already have an account?
@@ -143,8 +203,8 @@ const Register = () => {
             Login
           </Link>{" "}
         </p>
-        <SocialLogin></SocialLogin>
       </form>
+      <SocialRegister></SocialRegister>
     </div>
   );
 };
