@@ -6,6 +6,7 @@ import Contact from "../Pages/Contact/Contact";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/AuthPages/Login/Login";
 import Register from "../Pages/AuthPages/Register/Register";
+import ApplyTutors from "../Pages/ApplyTutors/ApplyTutors";
 
 export  const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export  const router = createBrowserRouter([
         {
             path : "contact",
             Component : Contact
+        },
+        {
+            path : "apply-tutor",
+            Component : ApplyTutors
         }
     ]
   },
