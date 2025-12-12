@@ -7,7 +7,10 @@ import GradientButton from "../../Components/GradientButton/GradientButton";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+
 const ApplyTutor = () => {
+
+ ;
   const { register, handleSubmit } = useForm();
   const axiosInstance = useAxios();
   const { user } = useAuth();
@@ -46,6 +49,7 @@ const ApplyTutor = () => {
         experienceYears: Number(data.experienceYears) || 0,
         experienceMonths: Number(data.experienceMonths) || 0,
         subjects,
+        district: data.district,
         location: data.location,
         salary: Number(data.salary),
         mode: data.mode,
@@ -58,7 +62,7 @@ const ApplyTutor = () => {
             position: "center",
             icon: "success",
             title: "Your tutor application has been submitted!",
-            text: "Our moderator will review it within 7 days.",
+            text: "Our team will review it within 7 days.",
             showConfirmButton: false,
             timer: 1800,
           });
@@ -68,204 +72,239 @@ const ApplyTutor = () => {
   };
 
   return (
-    <div className="bg-base-200 my-16 py-6 rounded-2xl px-4">
-      <div className="bg-base-100 p-10 md:p-20 rounded-2xl max-w-7xl mx-auto shadow-sm">
-        {/* Header */}
-        <h2 className="text-4xl py-3 font-bold text-base-content">
-          Apply to Become a Tutor
-        </h2>
-        <p className="text-sm pb-2 text-base-content">
-          Help students learn and grow with your skills. Submit your application
-          with your qualifications, experience and preferred teaching details.
-        </p>
+    <div className="py-16">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Main Container */}
+        <div
+          className="
+        bg-base-100/60 
+        backdrop-blur-xl 
+        rounded-3xl 
+        shadow-xl 
+        border border-base-300/40
+        p-6 md:p-12
+      "
+        >
+          {/* Header */}
+          <div className="text-center mb-10">
+            <h2
+              className=" text-4xl
+        font-bold 
+              bg-linear-to-r 
+                from-[#0043c1] via-[#11c4dc] to-[#0297f3]
+              dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]
+              bg-clip-text 
+              text-transparent
+          "
+            >
+              Become a Verified Tutor
+            </h2>
 
-        <div className="border-t border-dashed my-6"></div>
+            <p className="text-base text-base-content/80 mt-2 max-w-xl mx-auto">
+              Share your skills and help thousands of students learn better.
+              Submit your teaching profile to join our verified tutor community.
+            </p>
+          </div>
 
-        {/* Two-column layout */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-12">
-          {/* Form Section */}
-          <form
-            onSubmit={handleSubmit(handleApplyTutor)}
-            className="text-base-content flex-1 w-full"
-          >
-            <fieldset className="fieldset w-full">
-              <h4 className="text-2xl font-bold mb-4 text-base-content">
-                Basic Information
-              </h4>
+          {/* Content Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* FORM */}
+            <form
+              onSubmit={handleSubmit(handleApplyTutor)}
+              className="space-y-6 text-base-content"
+            >
+              {/* Basic Card */}
+              <div className="p-6 bg-base-200/50 rounded-2xl border border-base-300/40">
+                <h3 className="text-xl font-semibold mb-4">
+                  Basic Information
+                </h3>
 
-              {/* Name */}
-              <label className="label text-base-content">Full Name</label>
-              <input
-                type="text"
-                {...register("name")}
-                className="input w-full"
-                defaultValue={user?.displayName}
-                readOnly
-              />
+                <div className="space-y-3">
+                  <div>
+                    <label className="font-medium text-sm">Full Name</label>
+                    <input
+                      type="text"
+                      {...register("name")}
+                      defaultValue={user?.displayName}
+                      readOnly
+                      className="input input-bordered w-full mt-1"
+                    />
+                  </div>
 
-              {/* Email */}
-              <label className="label mt-4 text-base-content">Email</label>
-              <input
-                type="email"
-                {...register("email")}
-                className="input w-full"
-                defaultValue={user?.email}
-                readOnly
-              />
+                  <div>
+                    <label className="font-medium text-sm">Email</label>
+                    <input
+                      type="email"
+                      {...register("email")}
+                      defaultValue={user?.email}
+                      readOnly
+                      className="input input-bordered w-full mt-1"
+                    />
+                  </div>
 
-              {/* Qualification */}
-              <label className="label mt-4 text-base-content">
-                Qualification
-              </label>
-              <select {...register("qualification")} className="select w-full">
-                <option>Undergraduate (Running)</option>
-                <option>Undergraduate (Completed)</option>
-                <option>BSc (Engineering)</option>
-                <option>BSc (Engineering Hons)</option>
-                <option>BSc (Hons)</option>
-                <option>BA (Hons)</option>
-                <option>MBBS (Running)</option>
-                <option>MBBS (Completed)</option>
-                <option>BDS (Running)</option>
-                <option>BDS (Completed)</option>
-                <option>MSc</option>
-                <option>MA</option>
-                <option>BBA</option>
-                <option>MBA</option>
-              </select>
+                  <div>
+                    <label className="font-medium text-sm">Qualification</label>
+                    <select
+                      {...register("qualification")}
+                      className="select select-bordered w-full mt-1"
+                    >
+                      <option>Undergraduate (Running)</option>
+                      <option>Undergraduate (Completed)</option>
+                      <option>BSc Engineering</option>
+                      <option>BBA</option>
+                      <option>MBA</option>
+                      <option>MSc</option>
+                      <option>MBBS</option>
+                    </select>
+                  </div>
 
-              {/* Institution */}
-              <label className="label mt-4 text-base-content">
-                Institution
-              </label>
-              <input
-                type="text"
-                {...register("institution")}
-                className="input w-full"
-                placeholder="e.g. University of Dhaka"
-              />
-              {/* ID Card Upload */}
-              <label className="label mt-4 text-base-content">
-                Upload Student ID Card
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                {...register("idCard")}
-                className="file-input file-input-secondary w-full"
-                placeholder="Your ID Card"
-              />
+                  <div>
+                    <label className="font-medium text-sm">Institution</label>
+                    <input
+                      type="text"
+                      {...register("institution")}
+                      placeholder="e.g. RUET, BUET, DU"
+                      className="input input-bordered w-full mt-1"
+                    />
+                  </div>
 
-              {/* Experience */}
-              <label className="label mt-4 text-base-content">
-                Teaching Experience
-              </label>
-              <div className="flex gap-4">
-                <div className="flex-1">
+                  <div>
+                    <label className="font-medium text-sm">
+                      Upload Student ID
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      {...register("idCard")}
+                      className="file-input file-input-secondary w-full mt-1"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Experience + Subjects */}
+              <div className="p-6 bg-base-200/50 rounded-2xl border border-base-300/40">
+                <h3 className="text-xl font-semibold mb-4">
+                  Experience & Subjects
+                </h3>
+                <label className="label mt-2 text-base-content  font-medium text-sm">
+                  Teaching Experience
+                </label>
+                <div className="grid grid-cols-2 gap-4">
                   <input
                     type="number"
-                    {...register("experienceYears", { valueAsNumber: true })}
-                    className="input w-full"
+                    {...register("experienceYears")}
                     placeholder="Years"
+                    className="input input-bordered w-full"
                     min={0}
                   />
-                </div>
-                <div className="flex-1">
+
                   <input
                     type="number"
-                    {...register("experienceMonths", { valueAsNumber: true })}
-                    className="input w-full"
+                    {...register("experienceMonths")}
                     placeholder="Months"
+                    className="input input-bordered w-full"
                     min={0}
                     max={11}
                   />
                 </div>
-              </div>
 
-              {/* Subjects */}
-              <label className="label mt-4 text-base-content">Subjects</label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  className="input flex-1 placeholder:text-base-content"
-                  placeholder="Add subject"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                />
-                <button onClick={addSubject} className="btn btn-secondary">
-                  Add
-                </button>
-              </div>
+                {/* Subjects */}
+                <label className="label mt-4 text-base-content font-medium text-sm">Subjects</label>
+                <div className="flex mt-2 gap-2">
+                  <input
+                    type="text"
+                    className="input flex-1 placeholder:text-base-content"
+                    placeholder="Add subject"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                  />
+                  <button onClick={addSubject} className="btn btn-secondary">
+                    Add
+                  </button>
+                </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mt-2">
-                {subjects.map((s) => (
-                  <span
-                    key={s}
-                    className="px-3 py-1 rounded-full bg-secondary text-base-content flex items-center gap-2"
-                  >
-                    {s}
-                    <button
-                      className="text-xs text-base-content"
-                      onClick={() => removeSubject(s)}
-                      type="button"
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {subjects.map((s) => (
+                    <span
+                      key={s}
+                      className="px-3 py-1 rounded-full bg-secondary text-base-content flex items-center gap-2"
                     >
-                      ✕
-                    </button>
-                  </span>
-                ))}
+                      {s}
+                      <button
+                        className="text-xs text-base-content"
+                        onClick={() => removeSubject(s)}
+                        type="button"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              {/* Location */}
-              <label className="label mt-4 text-base-content">
-                Preferred Location
-              </label>
-              <input
-                type="text"
-                {...register("location")}
-                className="input w-full"
-                placeholder="e.g. Dhanmondi, Mirpur, Online"
+              {/* Preferences */}
+              <div className="p-6 bg-base-200/50 rounded-2xl border border-base-300/40">
+                <h3 className="text-xl font-semibold mb-4">Preferences</h3>
+                <label className="label mt-2 text-base-content font-medium text-sm">Location</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    {...register("district")}
+                    placeholder="District"
+                    className="input input-bordered w-full"
+                  
+                  />
+
+                  <input
+                    type="text"
+                    {...register("location")}
+                    placeholder="Area"
+                    className="input input-bordered w-full"
+                  
+                  />
+                </div>
+                
+                <label className="label mt-2 text-base-content font-medium text-sm">Expected Salary</label>
+                <input
+                  type="number"
+                  {...register("salary")}
+                  placeholder="Expected Minimum Salary"
+                  className="input input-bordered w-full mt-3"
+                />
+
+                <label className="label mt-2 text-base-content font-medium text-sm">Teaching Mode</label>
+                <select
+                  {...register("mode")}
+                  className="select select-bordered w-full mt-3"
+                >
+                  <option>Online</option>
+                  <option>Offline</option>
+                  <option>Hybrid</option>
+                </select>
+
+                <label className="label mt-2 text-base-content font-medium text-sm">Bio</label>
+                <textarea
+                  {...register("bio")}
+                  className="textarea textarea-bordered w-full mt-3"
+                  rows={4}
+                  placeholder="Short bio about your teaching style"
+                ></textarea>
+              </div>
+
+              <GradientButton type="submit" className="w-full text-lg py-3">
+                Submit Application
+              </GradientButton>
+            </form>
+
+         
+            <div className="hidden md:flex justify-center items-start">
+              <img
+                src={teacherImg}
+                className="w-[85%] rounded-3xl shadow-2xl"
               />
-
-              {/* Salary */}
-              <label className="label mt-4 text-base-content">
-                Expected Minimum Salary Range (BDT)
-              </label>
-              <input
-                type="number"
-                {...register("salary", { required: true, min: 0 })}
-                className="input w-full"
-                placeholder="e.g. 5000"
-              />
-
-              {/* Teaching Mode */}
-              <label className="label mt-4 text-base-content">
-                Teaching Mode
-              </label>
-              <select {...register("mode")} className="select w-full">
-                <option>Online</option>
-                <option>Offline</option>
-                <option>Hybrid</option>
-              </select>
-
-              {/* Bio */}
-              <label className="label mt-4 text-base-content">Bio</label>
-              <textarea
-                {...register("bio")}
-                className="textarea w-full placeholder:text-base-content"
-                placeholder="Tell us about your teaching style, strengths, and experience"
-              ></textarea>
-            </fieldset>
-
-            {/* Submit */}
-            <GradientButton type="submit" className="w-full mt-6">
-              Submit Application
-            </GradientButton>
-          </form>
-
-          {/* Image section */}
-          <div className="flex-1 hidden md:block">
-            <img src={teacherImg} alt="tutorImg" />
+            </div>
           </div>
         </div>
       </div>

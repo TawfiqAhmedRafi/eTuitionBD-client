@@ -27,7 +27,8 @@ export  const router = createBrowserRouter([
         },
         {
             path : "apply-tutor",
-            Component : ApplyTutors
+            Component : ApplyTutors,
+
         }
     ]
   },
