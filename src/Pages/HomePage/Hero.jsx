@@ -23,7 +23,8 @@ const Hero = () => {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-4">
-            <GradientButton className="btn-lg">Post a Tuition</GradientButton>
+            <Link to='/post-tuition'> <GradientButton className="btn-lg">Post a Tuition</GradientButton></Link>
+           
             <AccentGradientButton className="btn-lg">
               Browse Tuitions
             </AccentGradientButton>
@@ -31,12 +32,10 @@ const Hero = () => {
               className="
               btn btn-outline btn-md rounded-lg font-semibold outfit
               border-primary text-primary
-              dark:border-primary dark:text-primary-content
               transition-all duration-300
               hover:text-white 
               hover:bg-primary
-              "
-            >
+              ">
               Apply to be a Tutor
             </Link>
           </div>

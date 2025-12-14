@@ -7,10 +7,7 @@ import GradientButton from "../../Components/GradientButton/GradientButton";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-
 const ApplyTutor = () => {
-
- ;
   const { register, handleSubmit } = useForm();
   const axiosInstance = useAxios();
   const { user } = useAuth();
@@ -49,6 +46,7 @@ const ApplyTutor = () => {
         experienceYears: Number(data.experienceYears) || 0,
         experienceMonths: Number(data.experienceMonths) || 0,
         subjects,
+        time : data.time,
         district: data.district,
         location: data.location,
         salary: Number(data.salary),
@@ -114,12 +112,12 @@ const ApplyTutor = () => {
               className="space-y-6 text-base-content"
             >
               {/* Basic Card */}
-              <div className="p-6 bg-base-200/50 rounded-2xl border border-base-300/40">
+              <div className="p-6 bg-base-200/50  rounded-2xl border border-base-300/40">
                 <h3 className="text-xl font-semibold mb-4">
                   Basic Information
                 </h3>
 
-                <div className="space-y-3">
+                <div className="space-y-3 ">
                   <div>
                     <label className="font-medium text-sm">Full Name</label>
                     <input
@@ -183,7 +181,7 @@ const ApplyTutor = () => {
               </div>
 
               {/* Experience + Subjects */}
-              <div className="p-6 bg-base-200/50 rounded-2xl border border-base-300/40">
+              <div className="p-6 bg-base-200/50 rounded-2xl  border border-base-300/40">
                 <h3 className="text-xl font-semibold mb-4">
                   Experience & Subjects
                 </h3>
@@ -210,7 +208,9 @@ const ApplyTutor = () => {
                 </div>
 
                 {/* Subjects */}
-                <label className="label mt-4 text-base-content font-medium text-sm">Subjects</label>
+                <label className="label mt-4 text-base-content font-medium text-sm">
+                  Subjects
+                </label>
                 <div className="flex mt-2 gap-2">
                   <input
                     type="text"
@@ -247,14 +247,15 @@ const ApplyTutor = () => {
               {/* Preferences */}
               <div className="p-6 bg-base-200/50 rounded-2xl border border-base-300/40">
                 <h3 className="text-xl font-semibold mb-4">Preferences</h3>
-                <label className="label mt-2 text-base-content font-medium text-sm">Location</label>
+                <label className="label mt-2 text-base-content font-medium text-sm">
+                  Location
+                </label>
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="text"
                     {...register("district")}
                     placeholder="District"
                     className="input input-bordered w-full"
-                  
                   />
 
                   <input
@@ -262,19 +263,38 @@ const ApplyTutor = () => {
                     {...register("location")}
                     placeholder="Area"
                     className="input input-bordered w-full"
-                  
                   />
                 </div>
-                
-                <label className="label mt-2 text-base-content font-medium text-sm">Expected Salary</label>
+
+                <label className="label mt-2 text-base-content font-medium text-sm">
+                  Expected Salary
+                </label>
                 <input
                   type="number"
                   {...register("salary")}
                   placeholder="Expected Minimum Salary"
                   className="input input-bordered w-full mt-3"
                 />
+                <label className="label mt-2 text-base-content font-medium text-sm">
+                  Preferred Time
+                </label>
 
-                <label className="label mt-2 text-base-content font-medium text-sm">Teaching Mode</label>
+                <select
+                  {...register("time", { required: true })}
+                  className="select select-bordered w-full mt-3"
+                  defaultValue=""
+                >
+                  <option disabled value="">
+                    Select preferred time
+                  </option>
+                  <option value="morning">Morning</option>
+                  <option value="noon">Noon</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="evening">Evening</option>
+                </select>
+                <label className="label mt-2 text-base-content font-medium text-sm">
+                  Teaching Mode
+                </label>
                 <select
                   {...register("mode")}
                   className="select select-bordered w-full mt-3"
@@ -284,7 +304,9 @@ const ApplyTutor = () => {
                   <option>Hybrid</option>
                 </select>
 
-                <label className="label mt-2 text-base-content font-medium text-sm">Bio</label>
+                <label className="label mt-2 text-base-content font-medium text-sm">
+                  Bio
+                </label>
                 <textarea
                   {...register("bio")}
                   className="textarea textarea-bordered w-full mt-3"
@@ -298,7 +320,6 @@ const ApplyTutor = () => {
               </GradientButton>
             </form>
 
-         
             <div className="hidden md:flex justify-center items-start">
               <img
                 src={teacherImg}

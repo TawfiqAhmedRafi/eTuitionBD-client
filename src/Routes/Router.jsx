@@ -7,6 +7,7 @@ import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/AuthPages/Login/Login";
 import Register from "../Pages/AuthPages/Register/Register";
 import ApplyTutors from "../Pages/ApplyTutors/ApplyTutors";
+import PostTuitions from "../Pages/PostTuition/PostTuitions";
 
 export  const router = createBrowserRouter([
   {
@@ -29,7 +30,12 @@ export  const router = createBrowserRouter([
             path : "apply-tutor",
             Component : ApplyTutors,
 
-        }
+        },
+        {
+            path : "/post-tuition",
+            Component : PostTuitions
+
+        },
     ]
   },
   {

@@ -12,8 +12,8 @@ const Home = () => {
     <div>
       <Hero></Hero>
       <StatsStrip></StatsStrip>
-      {/* <LatestTuitions></LatestTuitions>
-      <LatestTutors></LatestTutors> */}
+      {/* <LatestTuitions></LatestTuitions> */}
+      <LatestTutors></LatestTutors>
       <HowItWorks></HowItWorks>
       <WhyChooseUs></WhyChooseUs>
       <CTASection></CTASection>

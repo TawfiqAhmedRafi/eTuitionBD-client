@@ -17,10 +17,12 @@ const CTASection = () => {
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-            <GradientButton className="btn-wide hover:shadow-lg transition-all duration-300 text-lg">
-              {" "}
-              Post a Tuition
-            </GradientButton>
+            <Link to="/post-tuition">
+              <GradientButton className="btn-wide hover:shadow-lg transition-all duration-300 text-lg">
+                {" "}
+                Post a Tuition
+              </GradientButton>
+            </Link>
 
             <Link to="/apply-tutor">
               <AccentGradientButton className="btn-wide hover:shadow-lg transition-all duration-300 text-lg">
