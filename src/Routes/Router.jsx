@@ -11,6 +11,8 @@ import PostTuitions from "../Pages/PostTuition/PostTuitions";
 import PrivateRoute from "./PrivateRoute";
 import AllTuitions from "../Pages/AllTuitions/AllTuitions";
 import TuitionDetails from "../Pages/TuitionDetails/TuitionDetails";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import DashboardHome from "../Pages/DashboardHome/DashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -44,7 +46,6 @@ export const router = createBrowserRouter([
             <PostTuitions></PostTuitions>
           </PrivateRoute>
         ),
-        
       },
       {
         path: "/all-tuition",
@@ -53,16 +54,14 @@ export const router = createBrowserRouter([
             <AllTuitions></AllTuitions>
           </PrivateRoute>
         ),
-        
       },
       {
         path: "/tuitions/:id",
         element: (
           <PrivateRoute>
-           <TuitionDetails></TuitionDetails>
+            <TuitionDetails></TuitionDetails>
           </PrivateRoute>
         ),
-        
       },
     ],
   },
@@ -79,5 +78,19 @@ export const router = createBrowserRouter([
         Component: Register,
       },
     ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children:[
+      {
+        index : true ,
+        Component: DashboardHome
+      }
+    ]
   },
 ]);

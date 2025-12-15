@@ -42,6 +42,13 @@ const Navbar = () => {
       <NavLink to="/contact" className={getLinkClass}>
         Contact
       </NavLink>
+       {user && (
+        <li className="mr-2">
+          <NavLink className={getLinkClass} to="/dashboard">
+            Dashboard
+          </NavLink>
+        </li>
+      )}
     </>
   );
   return (
