@@ -24,7 +24,7 @@ const LatestTutors = () => {
   } = useQuery({
     queryKey: ["latest-tutors"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/tutors?page=1&limit=6");
+      const res = await axiosInstance.get("/tutors/latest");
       return res.data.tutors || [];
     },
     staleTime: 1000 * 60 * 5,
