@@ -8,48 +8,66 @@ import Login from "../Pages/AuthPages/Login/Login";
 import Register from "../Pages/AuthPages/Register/Register";
 import ApplyTutors from "../Pages/ApplyTutors/ApplyTutors";
 import PostTuitions from "../Pages/PostTuition/PostTuitions";
+import PrivateRoute from "./PrivateRoute";
+import AllTuitions from "../Pages/AllTuitions/AllTuitions";
 
-export  const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
     children: [
-        {
-            index : true,
-            Component: Home
-        },
-        {
-            path : "aboutUs",
-            Component: AboutUs
-        },
-        {
-            path : "contact",
-            Component : Contact
-        },
-        {
-            path : "apply-tutor",
-            Component : ApplyTutors,
-
-        },
-        {
-            path : "/post-tuition",
-            Component : PostTuitions
-
-        },
-    ]
+      {
+        index: true,
+        Component: Home,
+      },
+      {
+        path: "aboutUs",
+        Component: AboutUs,
+      },
+      {
+        path: "contact",
+        Component: Contact,
+      },
+      {
+        path: "apply-tutor",
+        element: (
+          <PrivateRoute>
+            <ApplyTutors></ApplyTutors>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/post-tuition",
+        element: (
+          <PrivateRoute>
+            <PostTuitions></PostTuitions>
+          </PrivateRoute>
+        ),
+        
+      },
+      {
+        path: "/all-tuition",
+        element: (
+          <PrivateRoute>
+            <AllTuitions></AllTuitions>
+          </PrivateRoute>
+        ),
+        
+      },
+    ],
   },
   {
-    path : '/',
+    path: "/",
     Component: AuthLayout,
-    children :[
-        {
-          path : 'login',
-          Component: Login
-        },
-        {
-          path : 'register',
-          Component: Register
-        },
-    ]
-  }
+    children: [
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
+      },
+    ],
+  },
 ]);

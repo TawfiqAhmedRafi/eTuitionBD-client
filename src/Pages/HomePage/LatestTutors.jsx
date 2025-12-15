@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import SectionHeader from "../../Components/SectionHeader/SectionHeader";
 import { motion as MOTION } from "framer-motion";
 import TutorCard from "./TutorCard";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const container = {
   visible: { transition: { staggerChildren: 0.12 } },
@@ -15,8 +15,7 @@ const item = {
 };
 
 const LatestTutors = () => {
-  const axiosInstance = useAxios();
-
+  const axiosSecure = useAxiosSecure();
   const {
     data: tutors = [],
     isLoading,
@@ -24,7 +23,7 @@ const LatestTutors = () => {
   } = useQuery({
     queryKey: ["latest-tutors"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/tutors/latest");
+      const res = await axiosSecure.get("/tutors/latest");
       return res.data.tutors || [];
     },
     staleTime: 1000 * 60 * 5,

@@ -7,7 +7,7 @@ import GradientButton from "../../Components/GradientButton/GradientButton";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const ApplyTutor = () => {
+const ApplyTutors = () => {
   const { register, handleSubmit } = useForm();
   const axiosInstance = useAxios();
   const { user } = useAuth();
@@ -333,4 +333,4 @@ const ApplyTutor = () => {
   );
 };
 
-export default ApplyTutor;
+export default ApplyTutors;

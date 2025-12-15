@@ -49,13 +49,14 @@ const updateUserProfile =(profile)=>{
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
+      setLoading(false); 
+     
     });
     return () => {
       unsubscribe();
     };
   }, []);
-
+ console.log(user)
   const authInfo = {
     user,
     loading,
