@@ -194,7 +194,7 @@ const AllTuitions = () => {
 
                   <div className="divider my-3" />
 
-                  {/* Footer */}
+                  
                   <div className="card-actions justify-between items-center">
                     <span className="text-xs text-neutral-content">
                       Posted {new Date(tuition.postedAt).toLocaleDateString()}

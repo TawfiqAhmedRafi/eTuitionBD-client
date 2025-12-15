@@ -10,6 +10,7 @@ import ApplyTutors from "../Pages/ApplyTutors/ApplyTutors";
 import PostTuitions from "../Pages/PostTuition/PostTuitions";
 import PrivateRoute from "./PrivateRoute";
 import AllTuitions from "../Pages/AllTuitions/AllTuitions";
+import TuitionDetails from "../Pages/TuitionDetails/TuitionDetails";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,15 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AllTuitions></AllTuitions>
+          </PrivateRoute>
+        ),
+        
+      },
+      {
+        path: "/tuitions/:id",
+        element: (
+          <PrivateRoute>
+           <TuitionDetails></TuitionDetails>
           </PrivateRoute>
         ),
         

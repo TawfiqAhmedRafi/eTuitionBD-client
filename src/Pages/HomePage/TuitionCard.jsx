@@ -66,9 +66,9 @@ const TuitionCard = ({ tuition }) => {
           )}
         </div>
 
-        <a className="btn btn-sm btn-primary" href={`/tuitions/${_id}`}>
+        <Link className="btn btn-sm btn-primary" to={`/tuitions/${_id}`}>
           View
-        </a>
+        </Link>
       </div>
     </Link>
   );
