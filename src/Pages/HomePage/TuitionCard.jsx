@@ -1,5 +1,6 @@
 import React from "react";
 import useTimeAgo from "../../hooks/useTimeAgo";
+import { Link } from "react-router";
 
 const TuitionCard = ({ tuition }) => {
   const postedText = useTimeAgo(tuition?.postedAt);
@@ -13,7 +14,7 @@ const TuitionCard = ({ tuition }) => {
     location = "",
     minBudget,
     maxBudget,
-    description = "",
+
     mode,
   } = tuition;
 
@@ -28,7 +29,7 @@ const TuitionCard = ({ tuition }) => {
       : "Negotiable";
 
   return (
-    <article className="card bg-base-100 shadow-md p-5 rounded-lg flex flex-col justify-between">
+    <Link className="card bg-base-100 shadow-md p-5 rounded-lg flex flex-col justify-between">
       {/* Header */}
       <div>
         <div className="flex items-start justify-between gap-2">
@@ -46,10 +47,6 @@ const TuitionCard = ({ tuition }) => {
             Posted {postedText}
           </div>
         )}
-
-        <p className="text-sm text-neutral-content mt-2 line-clamp-3">
-          {description}
-        </p>
       </div>
 
       {/* Footer */}
@@ -73,7 +70,7 @@ const TuitionCard = ({ tuition }) => {
           View
         </a>
       </div>
-    </article>
+    </Link>
   );
 };
 

@@ -1,15 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import useAxios from "../../hooks/useAxios";
+;
 import GradientButton from "../../Components/GradientButton/GradientButton";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import { v4 as uuidv4 } from "uuid";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const PostTuition = () => {
   const { register, handleSubmit, reset } = useForm();
-  const axiosInstance = useAxios();
+
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
   const [subjects, setSubjects] = useState([]);
@@ -30,7 +32,7 @@ const PostTuition = () => {
 
   const mutation = useMutation({
     mutationFn: async (payload) => {
-      const res = await axiosInstance.post("/tuitions", payload);
+      const res = await axiosSecure.post("/tuitions", payload);
       return res.data;
     },
     onSuccess: () => {
@@ -163,6 +165,7 @@ const PostTuition = () => {
                 <option disabled value="">
                   Select preferred time
                 </option>
+                <option value="any">Any</option>
                 <option value="morning">Morning</option>
                 <option value="noon">Noon</option>
                 <option value="afternoon">Afternoon</option>

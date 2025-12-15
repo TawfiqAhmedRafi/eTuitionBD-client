@@ -3,6 +3,7 @@ import SectionHeader from "../../Components/SectionHeader/SectionHeader";
 import TuitionCard from "./TuitionCard";
 import useAxios from "../../hooks/useAxios";
 import { motion as MOTION } from "framer-motion";
+import { Link } from "react-router";
 const container = {
   visible: { transition: { staggerChildren: 0.12 } },
 };
@@ -35,7 +36,7 @@ const LatestTuitions = () => {
       <SectionHeader
         title="Latest Tuition Posts"
         subtitle="Recently posted tuition requests"
-        right={<a className="text-sm link" href="/tuitions">View all</a>}
+        right={<Link className="text-sm link" to="/all-tuition">View all</Link>}
       />
 
       {isLoading ? (

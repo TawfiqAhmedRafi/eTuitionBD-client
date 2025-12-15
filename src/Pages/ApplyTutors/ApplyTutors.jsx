@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import teacherImg from "../../assets/teacher.png";
 import { useForm } from "react-hook-form";
-import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import GradientButton from "../../Components/GradientButton/GradientButton";
 import Swal from "sweetalert2";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const ApplyTutors = () => {
   const { register, handleSubmit } = useForm();
-  const axiosInstance = useAxios();
+  
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
   const [subjects, setSubjects] = useState([]);
@@ -54,7 +55,7 @@ const ApplyTutors = () => {
         bio: data.bio,
       };
       console.log(finalData);
-      axiosInstance.post("/tutors", finalData).then((res) => {
+      axiosSecure.post("/tutors", finalData).then((res) => {
         if (res.data.insertedId) {
           Swal.fire({
             position: "center",
@@ -287,6 +288,7 @@ const ApplyTutors = () => {
                   <option disabled value="">
                     Select preferred time
                   </option>
+                  <option value="any">Any</option>
                   <option value="morning">Morning</option>
                   <option value="noon">Noon</option>
                   <option value="afternoon">Afternoon</option>

@@ -1,99 +1,225 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Pagination from "../../Components/Pagination/Pagination";
+import { Link } from "react-router";
+import GradientButton from "../../Components/GradientButton/GradientButton";
 
 const AllTuitions = () => {
   const axiosSecure = useAxiosSecure();
-  const [tuitions, setTuitions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [subjectInput, setSubjectInput] = useState("");
+  const [locationInput, setLocationInput] = useState("");
+  const [searching, setSearching] = useState(false);
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 9,
+    subject: "",
+    location: "",
+    sortBy: "date",
+    order: "desc",
+  });
 
   useEffect(() => {
-    const fetchTuitions = async () => {
-      try {
-        const res = await axiosSecure.get("/tuitions");
-        setTuitions(res.data.tuitions); 
-      } catch (err) {
-        console.error("Failed to fetch tuitions", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const timer = setTimeout(() => {
+      setFilters((prev) => ({
+        ...prev,
+        subject: subjectInput.trim(),
+        location: locationInput.trim(),
+        page: 1,
+      }));
+      setSearching(false);
+    }, 500);
 
-    fetchTuitions();
-  }, [axiosSecure]);
+    return () => clearTimeout(timer);
+  }, [subjectInput, locationInput]);
 
-  if (loading) {
-    return <div className="p-10 text-center">Loading tuitions...</div>;
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["tuitions", filters],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/tuitions", {
+        params: filters,
+      });
+      return res.data;
+    },
+    keepPreviousData: true,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="p-10 text-center">
+        <progress className="progress progress-primary w-full" />
+      </div>
+    );
   }
 
+  if (isError) {
+    return (
+      <div className="p-10 text-center text-error">Failed to load tuitions</div>
+    );
+  }
+
+  const { tuitions, totalPages } = data;
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-8">Available Tuitions</h1>
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      {/* ---------------- Page Header ---------------- */}
+      <div className="mb-10">
+        <h1
+          className="text-3xl font-bold 
+              bg-linear-to-r 
+                from-[#0043c1] via-[#11c4dc] to-[#0297f3]
+              dark:from-[#0e2246] dark:via-[#11c4dc] dark:to-[#0297f3]
+              bg-clip-text 
+              text-transparent"
+        >
+          Available Tuitions
+        </h1>
+        <p className="text-neutral-content mt-1 max-w-xl">
+          Discover verified tuition opportunities tailored to your expertise
+        </p>
+      </div>
 
-      {tuitions.length === 0 && (
-        <p className="text-gray-500">No tuitions available right now.</p>
-      )}
+      {/* ---------------- Search & Sort ---------------- */}
+      <div className="bg-base-200/80 backdrop-blur-md p-6 rounded-2xl mb-10 shadow-sm border border-base-300">
+        <div className="grid md:grid-cols-4 gap-4">
+          <input
+            type="text"
+            placeholder="Search by subject"
+            value={subjectInput}
+            onChange={(e) => {
+              setSubjectInput(e.target.value);
+              setSearching(true);
+            }}
+            className="input input-bordered w-full"
+          />
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {tuitions.map((tuition) => (
-          <div
-            key={tuition._id}
-            className="border rounded-xl p-5 shadow-sm hover:shadow-md transition"
+          <input
+            type="text"
+            placeholder="Search by location"
+            value={locationInput}
+            onChange={(e) => {
+              setLocationInput(e.target.value);
+              setSearching(true);
+            }}
+            className="input input-bordered w-full"
+          />
+
+          <select
+            className="select select-bordered w-full"
+            value={`${filters.sortBy}-${filters.order}`}
+            onChange={(e) => {
+              const [sortBy, order] = e.target.value.split("-");
+              setFilters((prev) => ({
+                ...prev,
+                sortBy,
+                order,
+                page: 1,
+              }));
+            }}
           >
-            {/* Header */}
-            <div className="flex items-center gap-4 mb-4">
-              <img
-                src={tuition.photoURL}
-                alt={tuition.name}
-                className="w-14 h-14 rounded-full object-cover"
-              />
-              <div>
-                <h2 className="font-semibold text-lg">{tuition.name}</h2>
-                <p className="text-sm text-gray-500">
-                  {tuition.district}, {tuition.location}
-                </p>
-              </div>
-            </div>
+            <option value="date-desc">Latest</option>
+            <option value="date-asc">Oldest</option>
+            <option value="budget-asc">Budget(Average): Low → High</option>
+            <option value="budget-desc">Budget(Average): High → Low</option>
+          </select>
+        </div>
 
-            {/* Info */}
-            <div className="space-y-1 text-sm">
-              <p>
-                <strong>Class:</strong> {tuition.classLevel}
-              </p>
-              <p>
-                <strong>Subjects:</strong> {tuition.subjects.join(", ")}
-              </p>
-              <p>
-                <strong>Mode:</strong> {tuition.mode}
-              </p>
-              <p>
-                <strong>Days:</strong> {tuition.days} days/week
-              </p>
-              <p>
-                <strong>Time:</strong> {tuition.time}
-              </p>
-              <p>
-                <strong>Duration:</strong> {tuition.duration} hours
-              </p>
-              <p>
-                <strong>Budget:</strong> ৳{tuition.minBudget} – ৳
-                {tuition.maxBudget}
-              </p>
-            </div>
+        {(searching || isFetching) && (
+          <progress className="progress progress-primary w-full mt-4" />
+        )}
+      </div>
 
-            {/* Description */}
-            <p className="mt-3 text-sm text-gray-600">{tuition.description}</p>
-
-            {/* Footer */}
-            <div className="mt-4 flex justify-between items-center">
-              <span className="text-xs px-2 py-1 rounded bg-green-100 text-green-700">
-                {tuition.status}
-              </span>
-              <span className="text-xs text-gray-400">
-                Posted: {new Date(tuition.postedAt).toLocaleDateString()}
-              </span>
-            </div>
+      {/* ---------------- Results Container ---------------- */}
+      <div className="bg-base-200 rounded-3xl p-6 md:p-8 border border-base-300">
+        {tuitions.length === 0 ? (
+          <div className="text-center py-24">
+            <p className="text-lg font-medium text-base-content">
+              No tuitions found
+            </p>
+            <p className="text-neutral-content mt-1">
+              Try adjusting your filters or search keywords
+            </p>
           </div>
-        ))}
+        ) : (
+          <div
+            className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 transition-opacity ${
+              isFetching ? "opacity-60" : "opacity-100"
+            }`}
+          >
+            {tuitions.map((tuition) => (
+              <div
+                key={tuition._id}
+                className="card bg-base-100 border border-base-300/60
+                  hover:-translate-y-1 hover:shadow-lg
+                  transition-all duration-300"
+              >
+                <div className="card-body p-5">
+                  {/* Class Level */}
+                  <h2 className="text-lg font-semibold text-base-content mb-2">
+                    {tuition.classLevel} Student
+                  </h2>
+
+                  {/* Subjects */}
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {tuition.subjects.map((sub, index) => (
+                      <span
+                        key={index}
+                        className="badge bg-secondary/10 text-secondary border-none text-xs"
+                      >
+                        {sub}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Location */}
+                  <p className="text-sm text-neutral-content flex items-center gap-1">
+                    <span>📍</span>
+                    {tuition.location}, {tuition.district}
+                  </p>
+
+                  {/* Details */}
+                  <div className="text-sm mt-3 space-y-1 text-base-content">
+                    <p>
+                      <span className="font-medium">Mode:</span> {tuition.mode}
+                    </p>
+                    <p>
+                      <span className="font-medium">Schedule:</span>{" "}
+                      {tuition.days} days /{" "}
+                      <span className="text-accent">{tuition.time}</span>
+                    </p>
+                    <p className="font-semibold text-primary text-base mt-2">
+                      ৳{tuition.minBudget} – ৳{tuition.maxBudget}
+                    </p>
+                  </div>
+
+                  <div className="divider my-3" />
+
+                  {/* Footer */}
+                  <div className="card-actions justify-between items-center">
+                    <span className="text-xs text-neutral-content">
+                      Posted {new Date(tuition.postedAt).toLocaleDateString()}
+                    </span>
+
+                    <Link to={`/tuitions/${tuition._id}`}>
+                      <GradientButton className="btn btn-sm ">
+                        View Details
+                      </GradientButton>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ---------------- Pagination ---------------- */}
+      <div className="mt-10">
+        <Pagination
+          currentPage={filters.page}
+          totalPages={totalPages}
+          onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+        />
       </div>
     </div>
   );
