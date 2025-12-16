@@ -17,6 +17,7 @@ import MyTuitions from "../Pages/DashboardHome/MyTuitions";
 import AllTutors from "../Pages/AllTutors/AllTutors";
 import TutorDetails from "../Pages/TutorDetails/TutorDetails";
 import ApproveTutors from "../Pages/DashboardHome/ApproveTutors";
+import UserManagement from "../Pages/UserManagement/UserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -118,7 +119,11 @@ export const router = createBrowserRouter([
       {
         path : 'tutors',
         Component : ApproveTutors
-      }
+      },
+      {
+        path : 'users',
+        Component : UserManagement
+      },
     ]
   },
 ]);

@@ -173,7 +173,7 @@ const ApproveTutors = () => {
                   {tutor.status === "pending" ? (
                     <div className="flex justify-center gap-2">
                       <button
-                        className="btn btn-xs btn-success btn-outline"
+                        className="btn btn-xs btn-success btn-outline hover:text-white"
                         onClick={() =>
                           handleStatusUpdate(tutor._id, "approved")
                         }
@@ -182,7 +182,7 @@ const ApproveTutors = () => {
                       </button>
 
                       <button
-                        className="btn btn-xs btn-error btn-outline"
+                        className="btn btn-xs btn-error btn-outline hover:text-white"
                         onClick={() =>
                           handleStatusUpdate(tutor._id, "rejected")
                         }
