@@ -14,6 +14,7 @@ import TuitionDetails from "../Pages/TuitionDetails/TuitionDetails";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import DashboardHome from "../Pages/DashboardHome/DashboardHome";
 import MyTuitions from "../Pages/DashboardHome/MyTuitions";
+import AllTutors from "../Pages/AllTutors/AllTutors";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AllTuitions></AllTuitions>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/all-tutors",
+        element: (
+          <PrivateRoute>
+            <AllTutors></AllTutors>
           </PrivateRoute>
         ),
       },

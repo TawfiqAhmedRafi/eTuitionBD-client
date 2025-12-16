@@ -4,6 +4,7 @@ import SectionHeader from "../../Components/SectionHeader/SectionHeader";
 import { motion as MOTION } from "framer-motion";
 import TutorCard from "./TutorCard";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { Link } from "react-router";
 
 const container = {
   visible: { transition: { staggerChildren: 0.12 } },
@@ -33,15 +34,15 @@ const LatestTutors = () => {
     <section className="py-12 md:py-16 bg-base-200 rounded-2xl my-12 shadow-sm">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader
-          title="Top Tutors This Week"
+          title="Latest Tutors This Week"
           subtitle="Experienced tutors recently joined"
           right={
-            <a
+            <Link
               className="text-sm font-medium text-primary hover:underline"
-              href="/tutors"
+              to="/all-tutors"
             >
               Explore all →
-            </a>
+            </Link>
           }
         />
 

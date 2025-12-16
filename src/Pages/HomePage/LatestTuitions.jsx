@@ -16,15 +16,11 @@ const item = {
 const LatestTuitions = () => {
   const axiosInstance = useAxios();
 
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["latest-tuitions"],
     queryFn: async () => {
       const res = await axiosInstance.get("/tuitions/latest");
-     return res.data.latestTuitions || [];
+      return res.data.latestTuitions || [];
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -36,13 +32,20 @@ const LatestTuitions = () => {
       <SectionHeader
         title="Latest Tuition Posts"
         subtitle="Recently posted tuition requests"
-        right={<Link className="text-sm link" to="/all-tuition">View all</Link>}
+        right={
+          <Link className="text-sm font-medium text-primary hover:underline" to="/all-tuition">
+            Explore All →
+          </Link>
+        }
       />
 
       {isLoading ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-40 rounded-lg bg-base-200 animate-pulse" />
+            <div
+              key={i}
+              className="h-40 rounded-lg bg-base-200 animate-pulse"
+            />
           ))}
         </div>
       ) : isError ? (
@@ -54,21 +57,20 @@ const LatestTuitions = () => {
           No tuitions available yet.
         </div>
       ) : (
-         <MOTION.div
-            variants={container}
-            initial="hidden"
-            animate="visible"
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-             
+        <MOTION.div
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {tuitions.map((t) => (
             <MOTION.div
-                            key={t._id}
-                            variants={item}
-                            whileHover={{ scale: 1.03 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                          >
-            <TuitionCard key={t._id} tuition={t} />
+              key={t._id}
+              variants={item}
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <TuitionCard key={t._id} tuition={t} />
             </MOTION.div>
           ))}
         </MOTION.div>
