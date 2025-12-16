@@ -26,19 +26,26 @@ const allMenuItems = [
     roles: ["student"],
   },
   {
-    name: "My Tuitions",
-    path: "/dashboard/my-tuitions/tutor",
-    icon: BookOpen,
-    roles: ["tutor"],
-  },
-  {
-    name: "Applications",
+    name: "Received Applications",
     path: "/dashboard/applications",
     icon: FileText,
     roles: ["student"],
   },
   {
-    name: "Applications",
+    name: "Payments",
+    path: "/dashboard/payments",
+    icon: CreditCard,
+    roles: ["student"],
+  },
+  {
+    name: "My Tuitions",
+    path: "/dashboard/my-tuitions/tutor",
+    icon: BookOpen,
+    roles: ["tutor"],
+  },
+
+  {
+    name: "My Applications",
     path: "/dashboard/applications/tutor",
     icon: FileText,
     roles: ["tutor"],
@@ -61,12 +68,7 @@ const allMenuItems = [
     icon: CreditCard,
     roles: ["admin"],
   },
-  {
-    name: "Payments",
-    path: "/dashboard/payments",
-    icon: CreditCard,
-    roles: ["student"],
-  },
+
   {
     name: "Settings",
     path: "/dashboard/settings",
@@ -77,12 +79,12 @@ const allMenuItems = [
 
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const {role}= useUserRole(); 
-console.log("role:", role);
+  const { role } = useUserRole();
+  console.log("role:", role);
 
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) => item.roles.includes(role));
-console.log("menuItems:", menuItems);
+  console.log("menuItems:", menuItems);
   return (
     <aside
       className={`h-screen sticky top-0 flex flex-col

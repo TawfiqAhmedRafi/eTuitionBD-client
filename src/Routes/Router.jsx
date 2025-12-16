@@ -13,13 +13,20 @@ import AllTuitions from "../Pages/AllTuitions/AllTuitions";
 import TuitionDetails from "../Pages/TuitionDetails/TuitionDetails";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import DashboardHome from "../Pages/DashboardHome/DashboardHome";
-import MyTuitions from "../Pages/DashboardHome/MyTuitions";
+import MyTuitions from "../Pages/StudentDashboard/MyTuitions";
 import AllTutors from "../Pages/AllTutors/AllTutors";
 import TutorDetails from "../Pages/TutorDetails/TutorDetails";
-import ApproveTutors from "../Pages/DashboardHome/ApproveTutors";
+import ApproveTutors from "../Pages/AdminDashboard/ApproveTutors";
 import UserManagement from "../Pages/UserManagement/UserManagement";
 import AdminRoute from "./AdminRoute";
 import StudentRoute from "./StudentRoute";
+import TutorRoute from "./TutorRoute";
+import TutorTuitions from "../Pages/TutorDashboard/TutorTuitions";
+import TutorApplication from "../Pages/TutorDashboard/TutorApplication";
+import AllPayments from "../Pages/AdminDashboard/AllPayments";
+import Application from "../Pages/StudentDashboard/Application";
+import MyPayments from "../Pages/StudentDashboard/MyPayments";
+import Settings from "../Pages/DashboardHome/Settings";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -122,10 +129,34 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "applications",
+        element: (
+          <StudentRoute>
+            <Application></Application>
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "payments",
+        element: (
+          <StudentRoute>
+            <MyPayments></MyPayments>
+          </StudentRoute>
+        ),
+      },
+      {
         path: "tutors",
         element: (
           <AdminRoute>
             <ApproveTutors></ApproveTutors>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "payments/all",
+        element: (
+          <AdminRoute>
+            <AllPayments></AllPayments>
           </AdminRoute>
         ),
       },
@@ -136,6 +167,22 @@ export const router = createBrowserRouter([
             <UserManagement></UserManagement>
           </AdminRoute>
         ),
+      },
+      {
+        path :"my-tuitions/tutor",
+        element : <TutorRoute>
+          <TutorTuitions></TutorTuitions>
+        </TutorRoute>
+      },
+      {
+        path :"applications/tutor",
+        element : <TutorRoute>
+          <TutorApplication></TutorApplication>
+        </TutorRoute>
+      },
+      {
+        path :"settings",
+       Component : Settings
       },
     ],
   },
