@@ -1,12 +1,13 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
+import GradientButton from "../../Components/GradientButton/GradientButton";
 
 const TuitionDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
-
+  const navigate = useNavigate();
   const { data: tuition, isLoading, isError } = useQuery({
     queryKey: ["tuition", id],
     queryFn: async () => {
@@ -119,6 +120,11 @@ const TuitionDetails = () => {
         <p className="text-base-content text-sm">
           {tuition.description || "No description provided."}
         </p>
+      </div>
+      <div className="flex justify-end">
+        <GradientButton onClick={()=>navigate(-1)}>
+          Go Back
+        </GradientButton>
       </div>
     </div>
   );

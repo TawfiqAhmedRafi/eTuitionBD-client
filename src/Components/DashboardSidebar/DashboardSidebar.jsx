@@ -20,7 +20,7 @@ const menuItems = [
 ];
 
 const DashboardSidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <aside
@@ -34,9 +34,9 @@ const DashboardSidebar = () => {
         {!collapsed && (
           <Link
             to="/"
-            className="text-xl font-bold text-primary tracking-tight"
+            className="text-xl font-bold bg-linear-to-r  from-[#0043c1] via-[#11c4dc] to-[#0297f3]  dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]  bg-clip-text text-transparent"
           >
-            eTuitionBD
+            ETUITIONBD
           </Link>
         )}
 
@@ -79,6 +79,7 @@ const DashboardSidebar = () => {
           // Tooltip only when collapsed
           return collapsed ? (
             <div
+              key={item.path}
               className="tooltip tooltip-right tooltip-primary"
               data-tip={item.name}
             >
