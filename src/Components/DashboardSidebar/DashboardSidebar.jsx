@@ -8,20 +8,81 @@ import {
   GraduationCap,
   CreditCard,
   ChevronLeft,
+  Settings,
 } from "lucide-react";
+import useUserRole from "../../hooks/useUserRole";
 
-const menuItems = [
-  { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-  { name: "My Tuitions", path: "/dashboard/my-tuitions", icon: BookOpen },
-  { name: "Applications", path: "/dashboard/applications", icon: FileText },
-  { name: "Users", path: "/dashboard/users", icon: Users },
-  { name: "Tutors", path: "/dashboard/tutors", icon: GraduationCap },
-  { name: "Payments", path: "/dashboard/payments", icon: CreditCard },
+const allMenuItems = [
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+    icon: LayoutDashboard,
+    roles: ["admin", "tutor", "student"],
+  },
+  {
+    name: "My Tuitions",
+    path: "/dashboard/my-tuitions",
+    icon: BookOpen,
+    roles: ["student"],
+  },
+  {
+    name: "My Tuitions",
+    path: "/dashboard/my-tuitions/tutor",
+    icon: BookOpen,
+    roles: ["tutor"],
+  },
+  {
+    name: "Applications",
+    path: "/dashboard/applications",
+    icon: FileText,
+    roles: ["student"],
+  },
+  {
+    name: "Applications",
+    path: "/dashboard/applications/tutor",
+    icon: FileText,
+    roles: ["tutor"],
+  },
+  {
+    name: "Users Management",
+    path: "/dashboard/users",
+    icon: Users,
+    roles: ["admin"],
+  },
+  {
+    name: "Approve Tutors",
+    path: "/dashboard/tutors",
+    icon: GraduationCap,
+    roles: ["admin"],
+  },
+  {
+    name: "Payments",
+    path: "/dashboard/payments/all",
+    icon: CreditCard,
+    roles: ["admin"],
+  },
+  {
+    name: "Payments",
+    path: "/dashboard/payments",
+    icon: CreditCard,
+    roles: ["student"],
+  },
+  {
+    name: "Settings",
+    path: "/dashboard/settings",
+    icon: Settings,
+    roles: ["admin", "tutor", "student"],
+  },
 ];
 
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
+  const {role}= useUserRole(); 
+console.log("role:", role);
 
+  // Filter menu items based on role
+  const menuItems = allMenuItems.filter((item) => item.roles.includes(role));
+console.log("menuItems:", menuItems);
   return (
     <aside
       className={`h-screen sticky top-0 flex flex-col
@@ -34,7 +95,7 @@ const DashboardSidebar = () => {
         {!collapsed && (
           <Link
             to="/"
-            className="text-xl font-bold bg-linear-to-r  from-[#0043c1] via-[#11c4dc] to-[#0297f3]  dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]  bg-clip-text text-transparent"
+            className="text-xl font-bold bg-linear-to-r from-[#0043c1] via-[#11c4dc] to-[#0297f3] dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3] bg-clip-text text-transparent"
           >
             ETUITIONBD
           </Link>
@@ -75,8 +136,6 @@ const DashboardSidebar = () => {
               {!collapsed && <span>{item.name}</span>}
             </NavLink>
           );
-
-          // Tooltip only when collapsed
           return collapsed ? (
             <div
               key={item.path}

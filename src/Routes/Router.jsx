@@ -18,7 +18,8 @@ import AllTutors from "../Pages/AllTutors/AllTutors";
 import TutorDetails from "../Pages/TutorDetails/TutorDetails";
 import ApproveTutors from "../Pages/DashboardHome/ApproveTutors";
 import UserManagement from "../Pages/UserManagement/UserManagement";
-
+import AdminRoute from "./AdminRoute";
+import StudentRoute from "./StudentRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -107,23 +108,35 @@ export const router = createBrowserRouter([
         <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
-    children:[
+    children: [
       {
-        index : true ,
-        Component: DashboardHome
+        index: true,
+        Component: DashboardHome,
       },
       {
-        path : 'my-tuitions',
-        Component : MyTuitions
+        path: "my-tuitions",
+        element: (
+          <StudentRoute>
+            <MyTuitions></MyTuitions>
+          </StudentRoute>
+        ),
       },
       {
-        path : 'tutors',
-        Component : ApproveTutors
+        path: "tutors",
+        element: (
+          <AdminRoute>
+            <ApproveTutors></ApproveTutors>
+          </AdminRoute>
+        ),
       },
       {
-        path : 'users',
-        Component : UserManagement
+        path: "users",
+        element: (
+          <AdminRoute>
+            <UserManagement></UserManagement>
+          </AdminRoute>
+        ),
       },
-    ]
+    ],
   },
 ]);
