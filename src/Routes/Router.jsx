@@ -15,6 +15,7 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import DashboardHome from "../Pages/DashboardHome/DashboardHome";
 import MyTuitions from "../Pages/DashboardHome/MyTuitions";
 import AllTutors from "../Pages/AllTutors/AllTutors";
+import TutorDetails from "../Pages/TutorDetails/TutorDetails";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +71,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <TuitionDetails></TuitionDetails>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/tutors/:id",
+        element: (
+          <PrivateRoute>
+            <TutorDetails></TutorDetails>
           </PrivateRoute>
         ),
       },
