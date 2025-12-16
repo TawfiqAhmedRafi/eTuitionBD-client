@@ -11,6 +11,7 @@ const AllTutors = () => {
   const [filters, setFilters] = useState({
     page: 1,
     limit: 9,
+    //status : 'approved'
   });
 
   const { data, isLoading, isFetching, isError } = useQuery({

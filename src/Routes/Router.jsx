@@ -16,6 +16,7 @@ import DashboardHome from "../Pages/DashboardHome/DashboardHome";
 import MyTuitions from "../Pages/DashboardHome/MyTuitions";
 import AllTutors from "../Pages/AllTutors/AllTutors";
 import TutorDetails from "../Pages/TutorDetails/TutorDetails";
+import ApproveTutors from "../Pages/DashboardHome/ApproveTutors";
 
 export const router = createBrowserRouter([
   {
@@ -113,6 +114,10 @@ export const router = createBrowserRouter([
       {
         path : 'my-tuitions',
         Component : MyTuitions
+      },
+      {
+        path : 'tutors',
+        Component : ApproveTutors
       }
     ]
   },
