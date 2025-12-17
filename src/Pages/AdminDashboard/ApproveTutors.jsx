@@ -190,8 +190,20 @@ const ApproveTutors = () => {
                         Reject
                       </button>
                     </div>
+                  ) : tutor.status === "approved" ? (
+                    <button
+                      className="btn btn-xs btn-error btn-outline hover:text-white"
+                      onClick={() => handleStatusUpdate(tutor._id, "rejected")}
+                    >
+                      Reject
+                    </button>
                   ) : (
-                    "—"
+                    <button
+                      className="btn btn-xs btn-success btn-outline hover:text-white"
+                      onClick={() => handleStatusUpdate(tutor._id, "approved")}
+                    >
+                      Approve
+                    </button>
                   )}
                 </td>
 

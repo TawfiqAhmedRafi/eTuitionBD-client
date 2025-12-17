@@ -215,15 +215,15 @@ const UserManagement = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-base-200 rounded-2xl p-4 border border-base-300">
+      <div className="overflow-x-auto bg-base-200 rounded-2xl border border-base-300">
         {isFetching && (
           <progress className="progress progress-primary w-full mb-4" />
         )}
 
         <table className="table table-zebra w-full align-middle">
-          <thead>
+          <thead className="bg-primary/40 text-primary-content">
             <tr>
-              <th>#</th>
+              <th className="ml-2">#</th>
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
@@ -234,7 +234,7 @@ const UserManagement = () => {
           <tbody>
             {users.map((user, idx) => (
               <tr key={user._id}>
-                <td>{(filters.page - 1) * filters.limit + idx + 1}</td>
+                <td className="ml-2">{(filters.page - 1) * filters.limit + idx + 1}</td>
                 {/* Name + Photo */}
                 <td>
                   <div className="flex items-center gap-2">

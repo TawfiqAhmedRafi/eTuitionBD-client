@@ -27,6 +27,7 @@ import AllPayments from "../Pages/AdminDashboard/AllPayments";
 import Application from "../Pages/StudentDashboard/Application";
 import MyPayments from "../Pages/StudentDashboard/MyPayments";
 import Settings from "../Pages/DashboardHome/Settings";
+import Revenue from "../Pages/TutorDashboard/Revenue";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -178,6 +179,12 @@ export const router = createBrowserRouter([
         path :"applications/tutor",
         element : <TutorRoute>
           <TutorApplication></TutorApplication>
+        </TutorRoute>
+      },
+      {
+        path :"revenue",
+        element : <TutorRoute>
+          <Revenue></Revenue>
         </TutorRoute>
       },
       {

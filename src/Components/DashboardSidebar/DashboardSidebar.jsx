@@ -11,6 +11,8 @@ import {
   Settings,
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
+import { FiSend } from "react-icons/fi";
+import { FaMoneyBill } from "react-icons/fa";
 
 const allMenuItems = [
   {
@@ -23,6 +25,12 @@ const allMenuItems = [
     name: "My Tuitions",
     path: "/dashboard/my-tuitions",
     icon: BookOpen,
+    roles: ["student"],
+  },
+  {
+    name: "Post Tuitions",
+    path: "/post-tuition",
+    icon: FiSend,
     roles: ["student"],
   },
   {
@@ -41,6 +49,12 @@ const allMenuItems = [
     name: "My Tuitions",
     path: "/dashboard/my-tuitions/tutor",
     icon: BookOpen,
+    roles: ["tutor"],
+  },
+  {
+    name: "My Tuitions",
+    path: "/dashboard/revenue",
+    icon: FaMoneyBill,
     roles: ["tutor"],
   },
 
