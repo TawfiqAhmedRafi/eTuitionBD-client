@@ -14,6 +14,7 @@ const TuitionDetails = () => {
   const queryClient = useQueryClient();
 
   const { tutor, isLoading: tutorLoading } = useTutor();
+  const isTutor = !!tutor;
   const {
     data: tuition,
     isLoading,
@@ -24,18 +25,44 @@ const TuitionDetails = () => {
       const res = await axiosSecure.get(`/tuitions/${id}`);
       return res.data;
     },
+    staleTime: 5 * 60 * 1000,
+     enabled: !!id,
   });
-
+  const { data: applyInfo, isLoading: applyLoading } = useQuery({
+    queryKey: ["has-applied", id],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/applications/has-applied/${id}`);
+      return res.data;
+    },
+    staleTime: 2 * 60 * 1000,
+    enabled: isTutor && !!id,
+  });
   const [modalOpen, setModalOpen] = useState(false);
   const [salary, setSalary] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
-  // Mutation to apply for tuition
   const applyMutation = useMutation({
     mutationFn: async () => {
       const payload = { tuitionId: id, salary: Number(salary), coverLetter };
       return await axiosSecure.post("/applications", payload);
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries(["has-applied", id]);
+      const previous = queryClient.getQueryData(["has-applied", id]);
+      queryClient.setQueryData(["has-applied", id], { hasApplied: true });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(["has-applied", id], context.previous);
+
+      const msg =
+        err.response?.data?.message || "Failed to apply. Try again later.";
+      Swal.fire({
+        icon: "error",
+        title: "Application Failed",
+        text: msg,
+      });
     },
     onSuccess: () => {
       Swal.fire({
@@ -48,20 +75,9 @@ const TuitionDetails = () => {
       setModalOpen(false);
       setSalary("");
       setCoverLetter("");
-      queryClient.invalidateQueries(["tuition", id]);
-    },
-    onError: (err) => {
-      const msg =
-        err.response?.data?.message || "Failed to apply. Try again later.";
-      Swal.fire({
-        icon: "error",
-        title: "Application Failed",
-        text: msg,
-      });
+      queryClient.invalidateQueries(["tuition", id]); // refresh tuition data
     },
   });
-
-  
 
   const handleApply = () => {
     if (!salary) {
@@ -83,6 +99,15 @@ const TuitionDetails = () => {
       });
       return;
     }
+    if (!tutor?.district) {
+      Swal.fire({
+        icon: "error",
+        title: "Tutor Info Missing",
+        text: "Your tutor profile is incomplete.",
+      });
+      return;
+    }
+
     if (tutor.district !== tuition.district) {
       Swal.fire({
         icon: "error",
@@ -92,18 +117,16 @@ const TuitionDetails = () => {
       return;
     }
 
-    setSubmitting(true);
     applyMutation.mutate();
-    setSubmitting(false);
   };
 
-  if (isLoading || tutorLoading) {
-    return (
-      <div className="p-10 text-center">
-        <progress className="progress progress-primary w-full" />
-      </div>
-    );
-  }
+  if (isLoading) { 
+  return (
+    <div className="p-10 text-center">
+      <progress className="progress progress-primary w-full" />
+    </div>
+  );
+}
 
   if (isError)
     return (
@@ -183,14 +206,36 @@ const TuitionDetails = () => {
 
         {/* Right Bottom: Apply Button */}
         <div className="md:self-end mt-6 md:mt-0">
-          <AccentGradientButton
-            className={`btn btn-primary btn-lg w-full md:w-auto ${
-              tuition.status !== "open" ? "btn-disabled" : ""
-            }`}
-            onClick={() => setModalOpen(true)}
-          >
-            {tuition.status === "open" ? "Apply Now" : "Tuition Closed"}
-          </AccentGradientButton>
+         {tutorLoading || applyLoading ? (
+    <button className="btn btn-primary btn-lg btn-disabled w-full md:w-auto">
+      Loading...
+    </button>
+  ) : isTutor ? (
+    <AccentGradientButton
+      className={`btn btn-primary btn-lg ${
+        tuition.status !== "open" || applyInfo?.hasApplied
+          ? "btn-disabled"
+          : ""
+      }`}
+      onClick={() => {
+        if (applyInfo?.hasApplied) {
+          Swal.fire({
+            icon: "info",
+            title: "Already Applied",
+            text: "You have already applied to this tuition.",
+          });
+          return;
+        }
+        setModalOpen(true);
+      }}
+    >
+      {applyInfo?.hasApplied
+        ? "Already Applied"
+        : tuition.status === "open"
+        ? "Apply Now"
+        : "Tuition Closed"}
+    </AccentGradientButton>
+  ) : null}
         </div>
       </div>
 
@@ -238,10 +283,12 @@ const TuitionDetails = () => {
             <div className="modal-action flex flex-col md:flex-row gap-2">
               <AccentGradientButton
                 onClick={handleApply}
-                disabled={submitting}
+                disabled={applyMutation.isPending}
                 className="btn w-full md:w-auto"
               >
-                {submitting ? "Submitting..." : "Submit Application"}
+                {applyMutation.isPending
+                  ? "Submitting..."
+                  : "Submit Application"}
               </AccentGradientButton>
               <GradientButton
                 onClick={() => setModalOpen(false)}
