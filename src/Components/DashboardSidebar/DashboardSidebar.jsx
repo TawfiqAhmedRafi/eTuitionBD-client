@@ -52,7 +52,7 @@ const allMenuItems = [
     roles: ["tutor"],
   },
   {
-    name: "My Tuitions",
+    name: "Income",
     path: "/dashboard/revenue",
     icon: FaMoneyBill,
     roles: ["tutor"],

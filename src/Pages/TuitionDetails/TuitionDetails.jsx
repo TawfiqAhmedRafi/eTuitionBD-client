@@ -1,14 +1,24 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
 import GradientButton from "../../Components/GradientButton/GradientButton";
+import Swal from "sweetalert2";
+import useTutor from "../../hooks/useTutor";
 
 const TuitionDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-  const { data: tuition, isLoading, isError } = useQuery({
+  const queryClient = useQueryClient();
+
+  const { tutor, isLoading: tutorLoading } = useTutor();
+  const {
+    data: tuition,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["tuition", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/tuitions/${id}`);
@@ -16,12 +26,84 @@ const TuitionDetails = () => {
     },
   });
 
-  if (isLoading)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [salary, setSalary] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // Mutation to apply for tuition
+  const applyMutation = useMutation({
+    mutationFn: async () => {
+      const payload = { tuitionId: id, salary: Number(salary), coverLetter };
+      return await axiosSecure.post("/applications", payload);
+    },
+    onSuccess: () => {
+      Swal.fire({
+        icon: "success",
+        title: "Application Submitted",
+        text: "Your application has been submitted successfully!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      setModalOpen(false);
+      setSalary("");
+      setCoverLetter("");
+      queryClient.invalidateQueries(["tuition", id]);
+    },
+    onError: (err) => {
+      const msg =
+        err.response?.data?.message || "Failed to apply. Try again later.";
+      Swal.fire({
+        icon: "error",
+        title: "Application Failed",
+        text: msg,
+      });
+    },
+  });
+
+  
+
+  const handleApply = () => {
+    if (!salary) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Salary",
+        text: "Please enter a salary.",
+      });
+      return;
+    }
+
+    const min = tuition.minBudget;
+    const max = tuition.maxBudget;
+    if (Number(salary) < min || Number(salary) > max) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Salary",
+        text: `Salary must be between ৳${min} and ৳${max}`,
+      });
+      return;
+    }
+    if (tutor.district !== tuition.district) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid District",
+        text: `You can only apply to tuitions in your district (${tutor.district}).`,
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    applyMutation.mutate();
+    setSubmitting(false);
+  };
+
+  if (isLoading || tutorLoading) {
     return (
       <div className="p-10 text-center">
         <progress className="progress progress-primary w-full" />
       </div>
     );
+  }
 
   if (isError)
     return (
@@ -49,25 +131,25 @@ const TuitionDetails = () => {
             {tuition.name}
           </h1>
 
-          {/* Status */}
           <span
             className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-              tuition.status === "open" ? "bg-success/20 text-success" : "bg-error/20 text-error"
+              tuition.status === "open"
+                ? "bg-success/20 text-success"
+                : "bg-error/20 text-error"
             }`}
           >
             {tuition.status.toUpperCase()}
           </span>
 
-          {/* Contact Info */}
           <div className="space-y-1 text-base-content">
             <p>Email: {tuition.email}</p>
             <p>Phone: {tuition.phone}</p>
           </div>
 
-          {/* Class Level */}
-          <p className="font-medium text-base-content">Class Level: {tuition.classLevel}</p>
+          <p className="font-medium text-base-content">
+            Class Level: {tuition.classLevel}
+          </p>
 
-          {/* Subjects */}
           <div>
             <h3 className="font-medium text-base-content mb-1">Subjects:</h3>
             <div className="flex flex-wrap gap-2">
@@ -82,21 +164,18 @@ const TuitionDetails = () => {
             </div>
           </div>
 
-          {/* Budget */}
           <p className="font-semibold text-lg text-base-content">
             Budget: ৳{tuition.minBudget} - ৳{tuition.maxBudget}
           </p>
 
-          {/* Location & Mode */}
-          <p className="text-base-content">Location: {tuition.location}, {tuition.district}</p>
-          <p className="text-base-content">Mode: {tuition.mode}</p>
-
-          {/* Schedule */}
           <p className="text-base-content">
-            Days/Week: {tuition.days} | Time: {tuition.time} | Duration: {tuition.duration} hrs/class
+            Location: {tuition.location}, {tuition.district}
           </p>
-
-          {/* Posted Date */}
+          <p className="text-base-content">Mode: {tuition.mode}</p>
+          <p className="text-base-content">
+            Days/Week: {tuition.days} | Time: {tuition.time} | Duration:{" "}
+            {tuition.duration} hrs/class
+          </p>
           <p className="text-sm text-neutral-content">
             Posted on: {new Date(tuition.postedAt).toLocaleDateString()}
           </p>
@@ -108,6 +187,7 @@ const TuitionDetails = () => {
             className={`btn btn-primary btn-lg w-full md:w-auto ${
               tuition.status !== "open" ? "btn-disabled" : ""
             }`}
+            onClick={() => setModalOpen(true)}
           >
             {tuition.status === "open" ? "Apply Now" : "Tuition Closed"}
           </AccentGradientButton>
@@ -116,16 +196,63 @@ const TuitionDetails = () => {
 
       {/* Description Section */}
       <div className="bg-base-200 p-6 rounded-2xl shadow-sm">
-        <h2 className="text-xl font-semibold text-base-content mb-2">Description</h2>
+        <h2 className="text-xl font-semibold text-base-content mb-2">
+          Description
+        </h2>
         <p className="text-base-content text-sm">
           {tuition.description || "No description provided."}
         </p>
       </div>
+
       <div className="flex justify-end">
-        <GradientButton onClick={()=>navigate(-1)}>
-          Go Back
-        </GradientButton>
+        <GradientButton onClick={() => navigate(-1)}>Go Back</GradientButton>
       </div>
+
+      {/* ------------------- Apply Modal ------------------- */}
+      {modalOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box relative">
+            <h3 className="text-lg font-bold mb-4">Apply for Tuition</h3>
+            <label className="label">
+              <span className="label-text">Proposed Salary (৳)</span>
+            </label>
+            <input
+              type="number"
+              min={tuition.minBudget}
+              max={tuition.maxBudget}
+              value={salary}
+              onChange={(e) => setSalary(e.target.value)}
+              className="input input-bordered w-full mb-4"
+              placeholder={`Between ${tuition.minBudget} - ${tuition.maxBudget}`}
+            />
+            <label className="label">
+              <span className="label-text">Cover Letter (Optional)</span>
+            </label>
+            <textarea
+              value={coverLetter}
+              onChange={(e) => setCoverLetter(e.target.value)}
+              className="textarea textarea-bordered w-full mb-4"
+              placeholder="Write a short cover letter"
+              rows={3}
+            />
+            <div className="modal-action flex flex-col md:flex-row gap-2">
+              <AccentGradientButton
+                onClick={handleApply}
+                disabled={submitting}
+                className="btn w-full md:w-auto"
+              >
+                {submitting ? "Submitting..." : "Submit Application"}
+              </AccentGradientButton>
+              <GradientButton
+                onClick={() => setModalOpen(false)}
+                className="btn w-full md:w-auto"
+              >
+                Cancel
+              </GradientButton>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

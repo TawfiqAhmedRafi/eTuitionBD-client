@@ -9,12 +9,14 @@ const AllTuitions = () => {
   const axiosSecure = useAxiosSecure();
   const [subjectInput, setSubjectInput] = useState("");
   const [locationInput, setLocationInput] = useState("");
+  const [classInput, setClassInput] = useState("");
   const [searching, setSearching] = useState(false);
   const [filters, setFilters] = useState({
     page: 1,
     limit: 9,
     subject: "",
     location: "",
+    classLevel: "",
     sortBy: "date",
     order: "desc",
   });
@@ -25,13 +27,14 @@ const AllTuitions = () => {
         ...prev,
         subject: subjectInput.trim(),
         location: locationInput.trim(),
+        classLevel: classInput.trim(),
         page: 1,
       }));
       setSearching(false);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [subjectInput, locationInput]);
+  }, [subjectInput, locationInput, classInput]);
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["tuitions", filters],
@@ -82,6 +85,7 @@ const AllTuitions = () => {
       {/* ---------------- Search & Sort ---------------- */}
       <div className="bg-base-200/80 backdrop-blur-md p-6 rounded-2xl mb-10 shadow-sm border border-base-300">
         <div className="grid md:grid-cols-4 gap-4">
+          {/* Subject */}
           <input
             type="text"
             placeholder="Search by subject"
@@ -93,6 +97,7 @@ const AllTuitions = () => {
             className="input input-bordered w-full"
           />
 
+          {/* Location */}
           <input
             type="text"
             placeholder="Search by location"
@@ -104,6 +109,19 @@ const AllTuitions = () => {
             className="input input-bordered w-full"
           />
 
+          {/* Class */}
+          <input
+            type="text"
+            placeholder="Search by class (e.g. Class 8)"
+            value={classInput}
+            onChange={(e) => {
+              setClassInput(e.target.value);
+              setSearching(true);
+            }}
+            className="input input-bordered w-full"
+          />
+
+          {/* Sort */}
           <select
             className="select select-bordered w-full"
             value={`${filters.sortBy}-${filters.order}`}
@@ -194,7 +212,6 @@ const AllTuitions = () => {
 
                   <div className="divider my-3" />
 
-                  
                   <div className="card-actions justify-between items-center">
                     <span className="text-xs text-neutral-content">
                       Posted {new Date(tuition.postedAt).toLocaleDateString()}
