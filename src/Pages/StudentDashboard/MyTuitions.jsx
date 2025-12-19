@@ -59,49 +59,60 @@ const MyTuitions = () => {
   };
 
   const handleCloseTuition = async (tuitionId) => {
-  try {
-    const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "This tuition will be permanently closed!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, close it!",
-    });
-
-    if (confirm.isConfirmed) {
-      const res = await axiosSecure.patch(`/tuitions/${tuitionId}`, {
-        status: "closed",
+    try {
+      const confirm = await Swal.fire({
+        title: "Are you sure?",
+        text: "This tuition will be permanently closed!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, close it!",
       });
 
-      if (res.status === 200) {
-        queryClient.setQueryData(["myTuitions", page], (oldData) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            tuitions: oldData.tuitions.map((t) =>
-              t._id === tuitionId ? { ...t, status: "closed" } : t
-            ),
-          };
+      if (confirm.isConfirmed) {
+        const res = await axiosSecure.patch(`/tuitions/${tuitionId}`, {
+          status: "closed",
         });
 
-        Swal.fire(
-          "Closed!",
-          "The tuition has been closed successfully.",
-          "success"
-        );
-      } else {
-        Swal.fire("Error", "Failed to close tuition.", "error");
-      }
-    }
-  } catch (err) {
-    console.error("Close tuition failed:", err);
-    Swal.fire("Error", "Failed to close tuition.", "error");
-  }
-};
+        if (res.status === 200) {
+          queryClient.setQueryData(["myTuitions", page], (oldData) => {
+            if (!oldData) return oldData;
+            return {
+              ...oldData,
+              tuitions: oldData.tuitions.map((t) =>
+                t._id === tuitionId ? { ...t, status: "closed" } : t
+              ),
+            };
+          });
 
-const handlePayNow=()=>{
-  
-}
+          Swal.fire(
+            "Closed!",
+            "The tuition has been closed successfully.",
+            "success"
+          );
+        } else {
+          Swal.fire("Error", "Failed to close tuition.", "error");
+        }
+      }
+    } catch (err) {
+      console.error("Close tuition failed:", err);
+      Swal.fire("Error", "Failed to close tuition.", "error");
+    }
+  };
+
+  const handlePayNow = async (tuition) => {
+    try {
+      const res = await axiosSecure.post("/payment-checkout-session", {
+        tuitionId: tuition._id,
+      });
+
+      if (res.data?.url) {
+        window.location.assign(res.data.url);
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      Swal.fire("Error", "Failed to start payment", "error");
+    }
+  };
 
   const openEditModal = (tuition) => {
     setEditingTuition(tuition);
@@ -198,7 +209,7 @@ const handlePayNow=()=>{
                   </div>
                 </td>
 
-                <td className="py-2 px-2 md:px-4">
+                <td className="py-2 px-2 md:px-4 font-mono">
                   ৳{tuition.minBudget} - ৳{tuition.maxBudget}
                 </td>
 
@@ -220,6 +231,8 @@ const handlePayNow=()=>{
                         ? "badge-success"
                         : tuition.status === "assigned"
                         ? "badge-warning"
+                        : tuition.status === "ongoing"
+                        ? "badge-accent"
                         : "badge-error"
                     }`}
                   >
@@ -229,7 +242,7 @@ const handlePayNow=()=>{
                 <td className="py-2 px-2 md:px-4">
                   {tuition.status === "assigned" && (
                     <button
-                      onClick={() => handlePayNow(tuition._id)}
+                      onClick={() => handlePayNow(tuition)}
                       className="btn btn-xs md:btn-sm btn-success btn-outline hover:text-white"
                     >
                       Pay Now

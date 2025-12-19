@@ -28,6 +28,8 @@ import Application from "../Pages/StudentDashboard/Application";
 import MyPayments from "../Pages/StudentDashboard/MyPayments";
 import Settings from "../Pages/DashboardHome/Settings";
 import Revenue from "../Pages/TutorDashboard/Revenue";
+import PaymentSuccess from "../Pages/StudentDashboard/PaymentSuccess";
+import PaymentFailure from "../Pages/StudentDashboard/PaymentFailure";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -142,6 +144,22 @@ export const router = createBrowserRouter([
         element: (
           <StudentRoute>
             <MyPayments></MyPayments>
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "payment-success",
+        element: (
+          <StudentRoute>
+            <PaymentSuccess></PaymentSuccess>
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "payment-failure",
+        element: (
+          <StudentRoute>
+            <PaymentFailure></PaymentFailure>
           </StudentRoute>
         ),
       },
