@@ -62,7 +62,7 @@ const TutorApplication = () => {
       <h1 className="text-2xl font-bold mb-4">My Applications</h1>
 
       {/* Status Filter */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col md:flex-row gap-2 mb-4">
         {["all", "pending", "accepted", "rejected"].map((s) => (
           <button
             key={s}

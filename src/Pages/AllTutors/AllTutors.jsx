@@ -5,6 +5,7 @@ import Pagination from "../../Components/Pagination/Pagination";
 import { Link } from "react-router";
 import GradientButton from "../../Components/GradientButton/GradientButton";
 import { FiCheckCircle } from "react-icons/fi";
+import { format } from "date-fns";
 
 const AllTutors = () => {
   const axiosSecure = useAxiosSecure();
@@ -165,8 +166,8 @@ const AllTutors = () => {
                     {/* Actions */}
                     <div className="card-actions justify-between items-center">
                       <span className="text-xs text-neutral-content">
-                        Posted{" "}
-                        {new Date(tutor.submittedAt).toLocaleDateString()}
+                        Posted on {" "}
+                       {format(new Date(tutor.submittedAt),"dd MMM, yy")}
                       </span>
 
                       <Link to={`/tutors/${tutor._id}`}>

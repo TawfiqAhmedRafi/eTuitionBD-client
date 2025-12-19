@@ -4,6 +4,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { FiCheckCircle } from "react-icons/fi";
 import GradientButton from "../../Components/GradientButton/GradientButton"; // assuming you have this
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
+import { format } from "date-fns";
 
 const TutorDetails = () => {
   const { id } = useParams();
@@ -55,7 +56,7 @@ const TutorDetails = () => {
               )}
             </div>
             <p className="text-sm text-neutral-content mt-1">
-              Joined on {new Date(tutor.submittedAt).toLocaleDateString()}
+              Joined on {format(new Date(tutor.submittedAt), "MMMM dd, yyyy")}
             </p>
           </div>
         </div>

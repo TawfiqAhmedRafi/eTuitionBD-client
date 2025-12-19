@@ -4,6 +4,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Pagination from "../../Components/Pagination/Pagination";
 import { Link } from "react-router";
 import GradientButton from "../../Components/GradientButton/GradientButton";
+import { format } from "date-fns";
 
 const AllTuitions = () => {
   const axiosSecure = useAxiosSecure();
@@ -218,7 +219,8 @@ const AllTuitions = () => {
 
                   <div className="card-actions justify-between items-center">
                     <span className="text-xs text-neutral-content">
-                      Posted {new Date(tuition.postedAt).toLocaleDateString()}
+                      Posted on {format(new Date(tuition.postedAt),"dd MMMM ,yy")}
+                     
                     </span>
 
                     <Link to={`/tuitions/${tuition._id}`}>

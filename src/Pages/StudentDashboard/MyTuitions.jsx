@@ -58,6 +58,51 @@ const MyTuitions = () => {
     }
   };
 
+  const handleCloseTuition = async (tuitionId) => {
+  try {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "This tuition will be permanently closed!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, close it!",
+    });
+
+    if (confirm.isConfirmed) {
+      const res = await axiosSecure.patch(`/tuitions/${tuitionId}`, {
+        status: "closed",
+      });
+
+      if (res.status === 200) {
+        queryClient.setQueryData(["myTuitions", page], (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            tuitions: oldData.tuitions.map((t) =>
+              t._id === tuitionId ? { ...t, status: "closed" } : t
+            ),
+          };
+        });
+
+        Swal.fire(
+          "Closed!",
+          "The tuition has been closed successfully.",
+          "success"
+        );
+      } else {
+        Swal.fire("Error", "Failed to close tuition.", "error");
+      }
+    }
+  } catch (err) {
+    console.error("Close tuition failed:", err);
+    Swal.fire("Error", "Failed to close tuition.", "error");
+  }
+};
+
+const handlePayNow=()=>{
+  
+}
+
   const openEditModal = (tuition) => {
     setEditingTuition(tuition);
     setFormData({
@@ -120,14 +165,14 @@ const MyTuitions = () => {
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-[#94C6CB]/30 text-gray-700">
+          <thead className="bg-primary/30 text-primary-content">
             <tr>
               <th className="py-3 px-2 md:px-4">#</th>
               <th className="py-3 px-2 md:px-4 text-left">Subjects</th>
-              <th className="py-3 px-2 md:px-4 text-left">Schedule</th>
               <th className="py-3 px-2 md:px-4 text-left">Budget</th>
               <th className="py-3 px-2 md:px-4 text-left">Mode</th>
               <th className="py-3 px-2 md:px-4 text-left">Status</th>
+              <th className="py-3 px-2 md:px-4 text-left">Payments / Close</th>
               <th className="py-3 px-2 md:px-4 text-left">Actions</th>
             </tr>
           </thead>
@@ -152,9 +197,7 @@ const MyTuitions = () => {
                     ))}
                   </div>
                 </td>
-                <td className="py-2 px-2 md:px-4">
-                  {tuition.days} days / {tuition.time}
-                </td>
+
                 <td className="py-2 px-2 md:px-4">
                   ৳{tuition.minBudget} - ৳{tuition.maxBudget}
                 </td>
@@ -172,16 +215,37 @@ const MyTuitions = () => {
                 </td>
                 <td className="py-2 px-2 md:px-4">
                   <span
-                    className={`badge ${
+                    className={`badge text-white font-semibold text-[10px] md:text-xs ${
                       tuition.status === "open"
                         ? "badge-success"
+                        : tuition.status === "assigned"
+                        ? "badge-warning"
                         : "badge-error"
-                    } text-[10px] md:text-xs`}
+                    }`}
                   >
                     {tuition.status.toUpperCase()}
                   </span>
                 </td>
+                <td className="py-2 px-2 md:px-4">
+                  {tuition.status === "assigned" && (
+                    <button
+                      onClick={() => handlePayNow(tuition._id)}
+                      className="btn btn-xs md:btn-sm btn-success btn-outline hover:text-white"
+                    >
+                      Pay Now
+                    </button>
+                  )}
 
+                  {(tuition.status === "open" ||
+                    tuition.status === "ongoing") && (
+                    <button
+                      onClick={() => handleCloseTuition(tuition._id)}
+                      className="btn btn-sm md:btn-sm btn-warning btn-outline hover:text-white"
+                    >
+                      Close Tuition
+                    </button>
+                  )}
+                </td>
                 <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row justify-center items-center gap-2">
                   <Link
                     to={`/tuitions/${tuition._id}`}
@@ -189,18 +253,25 @@ const MyTuitions = () => {
                   >
                     View
                   </Link>
-                  <button
-                    onClick={() => openEditModal(tuition)}
-                    className="btn btn-xs md:btn-sm btn-accent btn-outline"
-                  >
-                    <FiEdit className="w-3 h-3 md:w-4 md:h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(tuition._id)}
-                    className="btn btn-xs md:btn-sm btn-error btn-outline"
-                  >
-                    <FiTrash2 className="w-3 h-3 md:w-4 md:h-4" />
-                  </button>
+
+                  {tuition.status === "open" && (
+                    <button
+                      onClick={() => openEditModal(tuition)}
+                      className="btn btn-xs md:btn-sm btn-accent btn-outline"
+                    >
+                      <FiEdit className="w-3 h-3 md:w-4 md:h-4" />
+                    </button>
+                  )}
+
+                  {(tuition.status === "open" ||
+                    tuition.status === "closed") && (
+                    <button
+                      onClick={() => handleDelete(tuition._id)}
+                      className="btn btn-xs md:btn-sm btn-error btn-outline hover:text-white"
+                    >
+                      <FiTrash2 className="w-3 h-3 md:w-4 md:h-4" />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -217,153 +288,151 @@ const MyTuitions = () => {
 
       {/* Edit Tuition Modal */}
       {editingTuition && (
-       <>
-  <input
-    type="checkbox"
-    id="edit-modal"
-    className="modal-toggle"
-    checked
-    readOnly
-  />
-  <div className="modal modal-bottom sm:modal-middle">
-    <div className="modal-box relative">
-      <label
-        htmlFor="edit-modal"
-        className="btn btn-sm btn-circle absolute right-2 top-2"
-        onClick={() => setEditingTuition(null)}
-      >
-        ✕
-      </label>
-      <h3 className="text-lg font-bold mb-4">Edit Tuition</h3>
-
-      <div className="space-y-4">
-        <label className="w-full">
-          <span className="label-text font-medium">Class Level</span>
+        <>
           <input
-            type="text"
-            placeholder="Class Level"
-            value={formData.classLevel}
-            onChange={(e) =>
-              setFormData({ ...formData, classLevel: e.target.value })
-            }
-            className="input input-bordered w-full"
+            type="checkbox"
+            id="edit-modal"
+            className="modal-toggle"
+            checked
+            readOnly
           />
-        </label>
+          <div className="modal modal-bottom sm:modal-middle">
+            <div className="modal-box relative">
+              <label
+                htmlFor="edit-modal"
+                className="btn btn-sm btn-circle absolute right-2 top-2"
+                onClick={() => setEditingTuition(null)}
+              >
+                ✕
+              </label>
+              <h3 className="text-lg font-bold mb-4">Edit Tuition</h3>
 
-        <label className="w-full">
-          <span className="label-text font-medium">Subjects</span>
-          <input
-            type="text"
-            placeholder="Subjects (comma separated)"
-            value={formData.subjects}
-            onChange={(e) =>
-              setFormData({ ...formData, subjects: e.target.value })
-            }
-            className="input input-bordered w-full"
-          />
-        </label>
+              <div className="space-y-4">
+                <label className="w-full">
+                  <span className="label-text font-medium">Class Level</span>
+                  <input
+                    type="text"
+                    placeholder="Class Level"
+                    value={formData.classLevel}
+                    onChange={(e) =>
+                      setFormData({ ...formData, classLevel: e.target.value })
+                    }
+                    className="input input-bordered w-full"
+                  />
+                </label>
 
-        
-        <div className="flex gap-2">
-          <label className="w-1/2">
-            <span className="label-text font-medium">Days/Week</span>
-            <input
-              type="number"
-              placeholder="Days"
-              value={formData.days}
-              onChange={(e) =>
-                setFormData({ ...formData, days: e.target.value })
-              }
-              className="input input-bordered w-full"
-            />
-          </label>
+                <label className="w-full">
+                  <span className="label-text font-medium">Subjects</span>
+                  <input
+                    type="text"
+                    placeholder="Subjects (comma separated)"
+                    value={formData.subjects}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subjects: e.target.value })
+                    }
+                    className="input input-bordered w-full"
+                  />
+                </label>
 
-          <label className="w-1/2">
-            <span className="label-text font-medium">Time</span>
-            <select
-              value={formData.time}
-              onChange={(e) =>
-                setFormData({ ...formData, time: e.target.value })
-              }
-              className="select select-bordered w-full"
-            >
-              <option value="">Select Time</option>
-              <option value="any">Any</option>
-              <option value="morning">Morning</option>
-              <option value="noon">Noon</option>
-              <option value="afternoon">Afternoon</option>
-              <option value="evening">Evening</option>
-            </select>
-          </label>
-        </div>
+                <div className="flex gap-2">
+                  <label className="w-1/2">
+                    <span className="label-text font-medium">Days/Week</span>
+                    <input
+                      type="number"
+                      placeholder="Days"
+                      value={formData.days}
+                      onChange={(e) =>
+                        setFormData({ ...formData, days: e.target.value })
+                      }
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-        <div className="flex gap-2">
-          <label className="w-1/2">
-            <span className="label-text font-medium">Min Budget</span>
-            <input
-              type="number"
-              placeholder="Min Budget"
-              value={formData.minBudget}
-              onChange={(e) =>
-                setFormData({ ...formData, minBudget: e.target.value })
-              }
-              className="input input-bordered w-full"
-            />
-          </label>
+                  <label className="w-1/2">
+                    <span className="label-text font-medium">Time</span>
+                    <select
+                      value={formData.time}
+                      onChange={(e) =>
+                        setFormData({ ...formData, time: e.target.value })
+                      }
+                      className="select select-bordered w-full"
+                    >
+                      <option value="">Select Time</option>
+                      <option value="any">Any</option>
+                      <option value="morning">Morning</option>
+                      <option value="noon">Noon</option>
+                      <option value="afternoon">Afternoon</option>
+                      <option value="evening">Evening</option>
+                    </select>
+                  </label>
+                </div>
 
-          <label className="w-1/2">
-            <span className="label-text font-medium">Max Budget</span>
-            <input
-              type="number"
-              placeholder="Max Budget"
-              value={formData.maxBudget}
-              onChange={(e) =>
-                setFormData({ ...formData, maxBudget: e.target.value })
-              }
-              className="input input-bordered w-full"
-            />
-          </label>
-        </div>
+                <div className="flex gap-2">
+                  <label className="w-1/2">
+                    <span className="label-text font-medium">Min Budget</span>
+                    <input
+                      type="number"
+                      placeholder="Min Budget"
+                      value={formData.minBudget}
+                      onChange={(e) =>
+                        setFormData({ ...formData, minBudget: e.target.value })
+                      }
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-        <label className="w-full">
-          <span className="label-text font-medium">Mode</span>
-          <select
-            value={formData.mode}
-            onChange={(e) =>
-              setFormData({ ...formData, mode: e.target.value })
-            }
-            className="select select-bordered w-full"
-          >
-            <option value="">Select Mode</option>
-            <option value="Offline">Offline</option>
-            <option value="Online">Online</option>
-            <option value="Hybrid">Hybrid</option>
-          </select>
-        </label>
+                  <label className="w-1/2">
+                    <span className="label-text font-medium">Max Budget</span>
+                    <input
+                      type="number"
+                      placeholder="Max Budget"
+                      value={formData.maxBudget}
+                      onChange={(e) =>
+                        setFormData({ ...formData, maxBudget: e.target.value })
+                      }
+                      className="input input-bordered w-full"
+                    />
+                  </label>
+                </div>
 
-        <label className="w-full ">
-          <span className="label-text font-medium">Description</span>
-          <textarea
-            placeholder="Description"
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            className="textarea textarea-bordered w-full"
-          />
-        </label>
+                <label className="w-full">
+                  <span className="label-text font-medium">Mode</span>
+                  <select
+                    value={formData.mode}
+                    onChange={(e) =>
+                      setFormData({ ...formData, mode: e.target.value })
+                    }
+                    className="select select-bordered w-full"
+                  >
+                    <option value="">Select Mode</option>
+                    <option value="Offline">Offline</option>
+                    <option value="Online">Online</option>
+                    <option value="Hybrid">Hybrid</option>
+                  </select>
+                </label>
 
-        <AccentGradientButton
-          className="btn btn-primary w-full mt-2"
-          onClick={handleUpdate}
-        >
-          Update Tuition
-        </AccentGradientButton>
-      </div>
-    </div>
-  </div>
-</>
+                <label className="w-full ">
+                  <span className="label-text font-medium">Description</span>
+                  <textarea
+                    placeholder="Description"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    className="textarea textarea-bordered w-full"
+                  />
+                </label>
 
+                <AccentGradientButton
+                  className="btn btn-primary w-full mt-2"
+                  onClick={handleUpdate}
+                >
+                  Update Tuition
+                </AccentGradientButton>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

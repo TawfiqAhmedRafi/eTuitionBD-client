@@ -1,14 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useState } from "react";
 import { format } from "date-fns";
 import { Link } from "react-router";
 import GradientButton from "../../Components/GradientButton/GradientButton";
+import Swal from "sweetalert2";
 const Application = () => {
   const axiosSecure = useAxiosSecure();
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedApp, setSelectedApp] = useState(null);
-
+    const queryClient = useQueryClient()
   const { data, isLoading, isError } = useQuery({
     queryKey: ["student-applications", statusFilter],
     queryFn: async () => {
@@ -24,6 +25,45 @@ const Application = () => {
     statusFilter === "all"
       ? applications
       : applications.filter((app) => app.status === statusFilter);
+  ;
+
+  const updateApplicationStatus = async (appId, status) => {
+  const confirm = await Swal.fire({
+    title:
+      status === "accepted"
+        ? "Accept this tutor?"
+        : "Reject this application?",
+    text:
+      status === "accepted"
+        ? "This will assign the tuition and reject all other applications."
+        : "This action cannot be undone.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText:
+      status === "accepted" ? "Yes, Accept" : "Yes, Reject",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  try {
+    await axiosSecure.patch(`/applications/${appId}`, { status });
+
+    Swal.fire(
+      "Success",
+      `Application ${status} successfully`,
+      "success"
+    );
+
+    queryClient.invalidateQueries([
+      "student-applications",
+      statusFilter,
+    ]);
+  } catch (err) {
+    console.error("Update application error:", err);
+    Swal.fire("Error", "Failed to update application", "error");
+  }
+};
+
 
   if (isLoading)
     return (
@@ -44,7 +84,7 @@ const Application = () => {
       <h1 className="text-2xl font-bold mb-4">Applications Received</h1>
 
       {/* Status Filter */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col md:flex-row gap-2 mb-4">
         {["all", "pending", "accepted", "rejected"].map((s) => (
           <button
             key={s}
@@ -134,10 +174,10 @@ const Application = () => {
 
                     {app.status === "pending" && (
                       <>
-                        <button className="btn btn-sm btn-success hover:text-white">
+                        <button onClick={() => updateApplicationStatus(app._id, "accepted")} className="btn btn-sm btn-success hover:text-white">
                           Accept
                         </button>
-                        <button className="btn btn-sm btn-error hover:text-white">
+                        <button onClick={() => updateApplicationStatus(app._id, "rejected")} className="btn btn-sm btn-error hover:text-white">
                           Reject
                         </button>
                       </>

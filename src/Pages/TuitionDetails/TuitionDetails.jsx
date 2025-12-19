@@ -6,6 +6,7 @@ import AccentGradientButton from "../../Components/GradientButton/AccentGradient
 import GradientButton from "../../Components/GradientButton/GradientButton";
 import Swal from "sweetalert2";
 import useTutor from "../../hooks/useTutor";
+import { format } from "date-fns";
 
 const TuitionDetails = () => {
   const { id } = useParams();
@@ -27,8 +28,8 @@ const TuitionDetails = () => {
     },
     staleTime: 5 * 60 * 1000,
     cacheTime: 5 * 60 * 1000,
-     enabled: !!id,
-     refetchOnWindowFocus: false,
+    enabled: !!id,
+    refetchOnWindowFocus: false,
   });
   const { data: applyInfo, isLoading: applyLoading } = useQuery({
     queryKey: ["has-applied", id],
@@ -79,7 +80,7 @@ const TuitionDetails = () => {
       setModalOpen(false);
       setSalary("");
       setCoverLetter("");
-      queryClient.invalidateQueries(["tuition", id]); 
+      queryClient.invalidateQueries(["tuition", id]);
     },
   });
 
@@ -124,13 +125,13 @@ const TuitionDetails = () => {
     applyMutation.mutate();
   };
 
-  if (isLoading) { 
-  return (
-    <div className="p-10 text-center">
-      <progress className="progress progress-primary w-full" />
-    </div>
-  );
-}
+  if (isLoading) {
+    return (
+      <div className="p-10 text-center">
+        <progress className="progress progress-primary w-full" />
+      </div>
+    );
+  }
 
   if (isError)
     return (
@@ -159,10 +160,12 @@ const TuitionDetails = () => {
           </h1>
 
           <span
-            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+            className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-white ${
               tuition.status === "open"
-                ? "bg-success/20 text-success"
-                : "bg-error/20 text-error"
+                ? "bg-success "
+                : tuition.status === "assigned"
+                ? "bg-warning"
+                : "bg-error"
             }`}
           >
             {tuition.status.toUpperCase()}
@@ -204,60 +207,60 @@ const TuitionDetails = () => {
             {tuition.duration} hrs/class
           </p>
           <p className="text-sm text-neutral-content">
-            Posted on: {new Date(tuition.postedAt).toLocaleDateString()}
+            Posted on: {format(new Date(tuition.postedAt),"MMMM dd , yyyy")}
           </p>
         </div>
 
         {/* Right Bottom: Apply Button */}
         <div className="md:self-end mt-6 md:mt-0">
-         {tutorLoading || applyLoading ? (
-    <GradientButton className="btn btn-primary btn-lg btn-disabled w-full md:w-auto">
-      Loading...
-    </GradientButton>
-  ) : isTutor ? (
-    <AccentGradientButton
-      className={`btn btn-primary btn-lg ${
-        tuition.status !== "open" || applyInfo?.hasApplied
-          ? "btn-disabled"
-          : ""
-      }`}
-      onClick={() => {
-        if (applyInfo?.hasApplied) {
-          Swal.fire({
-            icon: "info",
-            title: "Already Applied",
-            text: "You have already applied to this tuition.",
-          });
-          return;
-        }
-        setModalOpen(true);
-      }}
-    >
-      {applyInfo?.hasApplied
-        ? "Already Applied"
-        : tuition.status === "open"
-        ? "Apply Now"
-        : "Tuition Closed"}
-    </AccentGradientButton>
-  ) : (
-    <div className="flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg w-full md:w-auto border border-yellow-300">
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M13 16h-1v-4h-1m1-4h.01M12 20h.01M12 4h.01"
-        ></path>
-      </svg>
-      <span>Only verified tutors can apply</span>
-    </div>
-  )}
+          {tutorLoading || applyLoading ? (
+            <GradientButton className="btn btn-primary btn-lg btn-disabled w-full md:w-auto">
+              Loading...
+            </GradientButton>
+          ) : isTutor ? (
+            <AccentGradientButton
+              className={`btn btn-primary btn-lg ${
+                tuition.status !== "open" || applyInfo?.hasApplied
+                  ? "btn-disabled"
+                  : ""
+              }`}
+              onClick={() => {
+                if (applyInfo?.hasApplied) {
+                  Swal.fire({
+                    icon: "info",
+                    title: "Already Applied",
+                    text: "You have already applied to this tuition.",
+                  });
+                  return;
+                }
+                setModalOpen(true);
+              }}
+            >
+              {applyInfo?.hasApplied
+                ? "Already Applied"
+                : tuition.status === "open"
+                ? "Apply Now"
+                : "Tuition Closed"}
+            </AccentGradientButton>
+          ) : (
+            <div className="flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg w-full md:w-auto border border-yellow-300">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 16h-1v-4h-1m1-4h.01M12 20h.01M12 4h.01"
+                ></path>
+              </svg>
+              <span>Only verified tutors can apply</span>
+            </div>
+          )}
         </div>
       </div>
 
