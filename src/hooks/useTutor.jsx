@@ -10,11 +10,12 @@ const useTutor = () => {
     queryKey: ["tutor-info", user?.email],
     queryFn: async () => {
       if (!user?.email) return null;
-      const res = await axiosSecure.get("/tutor-info"); 
+      const res = await axiosSecure.get("/tutor-info");
       return res.data;
     },
     enabled: !!user?.email,
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   return { tutor: data, isLoading, isError, refetch };

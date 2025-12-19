@@ -26,7 +26,9 @@ const TuitionDetails = () => {
       return res.data;
     },
     staleTime: 5 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
      enabled: !!id,
+     refetchOnWindowFocus: false,
   });
   const { data: applyInfo, isLoading: applyLoading } = useQuery({
     queryKey: ["has-applied", id],
@@ -35,7 +37,9 @@ const TuitionDetails = () => {
       return res.data;
     },
     staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
     enabled: isTutor && !!id,
+    refetchOnWindowFocus: false,
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [salary, setSalary] = useState("");
@@ -207,9 +211,9 @@ const TuitionDetails = () => {
         {/* Right Bottom: Apply Button */}
         <div className="md:self-end mt-6 md:mt-0">
          {tutorLoading || applyLoading ? (
-    <button className="btn btn-primary btn-lg btn-disabled w-full md:w-auto">
+    <GradientButton className="btn btn-primary btn-lg btn-disabled w-full md:w-auto">
       Loading...
-    </button>
+    </GradientButton>
   ) : isTutor ? (
     <AccentGradientButton
       className={`btn btn-primary btn-lg ${
@@ -235,7 +239,25 @@ const TuitionDetails = () => {
         ? "Apply Now"
         : "Tuition Closed"}
     </AccentGradientButton>
-  ) : null}
+  ) : (
+    <div className="flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg w-full md:w-auto border border-yellow-300">
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M13 16h-1v-4h-1m1-4h.01M12 20h.01M12 4h.01"
+        ></path>
+      </svg>
+      <span>Only verified tutors can apply</span>
+    </div>
+  )}
         </div>
       </div>
 
