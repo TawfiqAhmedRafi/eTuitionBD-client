@@ -118,14 +118,14 @@ const TutorApplication = () => {
                 <td className="font-mono">{format(new Date(app.appliedAt), "MMM dd, yyyy")}</td>
                 <td className="flex gap-2">
                   <button
-                    className="btn btn-xs btn-outline btn-info hover:text-white"
+                    className="btn btn-sm btn-outline btn-info hover:text-white"
                     onClick={() => setSelectedApp(app)}
                   >
                     View
                   </button>
                   {app.status === "pending" && (
                     <button
-                      className="btn  btn-xs btn-outline btn-error hover:text-white"
+                      className="btn  btn-sm btn-outline btn-error hover:text-white"
                       onClick={() => handleCancel(app._id)}
                     >
                       Cancel
@@ -145,11 +145,12 @@ const TutorApplication = () => {
             <div className="space-y-2 text-sm">
               <p>
                 <span className="font-semibold">Subjects:</span>{" "}
-                {selectedApp.subjects.join(", ")}
+                 <span className="font-bold">{selectedApp.subjects.join(", ")}</span>
               </p>
               <p>
                 <span className="font-semibold">Class Level:</span>{" "}
-                {selectedApp.classLevel}
+                <span className="badge badge-primary font-semibold text-white">{selectedApp.classLevel}</span>
+                
               </p>
               <p>
                 <span className="font-semibold">Location:</span>{" "}
@@ -160,8 +161,8 @@ const TutorApplication = () => {
                 {selectedApp.days} days | {selectedApp.tuitionTime}
               </p>
               <p>
-                <span className="font-semibold">Salary:</span> ৳
-                {selectedApp.salary}
+                <span className="font-semibold">Salary:</span> 
+                 <span className="font-bold text-primary">৳{selectedApp.salary}</span>
               </p>
               <p>
                 <span className="font-semibold">Status:</span>{" "}

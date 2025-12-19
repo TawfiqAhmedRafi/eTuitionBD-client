@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SocialLogin from "../../../Components/SocialLogin/SocialLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useLocation, useNavigate, Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import GradientButton from "../../../Components/GradientButton/GradientButton";
@@ -14,7 +14,12 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm();
+  const password = useWatch({
+    control,
+    name: "password",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const { registerUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
@@ -177,6 +182,7 @@ const Register = () => {
               {showPassword ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
             </button>
           </div>
+          {/*  */}
 
           {errors.password?.type === "required" && (
             <p className="text-red-500">Password is Required</p>
@@ -188,7 +194,24 @@ const Register = () => {
               and 1 special character{" "}
             </p>
           )}
+          {/* confirm password */}
+          <label className="label">Confirm Password</label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
+              className="input w-full"
+              placeholder="Confirm Password"
+            />
+          </div>
 
+          {errors.confirmPassword && (
+            <p className="text-red-500">{errors.confirmPassword.message}</p>
+          )}
           <GradientButton type="submit" className="btn btn-primary mt-4">
             Register
           </GradientButton>
