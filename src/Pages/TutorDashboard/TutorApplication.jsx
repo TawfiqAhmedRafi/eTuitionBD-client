@@ -79,7 +79,7 @@ const TutorApplication = () => {
       {/* Applications Table */}
       <div className="overflow-x-auto">
         <table className="table table-zebra min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-[#94C6CB]/30 text-gray-700">
+          <thead className="bg-primary/40  text-primary-content">
             <tr>
               <th>#</th>
               <th>Subjects</th>

@@ -174,7 +174,11 @@ const AllTuitions = () => {
                 <div className="card-body p-5">
                   {/* Class Level */}
                   <h2 className="text-lg font-semibold text-base-content mb-2">
-                    {tuition.classLevel} Student
+                    {["SSC", "HSC", "O-LEVEL", "A-LEVEL"].includes(
+                      tuition.classLevel?.toUpperCase()
+                    )
+                      ? `${tuition.classLevel.toUpperCase()} Level Student`
+                      : `Class ${tuition.classLevel} Student`}
                   </h2>
 
                   {/* Subjects */}
