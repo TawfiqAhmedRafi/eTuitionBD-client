@@ -9,7 +9,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const ApplyTutors = () => {
   const { register, handleSubmit } = useForm();
-  
+
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
@@ -47,7 +47,7 @@ const ApplyTutors = () => {
         experienceYears: Number(data.experienceYears) || 0,
         experienceMonths: Number(data.experienceMonths) || 0,
         subjects,
-        time : data.time,
+        time: data.time,
         district: data.district,
         location: data.location,
         salary: Number(data.salary),
@@ -102,6 +102,10 @@ const ApplyTutors = () => {
             <p className="text-base text-base-content/80 mt-2 max-w-xl mx-auto">
               Share your skills and help thousands of students learn better.
               Submit your teaching profile to join our verified tutor community.
+            </p>
+            <p className="text-xs text-neutral-content mt-2">
+              First month: <span className="font-semibold">60%</span> of tutor
+              salary will be charged as platform fee.
             </p>
           </div>
 
@@ -316,6 +320,10 @@ const ApplyTutors = () => {
                   placeholder="Short bio about your teaching style"
                 ></textarea>
               </div>
+              <label className="flex items-center gap-2 text-xs mt-2">
+                <input type="checkbox" required />I understand the first-month
+                platform fee policy
+              </label>
 
               <GradientButton type="submit" className="w-full text-lg py-3">
                 Submit Application

@@ -13,7 +13,7 @@ const MyTuitions = () => {
   const [page, setPage] = useState(1);
   const [editingTuition, setEditingTuition] = useState(null);
   const [formData, setFormData] = useState({});
-
+const [paying, setPaying] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["myTuitions", page],
     queryFn: async () => {
@@ -100,6 +100,8 @@ const MyTuitions = () => {
   };
 
   const handlePayNow = async (tuition) => {
+     if (paying) return; 
+  setPaying(true);
     try {
       const res = await axiosSecure.post("/payment-checkout-session", {
         tuitionId: tuition._id,
@@ -245,7 +247,7 @@ const MyTuitions = () => {
                       onClick={() => handlePayNow(tuition)}
                       className="btn btn-xs md:btn-sm btn-success btn-outline hover:text-white"
                     >
-                      Pay Now
+                       {paying ? "Processing..." : "Pay Now"}
                     </button>
                   )}
 
