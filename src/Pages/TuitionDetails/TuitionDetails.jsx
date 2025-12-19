@@ -75,7 +75,7 @@ const TuitionDetails = () => {
       setModalOpen(false);
       setSalary("");
       setCoverLetter("");
-      queryClient.invalidateQueries(["tuition", id]); // refresh tuition data
+      queryClient.invalidateQueries(["tuition", id]); 
     },
   });
 
