@@ -165,7 +165,7 @@ const TuitionDetails = () => {
                 ? "bg-success "
                 : tuition.status === "assigned"
                 ? "bg-warning"
-                : "bg-error"
+                :tuition.status === "ongoing"?"bg-accent": "bg-error"
             }`}
           >
             {tuition.status.toUpperCase()}

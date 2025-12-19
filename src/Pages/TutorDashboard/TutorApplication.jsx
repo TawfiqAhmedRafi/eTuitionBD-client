@@ -8,7 +8,7 @@ const TutorApplication = () => {
   const axiosSecure = useAxiosSecure();
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedApp, setSelectedApp] = useState(null);
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError,refetch } = useQuery({
     queryKey: ["tutor-applications", statusFilter],
     queryFn: async () => {
       const res = await axiosSecure.get("/applications/my-applications");
@@ -51,6 +51,7 @@ const TutorApplication = () => {
     try {
       await axiosSecure.delete(`/applications/${appId}`);
       Swal.fire("Cancelled", "Application has been cancelled", "success");
+      refetch();
     } catch (err) {
       console.log("application cancellation error ", err);
       Swal.fire("Error", "Failed to cancel application", "error");
@@ -93,12 +94,21 @@ const TutorApplication = () => {
           </thead>
           <tbody>
             {filteredApplications.map((app, index) => (
-              <tr className=" border-t border-gray-200 hover:bg-gray-50" key={app._id}>
+              <tr
+                className=" border-t border-gray-200 hover:bg-gray-50"
+                key={app._id}
+              >
                 <th className="flex items-center gap-2">{index + 1}</th>
                 <td className="font-bold">{app.subjects.join(", ")}</td>
-                <td> <span  className="badge badge-primary font-semibold text-white">{app.classLevel}</span> </td>
                 <td>
-                 <span className="font-medium">{app.days} days </span> | <span className="text-secondary">{app.tuitionTime}</span> 
+                  {" "}
+                  <span className="badge badge-primary font-semibold text-white">
+                    {app.classLevel}
+                  </span>{" "}
+                </td>
+                <td>
+                  <span className="font-medium">{app.days} days </span> |{" "}
+                  <span className="text-secondary">{app.tuitionTime}</span>
                 </td>
                 <td className="text-primary font-semibold">৳{app.salary}</td>
                 <td>
@@ -115,7 +125,9 @@ const TutorApplication = () => {
                   </span>
                 </td>
 
-                <td className="font-mono">{format(new Date(app.appliedAt), "MMM dd, yyyy")}</td>
+                <td className="font-mono">
+                  {format(new Date(app.appliedAt), "MMM dd, yyyy")}
+                </td>
                 <td className="flex gap-2">
                   <button
                     className="btn btn-sm btn-outline btn-info hover:text-white"
@@ -123,14 +135,15 @@ const TutorApplication = () => {
                   >
                     View
                   </button>
-                  {app.status === "pending" && (
-                    <button
-                      className="btn  btn-sm btn-outline btn-error hover:text-white"
-                      onClick={() => handleCancel(app._id)}
-                    >
-                      Cancel
-                    </button>
-                  )}
+                  {app.status === "pending" ||
+                    (app.status === "rejected" && (
+                      <button
+                        className="btn  btn-sm btn-outline btn-error hover:text-white"
+                        onClick={() => handleCancel(app._id)}
+                      >
+                        Cancel
+                      </button>
+                    ))}
                 </td>
               </tr>
             ))}
@@ -145,12 +158,15 @@ const TutorApplication = () => {
             <div className="space-y-2 text-sm">
               <p>
                 <span className="font-semibold">Subjects:</span>{" "}
-                 <span className="font-bold">{selectedApp.subjects.join(", ")}</span>
+                <span className="font-bold">
+                  {selectedApp.subjects.join(", ")}
+                </span>
               </p>
               <p>
                 <span className="font-semibold">Class Level:</span>{" "}
-                <span className="badge badge-primary font-semibold text-white">{selectedApp.classLevel}</span>
-                
+                <span className="badge badge-primary font-semibold text-white">
+                  {selectedApp.classLevel}
+                </span>
               </p>
               <p>
                 <span className="font-semibold">Location:</span>{" "}
@@ -161,8 +177,10 @@ const TutorApplication = () => {
                 {selectedApp.days} days | {selectedApp.tuitionTime}
               </p>
               <p>
-                <span className="font-semibold">Salary:</span> 
-                 <span className="font-bold text-primary">৳{selectedApp.salary}</span>
+                <span className="font-semibold">Salary:</span>
+                <span className="font-bold text-primary">
+                  ৳{selectedApp.salary}
+                </span>
               </p>
               <p>
                 <span className="font-semibold">Status:</span>{" "}
@@ -175,7 +193,8 @@ const TutorApplication = () => {
                       : "badge-error"
                   }`}
                 >
-                  {selectedApp.status.charAt(0).toUpperCase() + selectedApp.status.slice(1)}
+                  {selectedApp.status.charAt(0).toUpperCase() +
+                    selectedApp.status.slice(1)}
                 </span>
               </p>
 
