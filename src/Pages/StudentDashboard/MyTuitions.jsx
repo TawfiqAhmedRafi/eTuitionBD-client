@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Swal from "sweetalert2";
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
+import ReviewModal from "./ReviewModal";
 
 const MyTuitions = () => {
   const queryClient = useQueryClient();
@@ -14,6 +15,7 @@ const MyTuitions = () => {
   const [editingTuition, setEditingTuition] = useState(null);
   const [formData, setFormData] = useState({});
   const [paying, setPaying] = useState(false);
+  const [reviewTuition, setReviewTuition] = useState(null);
   const limit = 10;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["myTuitions", page],
@@ -273,6 +275,18 @@ const MyTuitions = () => {
                       Complete Tuition
                     </button>
                   )}
+                  {tuition.status === "completed" && !tuition.reviewed && (
+                    <button
+                      onClick={() => setReviewTuition(tuition)}
+                      className="btn btn-sm btn-info btn-outline"
+                    >
+                      Review Tutor
+                    </button>
+                  )}
+
+                  {tuition.reviewed && (
+                    <span className="badge badge-success">Reviewed</span>
+                  )}
                 </td>
                 <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row justify-center items-center gap-2">
                   <Link
@@ -292,7 +306,8 @@ const MyTuitions = () => {
                   )}
 
                   {(tuition.status === "open" ||
-                    tuition.status === "closed") && (
+                    tuition.status === "closed" ||
+                    tuition.status === "completed") && (
                     <button
                       onClick={() => handleDelete(tuition._id)}
                       className="btn btn-xs md:btn-sm btn-error btn-outline hover:text-white"
@@ -461,6 +476,14 @@ const MyTuitions = () => {
             </div>
           </div>
         </>
+      )}
+      {/* review modal */}
+      {reviewTuition && (
+        <ReviewModal
+          tuition={reviewTuition}
+          onClose={() => setReviewTuition(null)}
+          onSuccess={() => queryClient.invalidateQueries(["myTuitions", page])}
+        />
       )}
     </div>
   );
