@@ -162,10 +162,14 @@ const TuitionDetails = () => {
           <span
             className={`inline-block px-3 py-1 rounded-full text-sm font-semibold text-white ${
               tuition.status === "open"
-                ? "bg-success "
+                ? "bg-success"
                 : tuition.status === "assigned"
                 ? "bg-warning"
-                :tuition.status === "ongoing"?"bg-accent": "bg-error"
+                : tuition.status === "ongoing"
+                ? "bg-accent"
+                : tuition.status === "completed"
+                ? "bg-info"
+                : "bg-error"
             }`}
           >
             {tuition.status.toUpperCase()}
@@ -207,7 +211,7 @@ const TuitionDetails = () => {
             {tuition.duration} hrs/class
           </p>
           <p className="text-sm text-neutral-content">
-            Posted on: {format(new Date(tuition.postedAt),"MMMM dd , yyyy")}
+            Posted on: {format(new Date(tuition.postedAt), "MMMM dd , yyyy")}
           </p>
         </div>
 

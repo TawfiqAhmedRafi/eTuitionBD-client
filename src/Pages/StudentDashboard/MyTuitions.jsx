@@ -59,44 +59,43 @@ const MyTuitions = () => {
     }
   };
 
-  const handleCloseTuition = async (tuitionId) => {
+  const handleUpdateTuitionStatus = async (tuitionId, nextStatus) => {
     try {
       const confirm = await Swal.fire({
         title: "Are you sure?",
-        text: "This tuition will be permanently closed!",
+        text: `This tuition will be marked as "${nextStatus}".`,
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, close it!",
+        confirmButtonText: "Yes, continue!",
       });
 
-      if (confirm.isConfirmed) {
-        const res = await axiosSecure.patch(`/tuitions/${tuitionId}`, {
-          status: "closed",
+      if (!confirm.isConfirmed) return;
+
+      const res = await axiosSecure.patch(`/tuitions/${tuitionId}`, {
+        status: nextStatus,
+      });
+
+      if (res.status === 200) {
+        queryClient.setQueryData(["myTuitions", page], (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            tuitions: oldData.tuitions.map((t) =>
+              t._id === tuitionId ? { ...t, status: nextStatus } : t
+            ),
+          };
         });
 
-        if (res.status === 200) {
-          queryClient.setQueryData(["myTuitions", page], (oldData) => {
-            if (!oldData) return oldData;
-            return {
-              ...oldData,
-              tuitions: oldData.tuitions.map((t) =>
-                t._id === tuitionId ? { ...t, status: "closed" } : t
-              ),
-            };
-          });
-
-          Swal.fire(
-            "Closed!",
-            "The tuition has been closed successfully.",
-            "success"
-          );
-        } else {
-          Swal.fire("Error", "Failed to close tuition.", "error");
-        }
+        Swal.fire(
+          "Updated!",
+          `Tuition status updated to "${nextStatus}".`,
+          "success"
+        );
       }
     } catch (err) {
-      console.error("Close tuition failed:", err);
-      Swal.fire("Error", "Failed to close tuition.", "error");
+      console.error("Update tuition status failed:", err);
+      Swal.fire("Error", "Failed to update tuition.", "error");
     }
   };
 
@@ -236,6 +235,8 @@ const MyTuitions = () => {
                         ? "badge-warning"
                         : tuition.status === "ongoing"
                         ? "badge-accent"
+                        : tuition.status === "completed"
+                        ? "badge-info"
                         : "badge-error"
                     }`}
                   >
@@ -252,13 +253,24 @@ const MyTuitions = () => {
                     </button>
                   )}
 
-                  {(tuition.status === "open" ||
-                    tuition.status === "ongoing") && (
+                  {tuition.status === "open" && (
                     <button
-                      onClick={() => handleCloseTuition(tuition._id)}
+                      onClick={() =>
+                        handleUpdateTuitionStatus(tuition._id, "closed")
+                      }
                       className="btn btn-sm md:btn-sm btn-warning btn-outline hover:text-white"
                     >
                       Close Tuition
+                    </button>
+                  )}
+                  {tuition.status === "ongoing" && (
+                    <button
+                      onClick={() =>
+                        handleUpdateTuitionStatus(tuition._id, "completed")
+                      }
+                      className="btn btn-sm md:btn-sm btn-success btn-outline hover:text-white"
+                    >
+                      Complete Tuition
                     </button>
                   )}
                 </td>

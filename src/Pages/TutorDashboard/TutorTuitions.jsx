@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 const TutorTuitions = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
-  const limit=10
+  const limit = 10;
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["tutor-tuitions", page],
     queryFn: async () => {
@@ -69,7 +69,7 @@ const TutorTuitions = () => {
               <th className="py-3 px-2 md:px-4 text-left">Salary</th>
               <th className="py-3 px-2 md:px-4 text-left">Mode</th>
               <th className="py-3 px-2 md:px-4 text-left">Status</th>
-              <th className="py-3 px-2 md:px-4 text-left">Payments / Close</th>
+              <th className="py-3 px-2 md:px-4 text-left">Complete</th>
               <th className="py-3 px-2 md:px-4 text-left">Actions</th>
             </tr>
           </thead>
@@ -80,7 +80,7 @@ const TutorTuitions = () => {
                 className="border-t border-gray-200 hover:bg-gray-50"
               >
                 <th className="py-2 px-2 md:px-4">
-                 {(page - 1) * limit + index + 1}
+                  {(page - 1) * limit + index + 1}
                 </th>
                 <td className="py-2 px-2 md:px-4 font-medium">
                   <div className="flex flex-wrap gap-1">
@@ -119,6 +119,8 @@ const TutorTuitions = () => {
                         ? "badge-warning"
                         : tuition.status === "ongoing"
                         ? "badge-accent"
+                        : tuition.status === "completed"
+                        ? "badge-info"
                         : "badge-error"
                     }`}
                   >
@@ -128,10 +130,7 @@ const TutorTuitions = () => {
                 <td className="py-2 px-2 md:px-4">
                   {tuition.status === "assigned" ? (
                     <>
-                    <button
-                        
-                        className="btn btn-sm md:btn-sm btn-primary btn-outline hover:text-white"
-                      >
+                      <button className="btn btn-sm md:btn-sm btn-primary btn-outline hover:text-white">
                         Contact Now
                       </button>
                     </>
@@ -140,9 +139,9 @@ const TutorTuitions = () => {
                       {" "}
                       <button
                         onClick={() => handleCloseTuition(tuition._id)}
-                        className="btn btn-sm md:btn-sm btn-warning btn-outline hover:text-white"
+                        className="btn btn-sm md:btn-sm btn-success btn-outline hover:text-white"
                       >
-                        Close Tuition
+                        Complete Tuition
                       </button>
                     </>
                   )}
