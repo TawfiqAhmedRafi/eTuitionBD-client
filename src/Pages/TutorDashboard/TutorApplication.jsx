@@ -1,42 +1,32 @@
-import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
+import Pagination from "../../Components/Pagination/Pagination";
 
 const TutorApplication = () => {
   const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedApp, setSelectedApp] = useState(null);
-  const { data, isLoading, isError,refetch } = useQuery({
-    queryKey: ["tutor-applications", statusFilter],
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["tutor-applications", statusFilter, page],
     queryFn: async () => {
-      const res = await axiosSecure.get("/applications/my-applications");
+      const res = await axiosSecure.get("/applications/my-applications", {
+        params: { page, limit, status: statusFilter },
+      });
       return res.data;
     },
-    staleTime: 5 * 60 * 1000,
+    keepPreviousData: true,
   });
 
   const applications = data?.applications || [];
+  const totalPages = data?.pagination?.totalPages || 1;
 
-  const filteredApplications =
-    statusFilter === "all"
-      ? applications
-      : applications.filter((app) => app.status === statusFilter);
-
-  if (isLoading)
-    return (
-      <div className="p-10 text-center">
-        <progress className="progress progress-primary w-full" />
-      </div>
-    );
-
-  if (isError)
-    return (
-      <div className="p-10 text-center text-error">
-        Failed to load applications.
-      </div>
-    );
   const handleCancel = async (appId) => {
     const confirm = await Swal.fire({
       title: "Cancel Application?",
@@ -51,12 +41,26 @@ const TutorApplication = () => {
     try {
       await axiosSecure.delete(`/applications/${appId}`);
       Swal.fire("Cancelled", "Application has been cancelled", "success");
-      refetch();
+      queryClient.invalidateQueries(["tutor-applications", statusFilter, page]);
     } catch (err) {
       console.log("application cancellation error ", err);
       Swal.fire("Error", "Failed to cancel application", "error");
     }
   };
+
+  if (isLoading)
+    return (
+      <div className="p-10 text-center">
+        <progress className="progress progress-primary w-full" />
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="p-10 text-center text-error">
+        Failed to load applications.
+      </div>
+    );
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 space-y-6">
@@ -70,7 +74,10 @@ const TutorApplication = () => {
             className={`btn btn-sm ${
               statusFilter === s ? "btn-primary" : "btn-outline"
             }`}
-            onClick={() => setStatusFilter(s)}
+            onClick={() => {
+              setStatusFilter(s);
+              setPage(1); // reset page when changing filter
+            }}
           >
             {s.charAt(0).toUpperCase() + s.slice(1)}
           </button>
@@ -93,18 +100,17 @@ const TutorApplication = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredApplications.map((app, index) => (
+            {applications.map((app, index) => (
               <tr
-                className=" border-t border-gray-200 hover:bg-gray-50"
+                className="border-t border-gray-200 hover:bg-gray-50"
                 key={app._id}
               >
-                <th className="flex items-center gap-2">{index + 1}</th>
+                <th>{(page - 1) * limit + index + 1}</th>
                 <td className="font-bold">{app.subjects.join(", ")}</td>
                 <td>
-                  {" "}
                   <span className="badge badge-primary font-semibold text-white">
                     {app.classLevel}
-                  </span>{" "}
+                  </span>
                 </td>
                 <td>
                   <span className="font-medium">{app.days} days </span> |{" "}
@@ -124,7 +130,6 @@ const TutorApplication = () => {
                     {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
                   </span>
                 </td>
-
                 <td className="font-mono">
                   {format(new Date(app.appliedAt), "MMM dd, yyyy")}
                 </td>
@@ -135,32 +140,40 @@ const TutorApplication = () => {
                   >
                     View
                   </button>
-                  {app.status === "pending" ||
-                    (app.status === "rejected" && (
-                      <button
-                        className="btn  btn-sm btn-outline btn-error hover:text-white"
-                        onClick={() => handleCancel(app._id)}
-                      >
-                        Cancel
-                      </button>
-                    ))}
+                  {(app.status === "pending" || app.status === "rejected") && (
+                    <button
+                      className="btn btn-sm btn-outline btn-error hover:text-white"
+                      onClick={() => handleCancel(app._id)}
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
+            {applications.length === 0 && (
+              <tr>
+                <td colSpan="8" className="text-center py-10 opacity-70">
+                  No applications found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+
+      {/* Application Details Modal */}
       {selectedApp && (
         <dialog className="modal modal-open">
           <div className="modal-box w-11/12 max-w-lg">
             <h3 className="font-bold text-lg mb-3">Application Details</h3>
-
             <div className="space-y-2 text-sm">
               <p>
                 <span className="font-semibold">Subjects:</span>{" "}
-                <span className="font-bold">
-                  {selectedApp.subjects.join(", ")}
-                </span>
+                <span className="font-bold">{selectedApp.subjects.join(", ")}</span>
               </p>
               <p>
                 <span className="font-semibold">Class Level:</span>{" "}
@@ -169,18 +182,15 @@ const TutorApplication = () => {
                 </span>
               </p>
               <p>
-                <span className="font-semibold">Location:</span>{" "}
-                {selectedApp.location}
+                <span className="font-semibold">Location:</span> {selectedApp.location}
               </p>
               <p>
                 <span className="font-semibold">Days / Time:</span>{" "}
                 {selectedApp.days} days | {selectedApp.tuitionTime}
               </p>
               <p>
-                <span className="font-semibold">Salary:</span>
-                <span className="font-bold text-primary">
-                  ৳{selectedApp.salary}
-                </span>
+                <span className="font-semibold">Salary:</span>{" "}
+                <span className="font-bold text-primary">৳{selectedApp.salary}</span>
               </p>
               <p>
                 <span className="font-semibold">Status:</span>{" "}
@@ -201,24 +211,17 @@ const TutorApplication = () => {
               {selectedApp.coverLetter && (
                 <div>
                   <p className="font-semibold">Cover Letter:</p>
-                  <p className="bg-base-200 p-2 rounded text-sm">
-                    {selectedApp.coverLetter}
-                  </p>
+                  <p className="bg-base-200 p-2 rounded text-sm">{selectedApp.coverLetter}</p>
                 </div>
               )}
             </div>
 
             <div className="modal-action">
-              <button
-                className="btn btn-outline"
-                onClick={() => setSelectedApp(null)}
-              >
+              <button className="btn btn-outline" onClick={() => setSelectedApp(null)}>
                 Close
               </button>
             </div>
           </div>
-
-          {/* click outside to close */}
           <form method="dialog" className="modal-backdrop">
             <button onClick={() => setSelectedApp(null)}>close</button>
           </form>

@@ -8,12 +8,12 @@ const MyPayments = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);
-
+const limit =10;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["myPayments", page],
     queryFn: async () => {
       const res = await axiosSecure.get("/payments", {
-        params: { page, limit: 10 },
+        params: { page, limit },
       });
       return res.data;
     },
@@ -62,7 +62,7 @@ const MyPayments = () => {
                 key={p._id}
                 className="border-t border-gray-200 hover:bg-gray-50"
               >
-                <th className="py-2 px-3">{(page - 1) * 10 + index + 1}</th>
+                <th className="py-2 px-3">{(page - 1) * limit + index + 1}</th>
                 <td className="py-2 px-3 font-medium">{p.tutorEmail}</td>
                 <td className="py-2 px-3 font-semibold text-accent">
                   ৳{p.amount.toLocaleString()}

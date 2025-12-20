@@ -8,11 +8,12 @@ import Swal from "sweetalert2";
 const TutorTuitions = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
+  const limit=10
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["tutor-tuitions", page],
     queryFn: async () => {
       const res = await axiosSecure.get("/dashboard/tutor-tuitions", {
-        params: { page, limit: 10 },
+        params: { page, limit },
       });
       return res.data;
     },
@@ -79,7 +80,7 @@ const TutorTuitions = () => {
                 className="border-t border-gray-200 hover:bg-gray-50"
               >
                 <th className="py-2 px-2 md:px-4">
-                  {(page - 1) * 10 + index + 1}
+                 {(page - 1) * limit + index + 1}
                 </th>
                 <td className="py-2 px-2 md:px-4 font-medium">
                   <div className="flex flex-wrap gap-1">

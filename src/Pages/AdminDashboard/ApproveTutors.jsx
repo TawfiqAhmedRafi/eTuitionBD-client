@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 const ApproveTutors = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+ 
   const [filters, setFilters] = useState({
     status: "",
     page: 1,
@@ -134,7 +135,7 @@ const ApproveTutors = () => {
                 key={tutor._id}
                 className="transition-colors duration-200 hover:bg-base-300/40"
               >
-                <td className="font-bold ml-2">{index + 1}</td>
+                <td className="font-bold ml-2">{(filters.page - 1) * filters.limit + index + 1}</td>
                 <td>
                   <div className="flex items-center gap-3 whitespace-nowrap">
                     <img

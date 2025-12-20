@@ -8,12 +8,13 @@ const Revenue = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);
-const [showPolicy, setShowPolicy] = useState(true);
+  const [showPolicy, setShowPolicy] = useState(true);
+  const limit = 10;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["tutorRevenue", page],
     queryFn: async () => {
       const res = await axiosSecure.get("/payments", {
-        params: { page, limit: 10 },
+        params: { page, limit },
       });
       return res.data;
     },
@@ -41,21 +42,21 @@ const [showPolicy, setShowPolicy] = useState(true);
       <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-6">
         Revenue
       </h2>
-{showPolicy && (
-  <div className="alert alert-info text-white  mb-6 flex justify-between items-start">
-    <span>
-       <strong>Platform Fee Policy:</strong>  
-      For the first month, <strong>60%</strong> of tutor salary is charged as
-      platform fee.
-    </span>
-    <button
-      className="btn btn-xs btn-ghost"
-      onClick={() => setShowPolicy(false)}
-    >
-      ✕
-    </button>
-  </div>
-)}
+      {showPolicy && (
+        <div className="alert alert-info text-white  mb-6 flex justify-between items-start">
+          <span>
+            <strong>Platform Fee Policy:</strong>
+            For the first month, <strong>60%</strong> of tutor salary is charged
+            as platform fee.
+          </span>
+          <button
+            className="btn btn-xs btn-ghost"
+            onClick={() => setShowPolicy(false)}
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
           <thead className="bg-primary/30 text-primary-content">
@@ -75,7 +76,7 @@ const [showPolicy, setShowPolicy] = useState(true);
                 key={p._id}
                 className="border-t border-gray-200 hover:bg-gray-50"
               >
-                <th className="py-2 px-3">{(page - 1) * 10 + index + 1}</th>
+                <th className="py-2 px-3">{(page - 1) * limit + index + 1}</th>
 
                 <td className="py-2 px-3 font-medium">{p.studentEmail}</td>
                 <td className="py-2 px-3 font-semibold text-accent">
@@ -179,7 +180,6 @@ const [showPolicy, setShowPolicy] = useState(true);
                 <span className="font-medium">Tuition ID:</span>{" "}
                 <span className="font-mono">{selected.tuitionId}</span>
               </p>
-              
             </div>
 
             <div className="flex justify-end mt-4">

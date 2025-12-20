@@ -13,12 +13,13 @@ const MyTuitions = () => {
   const [page, setPage] = useState(1);
   const [editingTuition, setEditingTuition] = useState(null);
   const [formData, setFormData] = useState({});
-const [paying, setPaying] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const limit = 10;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["myTuitions", page],
     queryFn: async () => {
       const res = await axiosSecure.get("/dashboard/my-tuitions", {
-        params: { page, limit: 10 },
+        params: { page, limit },
       });
       return res.data;
     },
@@ -100,8 +101,8 @@ const [paying, setPaying] = useState(false);
   };
 
   const handlePayNow = async (tuition) => {
-     if (paying) return; 
-  setPaying(true);
+    if (paying) return;
+    setPaying(true);
     try {
       const res = await axiosSecure.post("/payment-checkout-session", {
         tuitionId: tuition._id,
@@ -196,7 +197,7 @@ const [paying, setPaying] = useState(false);
                 className="border-t border-gray-200 hover:bg-gray-50"
               >
                 <th className="py-2 px-2 md:px-4">
-                  {(page - 1) * 10 + index + 1}
+                  {(page - 1) * limit + index + 1}
                 </th>
                 <td className="py-2 px-2 md:px-4 font-medium">
                   <div className="flex flex-wrap gap-1">
@@ -247,7 +248,7 @@ const [paying, setPaying] = useState(false);
                       onClick={() => handlePayNow(tuition)}
                       className="btn btn-xs md:btn-sm btn-success btn-outline hover:text-white"
                     >
-                       {paying ? "Processing..." : "Pay Now"}
+                      {paying ? "Processing..." : "Pay Now"}
                     </button>
                   )}
 
