@@ -7,6 +7,7 @@ import ReviewCard from "./ReviewCard";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import ReviewCardSkeleton from "./ReviewCardSkeleton";
 
 const LatestReviews = () => {
   const axiosSecure = useAxiosSecure();
@@ -19,11 +20,10 @@ const LatestReviews = () => {
     },
   });
 
-  if (isLoading)
-    return <span className="loading loading-dots text-primary"></span>;
-
   if (isError)
-    return <div className="text-center py-10 text-error">Failed to load reviews</div>;
+    return (
+      <div className="text-center py-10 text-error">Failed to load reviews</div>
+    );
 
   return (
     <div className="py-10 max-w-6xl mx-auto">
@@ -37,10 +37,10 @@ const LatestReviews = () => {
       </div>
 
       <Swiper
-        effect={"coverflow"}
-        grabCursor={true}
-        centeredSlides={true}
-        loop={true}
+        effect="coverflow"
+        grabCursor
+        centeredSlides
+        loop
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         slidesPerView={3}
         coverflowEffect={{
@@ -58,13 +58,18 @@ const LatestReviews = () => {
           640: { slidesPerView: 2, spaceBetween: 20 },
           1024: { slidesPerView: 3, spaceBetween: 30 },
         }}
-        className="mySwiper"
       >
-        {data.map((review) => (
-          <SwiperSlide key={review._id}>
-            <ReviewCard review={review} />
-          </SwiperSlide>
-        ))}
+        {isLoading
+          ? Array.from({ length: 5 }).map((_, i) => (
+              <SwiperSlide key={`skeleton-${i}`}>
+                <ReviewCardSkeleton />
+              </SwiperSlide>
+            ))
+          : data.map((review) => (
+              <SwiperSlide key={review._id}>
+                <ReviewCard review={review} />
+              </SwiperSlide>
+            ))}
       </Swiper>
     </div>
   );

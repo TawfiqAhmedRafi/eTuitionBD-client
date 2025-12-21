@@ -1,24 +1,37 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import Hero from "./Hero";
 import StatsStrip from "../../Components/StatsStrip/StatsStrip";
-import LatestTuitions from "./LatestTuitions";
-import LatestTutors from "./LatestTutors";
 import HowItWorks from "./HowItWorks";
 import WhyChooseUs from "./WhyChooseUs";
 import CTASection from "./CTASection";
-import LatestReviews from "./LatestReviews";
+import { SectionSkeleton } from "../../Components/Skeleton/SectionSkeleton";
+
+// Lazy-loaded sections
+const LatestTuitions = lazy(() => import("./LatestTuitions"));
+const LatestTutors = lazy(() => import("./LatestTutors"));
+const LatestReviews = lazy(() => import("./LatestReviews"));
 
 const Home = () => {
   return (
     <div>
-      <Hero></Hero>
-      <StatsStrip></StatsStrip>
-      <LatestTuitions></LatestTuitions>
-      <LatestTutors></LatestTutors>
-      <LatestReviews></LatestReviews>
-      <HowItWorks></HowItWorks>
-      <WhyChooseUs></WhyChooseUs>
-      <CTASection></CTASection>
+      <Hero />
+      <StatsStrip />
+
+      <Suspense fallback={<SectionSkeleton type="tuition" count={6} />}>
+        <LatestTuitions />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton type="tutor" count={6} />}>
+        <LatestTutors />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton type="review" count={6} />}>
+        <LatestReviews />
+      </Suspense>
+
+      <HowItWorks />
+      <WhyChooseUs />
+      <CTASection />
     </div>
   );
 };
