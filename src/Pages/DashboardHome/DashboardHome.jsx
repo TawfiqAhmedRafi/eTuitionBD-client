@@ -8,9 +8,9 @@ const DashboardHome = () => {
     if(role==="student"){
         return <StudentDashboard></StudentDashboard>
     }
-    // if(role==="tutor"){
-    //     return <TutorDashboard></TutorDashboard>
-    // }
+    if(role==="tutor"){
+        return <TutorDashboard></TutorDashboard>
+    }
     // if(role==="admin"){
     //     return <StudentDashboard></StudentDashboard>
     // }

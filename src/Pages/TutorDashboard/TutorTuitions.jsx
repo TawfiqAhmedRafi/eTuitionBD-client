@@ -134,17 +134,17 @@ const TutorTuitions = () => {
                         Contact Now
                       </button>
                     </>
-                  ) : (
-                    <>
-                      {" "}
+                  ) : tuition.status ==="closed" ||  tuition.status ==="completed" ? <>
+                 --
+                  </>:<>
+                  {" "}
                       <button
                         onClick={() => handleCloseTuition(tuition._id)}
                         className="btn btn-sm md:btn-sm btn-success btn-outline hover:text-white"
                       >
                         Complete Tuition
-                      </button>
-                    </>
-                  )}
+                      </button></>
+                  }
                 </td>
                 <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row justify-center items-center gap-2">
                   <Link
