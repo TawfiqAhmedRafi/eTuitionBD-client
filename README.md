@@ -1,16 +1,53 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# eTuitionBD - Tuition Management System
+- Live Demo: [eTuitionBD](https://etuition-17f11.web.app/)
 
-Currently, two official plugins are available:
+## 📌 Project Purpose
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Tuition Management System is a full-stack MERN-based platform designed to connect students, tutors, and administrators through a structured, secure, and automated tuition workflow. It solves real-world problems such as tutor verification, tuition authenticity, transparent payments, and role-based system control.
 
-## React Compiler
+## 🚀 Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🔐 Authentication & Authorization
+- Firebase Authentication (Email/Password)
+- Google Social Login (default role: Student)
+- JWT-based secure API access
+- Role-based dashboard routing (Student / Tutor / Admin)
+- Protected routes with reload persistence
 
-## Expanding the ESLint configuration
+### 👩‍🎓 Student Features
+- Post, update, and delete tuition requests
+- View tuition status (Pending / Approved / Rejected)
+- View and manage tutor applications
+- Approve tutors after successful Stripe payment
+- Reject tutor applications
+- View payment history
+- Update profile information
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 👨‍🏫 Tutor Features
+- Browse approved tuition posts
+- Apply for tuitions via modal form
+- Track application status
+- View approved (ongoing) tuitions
+- View revenue & earnings history
+- Update/delete applications before approval
+
+### 🛠️ Admin Features
+- **User Management:** View, update, and delete users; change roles
+- **Tuition Management:** Review, approve, or reject tuition posts
+- **Reports & Analytics:** View earnings, transaction history, and financial charts
+
+### 🏠 Public Pages & UI
+- Responsive navbar with role-based navigation
+- Home page with hero section, latest tuitions, and tutors
+- Framer Motion animations
+- Tuition listing, details, and tutor profiles
+- Contact & About pages
+- Custom 404 error page
+- Fully responsive design
+
+### 🔍 Advanced Features
+- Search tuitions by subject & location
+- Sort tuitions by budget & date
+- Filter by class, subject, and location
+- Pagination on tuition listings
