@@ -6,6 +6,7 @@ import LatestTutors from "./LatestTutors";
 import HowItWorks from "./HowItWorks";
 import WhyChooseUs from "./WhyChooseUs";
 import CTASection from "./CTASection";
+import LatestReviews from "./LatestReviews";
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <StatsStrip></StatsStrip>
       <LatestTuitions></LatestTuitions>
       <LatestTutors></LatestTutors>
+      <LatestReviews></LatestReviews>
       <HowItWorks></HowItWorks>
       <WhyChooseUs></WhyChooseUs>
       <CTASection></CTASection>

@@ -278,14 +278,14 @@ const MyTuitions = () => {
                   {tuition.status === "completed" && !tuition.reviewed && (
                     <button
                       onClick={() => setReviewTuition(tuition)}
-                      className="btn btn-sm btn-info btn-outline"
+                      className="btn btn-sm btn-info btn-outline hover:text-white"
                     >
                       Review Tutor
                     </button>
                   )}
 
                   {tuition.reviewed && (
-                    <span className="badge badge-success">Reviewed</span>
+                    <span className="badge badge-success text-white font-semibold">Reviewed</span>
                   )}
                 </td>
                 <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row justify-center items-center gap-2">
