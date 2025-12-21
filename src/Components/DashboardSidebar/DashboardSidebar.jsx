@@ -9,6 +9,7 @@ import {
   CreditCard,
   ChevronLeft,
   Settings,
+  Star,
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
 import { FiSend } from "react-icons/fi";
@@ -55,6 +56,12 @@ const allMenuItems = [
     name: "Income",
     path: "/dashboard/revenue",
     icon: FaMoneyBill,
+    roles: ["tutor"],
+  },
+  {
+    name: "Reviews",
+    path: "/dashboard/review",
+    icon: Star,
     roles: ["tutor"],
   },
 

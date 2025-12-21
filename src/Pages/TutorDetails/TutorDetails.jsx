@@ -5,6 +5,7 @@ import { FiCheckCircle } from "react-icons/fi";
 import GradientButton from "../../Components/GradientButton/GradientButton"; // assuming you have this
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
 import { format } from "date-fns";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 const TutorDetails = () => {
   const { id } = useParams();
@@ -33,6 +34,26 @@ const TutorDetails = () => {
     );
 
   const tutor = data;
+  const avgRating =
+    tutor.ratingCount > 0 ? tutor.ratingSum / tutor.ratingCount : 0;
+
+  const renderRatingStars = (rating) => {
+    const stars = [];
+
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(<FaStar key={i} className="text-yellow-400 w-4 h-4" />);
+      } else if (rating >= i - 0.5) {
+        stars.push(
+          <FaStarHalfAlt key={i} className="text-yellow-400 w-4 h-4" />
+        );
+      } else {
+        stars.push(<FaRegStar key={i} className="text-gray-300 w-4 h-4" />);
+      }
+    }
+
+    return <div className="flex gap-1">{stars}</div>;
+  };
 
   return (
     <div className="mt-10">
@@ -97,20 +118,37 @@ const TutorDetails = () => {
           <p>
             <span className="font-semibold"> Preferred Time:</span> {tutor.time}
           </p>
-          <p>
-            <span className="font-semibold">Status:</span>{" "}
-            <span
-              className={`badge ${
-                tutor.status === "approved"
-                  ? "badge-success"
-                  : tutor.status === "pending"
-                  ? "badge-warning"
-                  : "badge-error"
-              } text-xs text-white  font-semibold`}
-            >
-              {tutor.status.toUpperCase()}
-            </span>
-          </p>
+          <div className="flex flex-col gap-3">
+            <div>
+              <span className="font-semibold">Status:</span>{" "}
+              <span
+                className={`badge ${
+                  tutor.status === "approved"
+                    ? "badge-success"
+                    : tutor.status === "pending"
+                    ? "badge-warning"
+                    : "badge-error"
+                } text-xs text-white font-semibold`}
+              >
+                {tutor.status.toUpperCase()}
+              </span>
+            </div>
+
+            {/* ⭐ Rating below status */}
+            <div className="flex items-center gap-2">
+              {renderRatingStars(avgRating)}
+
+              <span className="text-sm font-semibold text-base-content">
+                {avgRating > 0 ? avgRating.toFixed(1) : "New"}
+              </span>
+
+              {tutor.ratingCount > 0 && (
+                <span className="text-xs text-neutral-content">
+                  ({tutor.ratingCount})
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Subjects */}

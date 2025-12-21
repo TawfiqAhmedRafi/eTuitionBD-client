@@ -30,6 +30,7 @@ import Settings from "../Pages/DashboardHome/Settings";
 import Revenue from "../Pages/TutorDashboard/Revenue";
 import PaymentSuccess from "../Pages/StudentDashboard/PaymentSuccess";
 import PaymentFailure from "../Pages/StudentDashboard/PaymentFailure";
+import TutorReviewsPage from "../Pages/TutorDashboard/TutorReviewsPage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -203,6 +204,12 @@ export const router = createBrowserRouter([
         path :"revenue",
         element : <TutorRoute>
           <Revenue></Revenue>
+        </TutorRoute>
+      },
+      {
+        path :"review",
+        element : <TutorRoute>
+          <TutorReviewsPage></TutorReviewsPage>
         </TutorRoute>
       },
       {
