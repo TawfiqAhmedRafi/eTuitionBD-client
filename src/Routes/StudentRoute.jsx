@@ -3,9 +3,12 @@ import useUserRole from '../hooks/useUserRole';
 import useAuth from '../hooks/useAuth';
 import Forbidden from '../Components/Forbidden/Forbidden';
 
-const AdminRoute = ({children}) => {
+
+const StudentRoute = ({children}) => {
     const {loading} = useAuth();
     const {role , isLoading} = useUserRole();
+   
+    
     if(loading || isLoading){
         return <span className='loading loading-bars text-primary'></span>
     }
@@ -15,4 +18,4 @@ const AdminRoute = ({children}) => {
     return children;
 };
 
-export default AdminRoute;
+export default StudentRoute;
