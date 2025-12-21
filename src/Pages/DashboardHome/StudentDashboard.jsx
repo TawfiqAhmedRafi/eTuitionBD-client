@@ -27,7 +27,7 @@ const StudentDashboard = () => {
       try {
         const res = await axiosSecure.get("/dashboard/student");
         setDashboard(res.data);
-        console.log(res.data);
+      
       } catch (err) {
         console.error("Failed to fetch student dashboard:", err);
       } finally {

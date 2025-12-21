@@ -20,12 +20,12 @@ const Login = () => {
   });
 
   const handleLogin = async (data) => {
-    console.log(data.email, data.password);
+    
     setLoginError("");
 
     try {
-      const result = await signInUser(data.email, data.password);
-      console.log(result.user);
+      await signInUser(data.email, data.password);
+     
 
       navigate(location?.state || "/");
     } catch (error) {

@@ -101,11 +101,11 @@ const allMenuItems = [
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
   const { role } = useUserRole();
-  console.log("role:", role);
+  
 
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) => item.roles.includes(role));
-  console.log("menuItems:", menuItems);
+  
   return (
     <aside
       className={`h-screen sticky top-0 flex flex-col

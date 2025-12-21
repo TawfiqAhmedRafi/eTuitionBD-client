@@ -72,7 +72,7 @@ const PostTuition = () => {
       mode: data.mode,
       idempotencyKey: uuidv4(),
     };
-    console.log("Submitting tuition:", payload);
+ 
     mutation.mutate(payload);
   };
 

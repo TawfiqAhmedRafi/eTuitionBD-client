@@ -27,7 +27,7 @@ const AdminDashboard = () => {
       try {
         const res = await axiosSecure.get("/dashboard/admin");
         setDashboard(res.data);
-        console.log(res.data);
+       
       } catch (err) {
         console.error("Failed to fetch admin dashboard:", err);
       } finally {

@@ -56,7 +56,7 @@ const updateUserProfile =(profile)=>{
       unsubscribe();
     };
   }, []);
- console.log(user)
+ 
   const authInfo = {
     user,
     loading,

@@ -54,7 +54,7 @@ const ApplyTutors = () => {
         mode: data.mode,
         bio: data.bio,
       };
-      console.log(finalData);
+     
       axiosSecure.post("/tutors", finalData).then((res) => {
         if (res.data.insertedId) {
           Swal.fire({

@@ -30,8 +30,8 @@ const Register = () => {
     e.preventDefault();
     const profileImg = data.photo[0];
     registerUser(data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
+      .then(() => {
+      
         // store the image and get photoURL
         const formData = new FormData();
         formData.append("image", profileImg);
@@ -58,8 +58,8 @@ const Register = () => {
                   phone: data.phone,
                   photoURL: photoURL,
                 })
-                .then((res) => {
-                  console.log("Backend saved:", res.data);
+                .then(() => {
+                  
                   navigate(location.state || "/");
                 })
                 .catch((err) => {

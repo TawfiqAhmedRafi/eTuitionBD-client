@@ -10,9 +10,9 @@ const SocialLogin = () => {
   const location = useLocation();
   const handleGoogle = () => {
     return googleSignIn()
-      .then((result) => {
+      .then(() => {
         toast.success("Google sign-in successful!");
-        console.log(result.user);
+      
         navigate(location?.state || "/");
       })
       .catch((error) => {
