@@ -29,8 +29,8 @@ const Footer = () => {
           {/* Platform */}
           <nav className="flex flex-col gap-2">
             <h6 className="footer-title">Platform</h6>
-            <a className="link link-hover">Tuitions</a>
-            <a className="link link-hover">Tutors</a>
+            <Link to="/all-tuition" className="link link-hover">Tuitions</Link>
+            <Link to="/all-tutors" className="link link-hover">Tutors</Link>
             <a className="link link-hover">Pricing</a>
             <a className="link link-hover">Support</a>
           </nav>
