@@ -12,7 +12,7 @@ import ReviewCardSkeleton from "./ReviewCardSkeleton";
 const LatestReviews = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data=[], isLoading, isError } = useQuery({
     queryKey: ["latestReviews"],
     queryFn: async () => {
       const res = await axiosSecure.get("/latest-reviews");
