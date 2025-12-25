@@ -32,6 +32,9 @@ import PaymentSuccess from "../Pages/StudentDashboard/PaymentSuccess";
 import PaymentFailure from "../Pages/StudentDashboard/PaymentFailure";
 import TutorReviewsPage from "../Pages/TutorDashboard/TutorReviewsPage";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import ForgetPassword from "../Pages/AuthPages/ForgetPassword/ForgetPassword";
+import VerifyOtp from "../Pages/AuthPages/VerifyOtp/VerifyOtp";
+import ResetPassword from "../Pages/AuthPages/ResetPassword/ResetPassword";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -111,6 +114,18 @@ export const router = createBrowserRouter([
         path: "register",
         Component: Register,
       },
+      {
+        path: "forgot-password",
+        Component: ForgetPassword,
+      },
+      {
+        path: "verify-otp",
+        Component: VerifyOtp,
+      },
+      {
+        path: "reset-password",
+        Component: ResetPassword,
+      }
     ],
   },
   {

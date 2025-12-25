@@ -31,7 +31,7 @@ const LatestTutors = () => {
   });
 
   return (
-    <section className="py-12 md:py-16 bg-base-200 rounded-2xl my-12 shadow-sm">
+    <section className="py-12 md:py-16 bg-base-200 rounded-2xl my-12 max-w-7xl mx-auto shadow-sm">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader
           title="Latest Tutors This Week"

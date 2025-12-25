@@ -5,7 +5,7 @@ import logoImg from "../assets/logo.png";
 
 const AuthLayout = () => {
   return (
-   <div className="max-w-7xl mx-auto min-h-screen">
+   <div className="w-fill min-h-screen">
   <div className="flex h-full">
     <div className="flex-1 relative min-h-screen">
 
