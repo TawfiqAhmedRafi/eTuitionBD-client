@@ -19,6 +19,7 @@ import { Star } from "lucide-react";
 const COLORS = ["#2596be", "#0494f4", "#0b3b6b", "#3cdaa7", "#f4b400"];
 
 const TutorDashboard = () => {
+  const isMobile = window.innerWidth < 640;
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
@@ -28,7 +29,6 @@ const TutorDashboard = () => {
       try {
         const res = await axiosSecure.get("/dashboard/tutor");
         setDashboard(res.data);
-     
       } catch (err) {
         console.error("Failed to fetch tutor dashboard:", err);
       } finally {
@@ -44,11 +44,11 @@ const TutorDashboard = () => {
 
   const applicationsSummary = dashboard?.applicationsSummary || [];
   const reviewsSummary = dashboard?.reviewsSummary || [];
-
+  const sortedReviews = [...reviewsSummary].sort((a, b) => a._id - b._id);
   return (
-    <div className="p-6 space-y-10">
+    <div className="p-2 md:p-6 space-y-10">
       {/* SUMMARY CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
         <Card
           title="Total Tuitions"
           value={cards.totalTuitions}
@@ -87,11 +87,11 @@ const TutorDashboard = () => {
       </div>
 
       {/* PIE CHART: APPLICATION STATUS */}
-      <div className="p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
           Applications Status Breakdown
         </h2>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={isMobile ? 220 : 300}>
           <PieChart>
             <Pie
               data={applicationsSummary}
@@ -99,17 +99,26 @@ const TutorDashboard = () => {
               nameKey="_id"
               cx="50%"
               cy="50%"
-              outerRadius={100}
-              innerRadius={60}
-              label={({ _id, percent }) =>
-                `${formatStatus(_id)}: ${(percent * 100).toFixed(0)}%`
+              outerRadius={isMobile ? 60 : 100}
+              innerRadius={isMobile ? 35 : 60}
+              label={
+                isMobile
+                  ? false
+                  : ({ _id, percent }) =>
+                      `${formatStatus(_id)}: ${(percent * 100).toFixed(0)}%`
               }
             >
               {applicationsSummary.map((_, i) => (
                 <Cell key={i} fill={COLORS[i % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value, name) => [value, formatStatus(name)]} />
+            <Tooltip
+              formatter={(value, name) => [value, formatStatus(name)]}
+              contentStyle={{
+                fontSize: "14px",
+                borderRadius: "8px",
+              }}
+            />
             <Legend
               layout="horizontal"
               verticalAlign="bottom"
@@ -121,27 +130,54 @@ const TutorDashboard = () => {
       </div>
 
       {/* BAR CHART: REVIEWS */}
-      <div className="p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
           Reviews Breakdown
         </h2>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
           <BarChart
             data={reviewsSummary}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+            margin={{
+              top: 10,
+              right: isMobile ? 10 : 30,
+              left: 0,
+              bottom: isMobile ? 25 : 20,
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="_id"
+              type="category"
               label={{
                 value: "Rating",
                 position: "insideBottomRight",
                 offset: -5,
               }}
             />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="count" fill="#0494f4" radius={[5, 5, 0, 0]} />
+            <YAxis
+              type="number"
+              allowDecimals={false}
+              tickFormatter={(val) => (val >= 1000 ? `${val / 1000}k` : val)}
+            />
+
+            <Tooltip
+              formatter={(value, name, props) => {
+                const total = reviewsSummary.reduce(
+                  (acc, r) => acc + r.count,
+                  0
+                );
+                const percent = ((value / total) * 100).toFixed(1);
+                return [
+                  `${value} (${percent}%)`,
+                  `Rating ${props.payload._id}`,
+                ];
+              }}
+            />
+            <Bar dataKey="count" radius={[5, 5, 0, 0]} fill="#0494f4">
+              {sortedReviews.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill="#0494f4" />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
