@@ -7,7 +7,7 @@ const MessageBubble = ({ message, myEmail }) => {
         className={`max-w-xs md:max-w-md px-4 py-2 rounded-2xl text-sm wrap-break-word ${
           isMe
             ? "bg-primary text-white rounded-br-none"
-            : "bg-base-200 text-base-content rounded-bl-none"
+            : "bg-base-300 text-base-content rounded-bl-none"
         }`}
       >
         {message.text}

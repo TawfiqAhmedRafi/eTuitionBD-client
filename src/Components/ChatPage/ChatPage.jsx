@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {  useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
@@ -9,7 +9,7 @@ import useUserRole from "../../hooks/useUserRole";
 
 const ChatPage = () => {
   const { conversationId } = useParams();
-  const {role} = useUserRole();
+  const { role } = useUserRole();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -17,8 +17,9 @@ const ChatPage = () => {
 
   const [text, setText] = useState("");
   const bottomRef = useRef(null);
+  const containerRef = useRef(null);
 
-  // Conversation info
+ 
   const { data: conversation } = useQuery({
     queryKey: ["conversation", conversationId],
     queryFn: async () => {
@@ -27,85 +28,140 @@ const ChatPage = () => {
     },
   });
 
-  // Messages
+  
   const { data: messages = [] } = useQuery({
     queryKey: ["messages", conversationId],
     queryFn: async () => {
       const res = await axiosSecure.get(`/messages/${conversationId}`);
       return res.data;
     },
-     refetchInterval: 3000,
+    refetchInterval: 3000,
   });
 
- const handleSend = async () => {
-  if (!text.trim()) return;
 
-  const newMsg = {
-    _id: Date.now().toString(), // temp id
-    text,
-    senderEmail: user.email,
-    createdAt: new Date().toISOString(),
+  const scrollToBottom = (behavior = "auto") => {
+    bottomRef.current?.scrollIntoView({ behavior });
+  };
+  useEffect(() => {
+    if (messages.length) {
+      scrollToBottom();
+    }
+  }, [messages.length]);
+
+  const handleSend = async () => {
+    if (!text.trim()) return;
+
+    const optimisticMsg = {
+      _id: Date.now().toString(),
+      text,
+      senderEmail: user.email,
+      createdAt: new Date().toISOString(),
+    };
+
+    queryClient.setQueryData(["messages", conversationId], (old = []) => [
+      ...old,
+      optimisticMsg,
+    ]);
+
+    setText("");
+    scrollToBottom("smooth");
+
+    await axiosSecure.post(`/messages`, {
+      conversationId,
+      text,
+    });
+
+    queryClient.invalidateQueries(["messages", conversationId]);
+    queryClient.invalidateQueries(["conversations"]);
   };
 
-  queryClient.setQueryData(["messages", conversationId], (old = []) => [
-    ...old,
-    newMsg,
-  ]);
 
-  setText("");
-
-  await axiosSecure.post(`/messages`, {
-    conversationId,
-    text,
-  });
-
-  queryClient.invalidateQueries(["messages", conversationId]);
-  queryClient.invalidateQueries(["conversations"]);
-};
-
+  useEffect(() => {
+    if (!conversationId || messages.length === 0) return;
+    axiosSecure.patch(`/messages/seen/${conversationId}`).catch(() => {});
+  }, [conversationId, messages.length, axiosSecure]);
 
   return (
-    <div className="flex flex-col h-[80vh] max-w-4xl mx-auto border border-base-300 rounded-2xl overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b bg-base-200">
-        <button onClick={() => navigate(-1)}>
-          <FiArrowLeft className="w-5 h-5" />
-        </button>
+    <div className="relative max-w-6xl mx-auto h-[85vh] px-2 sm:px-4">
+      <div className="flex flex-col h-full rounded-3xl overflow-hidden
+        border border-base-300 shadow-2xl
+        bg-linear-to-br from-base-100 via-base-200/70 to-base-100">
 
-        {conversation && (
-    <>
-      <img
-        src={role === "student" ? conversation.otherPhoto : conversation.studentPhoto}
-        className="w-10 h-10 rounded-full"
-        alt="User Avatar"
-      />
-      <span className="font-semibold">
-        {role === "student" ? conversation.otherName : conversation.studentName}
-      </span>
-    </>
-  )}
-      </div>
+       
+        <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3
+          bg-base-300/80 backdrop-blur-xl
+          border-b border-base-300">
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-base-100">
-        {messages.map((msg) => (
-          <MessageBubble key={msg._id} message={msg} myEmail={user.email} />
-        ))}
-        <div ref={bottomRef}></div>
-      </div>
+          <button
+            onClick={() => navigate("/dashboard/messages")}
+            className="btn btn-ghost btn-circle btn-sm"
+          >
+            <FiArrowLeft className="w-5 h-5" />
+          </button>
 
-      {/* Input */}
-      <div className="p-4 border-t flex gap-3 bg-base-200">
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          className="input input-bordered w-full"
-          placeholder="Type a message..."
-        />
-        <button onClick={handleSend} className="btn btn-primary btn-circle">
-          <FiSend />
-        </button>
+          {conversation && (
+            <div className="flex items-center gap-3 min-w-0">
+              <img
+                src={
+                  role === "student"
+                    ? conversation.otherPhoto
+                    : conversation.studentPhoto
+                }
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/30"
+                alt="User Avatar"
+              />
+              <div className="min-w-0">
+                <h3 className="font-semibold truncate">
+                  {role === "student"
+                    ? conversation.otherName
+                    : conversation.studentName}
+                </h3>
+                <p className="text-xs text-neutral-content">
+                  Active conversation
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div
+          ref={containerRef}
+          className="flex-1 overflow-y-auto px-3 sm:px-5 py-6 space-y-5
+          bg-linear-to-b from-transparent to-base-200/40"
+        >
+          {messages.map((msg) => (
+            <MessageBubble
+              key={msg._id}
+              message={msg}
+              myEmail={user.email}
+            />
+          ))}
+          <div ref={bottomRef} />
+        </div>
+
+        {/* ================= INPUT ================= */}
+        <div className="sticky bottom-0 px-3 sm:px-5 py-3
+          bg-base-100/80 backdrop-blur-xl
+          border-t border-base-300">
+          <div className="flex items-center gap-3">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              placeholder="Write a message…"
+              className="input input-bordered w-full
+                rounded-full px-5
+                bg-base-100/90 focus:outline-none"
+            />
+            <button
+              onClick={handleSend}
+              className="btn btn-primary btn-circle shrink-0 shadow-md"
+            >
+              <FiSend />
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );

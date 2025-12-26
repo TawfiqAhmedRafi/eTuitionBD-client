@@ -88,8 +88,8 @@ const StudentDashboard = () => {
       </div>
 
       {/* PIE CHART */}
-      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-base-200 text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-neutral-content">
           Tuitions Status Breakdown
         </h2>
         <ResponsiveContainer width="100%" height={isMobile ? 220 : 300}>
@@ -131,8 +131,8 @@ const StudentDashboard = () => {
       </div>
 
       {/* SUBJECTS BAR CHART */}
-      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
-  <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-base-200 text-center">
+  <h2 className="text-lg md:text-xl font-semibold mb-4 text-neutral-content">
     Tuitions Per Subject
   </h2>
   <ResponsiveContainer width="100%" height={isMobile ? 220 : 300}>

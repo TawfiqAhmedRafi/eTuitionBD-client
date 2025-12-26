@@ -84,8 +84,8 @@ const AdminDashboard = () => {
       </div>
 
       {/* PIE CHART: Tuitions Status */}
-      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-base-200 text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-neutral-content">
           Tuitions Status Breakdown
         </h2>
         <ResponsiveContainer width="100%" height={300}>
@@ -127,8 +127,8 @@ const AdminDashboard = () => {
       </div>
 
       {/* BAR CHART: Monthly Revenue */}
-      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-base-200 text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-neutral-content">
           Monthly Revenue (Last 6 Months)
         </h2>
         <ResponsiveContainer width="100%" height={isMobile ? 220 : 300}>

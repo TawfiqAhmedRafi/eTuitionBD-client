@@ -87,8 +87,8 @@ const TutorDashboard = () => {
       </div>
 
       {/* PIE CHART: APPLICATION STATUS */}
-      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-base-200 text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-neutral-content">
           Applications Status Breakdown
         </h2>
         <ResponsiveContainer width="100%" height={isMobile ? 220 : 300}>
@@ -130,8 +130,8 @@ const TutorDashboard = () => {
       </div>
 
       {/* BAR CHART: REVIEWS */}
-      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-white text-center">
-        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-700">
+      <div className="p-2 md:p-6 rounded-xl shadow-lg bg-base-200 text-center">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-neutral-content">
           Reviews Breakdown
         </h2>
         <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
