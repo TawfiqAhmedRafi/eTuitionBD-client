@@ -44,7 +44,7 @@ const ChatPage = () => {
     _id: Date.now().toString(), // temp id
     text,
     senderEmail: user.email,
-    sentAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   };
 
   queryClient.setQueryData(["messages", conversationId], (old = []) => [

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { format } from "date-fns";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import Pagination from "../../Components/Pagination/Pagination";
 import GradientButton from "../../Components/GradientButton/GradientButton";
@@ -13,8 +13,8 @@ const Application = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedApp, setSelectedApp] = useState(null);
   const [page, setPage] = useState(1);
-  const limit = 10; 
-
+  const limit = 10;
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["student-applications", statusFilter, page],
     queryFn: async () => {
@@ -66,7 +66,23 @@ const Application = () => {
       Swal.fire("Error", "Failed to update application", "error");
     }
   };
+  const handleContactTutor = async (tutorId) => {
+    try {
+      const res = await axiosSecure.post("/conversations", { tutorId });
+      const conversationId = res.data._id;
 
+      // Navigate to the conversation page
+      navigate(`/dashboard/messages/${conversationId}`);
+    } catch (err) {
+      console.error("Contact tutor error:", err);
+
+      if (err.response?.status === 403) {
+        Swal.fire("Forbidden", err.response.data?.message, "error");
+      } else {
+        Swal.fire("Error", "Failed to start conversation", "error");
+      }
+    }
+  };
   if (isLoading)
     return (
       <div className="p-10 text-center">
@@ -117,7 +133,10 @@ const Application = () => {
           </thead>
           <tbody>
             {filteredApplications.map((app, index) => (
-              <tr key={app._id} className="border-t border-gray-200 hover:bg-gray-50">
+              <tr
+                key={app._id}
+                className="border-t border-gray-200 hover:bg-gray-50"
+              >
                 <th>{(page - 1) * limit + index + 1}</th>
                 <td className="flex items-center gap-3">
                   <img
@@ -162,17 +181,28 @@ const Application = () => {
                     >
                       View
                     </button>
-
+                    {app.status === "accepted" && (
+                      <button
+                        className="btn btn-sm btn-primary hover:text-white"
+                        onClick={() => handleContactTutor(app.tutorId)}
+                      >
+                        Contact Tutor
+                      </button>
+                    )}
                     {app.status === "pending" && (
                       <>
                         <button
-                          onClick={() => updateApplicationStatus(app._id, "accepted")}
+                          onClick={() =>
+                            updateApplicationStatus(app._id, "accepted")
+                          }
                           className="btn btn-sm btn-success hover:text-white"
                         >
                           Accept
                         </button>
                         <button
-                          onClick={() => updateApplicationStatus(app._id, "rejected")}
+                          onClick={() =>
+                            updateApplicationStatus(app._id, "rejected")
+                          }
                           className="btn btn-sm btn-error hover:text-white"
                         >
                           Reject
@@ -195,7 +225,11 @@ const Application = () => {
       </div>
 
       {/* Pagination */}
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
 
       {/* View Modal */}
       {selectedApp && (
@@ -220,19 +254,26 @@ const Application = () => {
               </p>
               <p>
                 <span className="font-semibold">Subjects:</span>{" "}
-                <span className="font-bold">{selectedApp.subjects.join(", ")}</span>
+                <span className="font-bold">
+                  {selectedApp.subjects.join(", ")}
+                </span>
               </p>
               <p>
-                <span className="font-semibold">Location:</span> {selectedApp.location}
+                <span className="font-semibold">Location:</span>{" "}
+                {selectedApp.location}
               </p>
               <p>
                 <span className="font-semibold">Proposed Salary:</span>{" "}
-                <span className="font-bold text-primary">৳{selectedApp.salary}</span>
+                <span className="font-bold text-primary">
+                  ৳{selectedApp.salary}
+                </span>
               </p>
               {selectedApp.coverLetter && (
                 <div>
                   <p className="font-semibold">Cover Letter:</p>
-                  <p className="bg-base-200 p-2 rounded">{selectedApp.coverLetter}</p>
+                  <p className="bg-base-200 p-2 rounded">
+                    {selectedApp.coverLetter}
+                  </p>
                 </div>
               )}
             </div>
@@ -240,7 +281,10 @@ const Application = () => {
               <Link to={`/tutors/${selectedApp.tutorId}`}>
                 <GradientButton>Tutor Details</GradientButton>
               </Link>
-              <button className="btn btn-outline" onClick={() => setSelectedApp(null)}>
+              <button
+                className="btn btn-outline"
+                onClick={() => setSelectedApp(null)}
+              >
                 Close
               </button>
             </div>
