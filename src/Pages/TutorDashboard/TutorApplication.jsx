@@ -4,15 +4,17 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
 import Pagination from "../../Components/Pagination/Pagination";
+import { useNavigate } from "react-router";
 
 const TutorApplication = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [contactLoadingId, setContactLoadingId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedApp, setSelectedApp] = useState(null);
   const [page, setPage] = useState(1);
   const limit = 10;
-
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["tutor-applications", statusFilter, page],
     queryFn: async () => {
@@ -26,7 +28,7 @@ const TutorApplication = () => {
 
   const applications = data?.applications || [];
   const totalPages = data?.pagination?.totalPages || 1;
-
+console.log(applications)
   const handleCancel = async (appId) => {
     const confirm = await Swal.fire({
       title: "Cancel Application?",
@@ -45,6 +47,26 @@ const TutorApplication = () => {
     } catch (err) {
       console.log("application cancellation error ", err);
       Swal.fire("Error", "Failed to cancel application", "error");
+    }
+  };
+  const handleContactStudent = async (studentId) => {
+    if (contactLoadingId === studentId) return;
+    setContactLoadingId(studentId);
+
+    try {
+      const res = await axiosSecure.post("/tutor/conversations", { studentId });
+      const conversationId = res.data._id;
+
+      navigate(`/dashboard/messages/${conversationId}`);
+    } catch (err) {
+      console.error(err);
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Failed to contact student",
+        "error"
+      );
+    } finally {
+      setContactLoadingId(null);
     }
   };
 
@@ -140,6 +162,14 @@ const TutorApplication = () => {
                   >
                     View
                   </button>
+                  {app.status === "accepted" && (
+                    <button
+                      className="btn btn-sm btn-outline btn-primary hover:text-white"
+                      onClick={() => handleContactStudent(app.studentId)}
+                    >
+                      Contact
+                    </button>
+                  )}
                   {(app.status === "pending" || app.status === "rejected") && (
                     <button
                       className="btn btn-sm btn-outline btn-error hover:text-white"
@@ -163,7 +193,11 @@ const TutorApplication = () => {
       </div>
 
       {/* Pagination */}
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
 
       {/* Application Details Modal */}
       {selectedApp && (
@@ -173,7 +207,9 @@ const TutorApplication = () => {
             <div className="space-y-2 text-sm">
               <p>
                 <span className="font-semibold">Subjects:</span>{" "}
-                <span className="font-bold">{selectedApp.subjects.join(", ")}</span>
+                <span className="font-bold">
+                  {selectedApp.subjects.join(", ")}
+                </span>
               </p>
               <p>
                 <span className="font-semibold">Class Level:</span>{" "}
@@ -182,7 +218,8 @@ const TutorApplication = () => {
                 </span>
               </p>
               <p>
-                <span className="font-semibold">Location:</span> {selectedApp.location}
+                <span className="font-semibold">Location:</span>{" "}
+                {selectedApp.location}
               </p>
               <p>
                 <span className="font-semibold">Days / Time:</span>{" "}
@@ -190,7 +227,9 @@ const TutorApplication = () => {
               </p>
               <p>
                 <span className="font-semibold">Salary:</span>{" "}
-                <span className="font-bold text-primary">৳{selectedApp.salary}</span>
+                <span className="font-bold text-primary">
+                  ৳{selectedApp.salary}
+                </span>
               </p>
               <p>
                 <span className="font-semibold">Status:</span>{" "}
@@ -211,13 +250,18 @@ const TutorApplication = () => {
               {selectedApp.coverLetter && (
                 <div>
                   <p className="font-semibold">Cover Letter:</p>
-                  <p className="bg-base-200 p-2 rounded text-sm">{selectedApp.coverLetter}</p>
+                  <p className="bg-base-200 p-2 rounded text-sm">
+                    {selectedApp.coverLetter}
+                  </p>
                 </div>
               )}
             </div>
 
             <div className="modal-action">
-              <button className="btn btn-outline" onClick={() => setSelectedApp(null)}>
+              <button
+                className="btn btn-outline"
+                onClick={() => setSelectedApp(null)}
+              >
                 Close
               </button>
             </div>

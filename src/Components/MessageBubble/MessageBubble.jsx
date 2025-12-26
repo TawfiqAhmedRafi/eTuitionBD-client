@@ -11,7 +11,11 @@ const MessageBubble = ({ message, myEmail }) => {
         }`}
       >
         {message.text}
-        <div className="text-xs text-neutral-content mt-1 text-right">
+        <div
+          className={`text-xs mt-1 text-right ${
+            isMe ? "text-white" : "text-neutral-content"
+          }`}
+        >
           {new Date(message.createdAt).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",

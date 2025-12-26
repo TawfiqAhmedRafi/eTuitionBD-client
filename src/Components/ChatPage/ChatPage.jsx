@@ -5,9 +5,11 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
 import MessageBubble from "../MessageBubble/MessageBubble";
 import { FiArrowLeft, FiSend } from "react-icons/fi";
+import useUserRole from "../../hooks/useUserRole";
 
 const ChatPage = () => {
   const { conversationId } = useParams();
+  const {role} = useUserRole();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -71,14 +73,17 @@ const ChatPage = () => {
         </button>
 
         {conversation && (
-          <>
-            <img
-              src={conversation.otherPhoto}
-              className="w-10 h-10 rounded-full"
-            />
-            <span className="font-semibold">{conversation.otherName}</span>
-          </>
-        )}
+    <>
+      <img
+        src={role === "student" ? conversation.otherPhoto : conversation.studentPhoto}
+        className="w-10 h-10 rounded-full"
+        alt="User Avatar"
+      />
+      <span className="font-semibold">
+        {role === "student" ? conversation.otherName : conversation.studentName}
+      </span>
+    </>
+  )}
       </div>
 
       {/* Messages */}
