@@ -35,6 +35,8 @@ import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import ForgetPassword from "../Pages/AuthPages/ForgetPassword/ForgetPassword";
 import VerifyOtp from "../Pages/AuthPages/VerifyOtp/VerifyOtp";
 import ResetPassword from "../Pages/AuthPages/ResetPassword/ResetPassword";
+import DashboardMessages from "../Components/DashboardMessages/DashboardMessages";
+import ChatPage from "../Components/ChatPage/ChatPage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -227,6 +229,14 @@ export const router = createBrowserRouter([
         element : <TutorRoute>
           <TutorReviewsPage></TutorReviewsPage>
         </TutorRoute>
+      },
+      {
+        path :"messages",
+       Component : DashboardMessages
+      },
+      {
+        path :"messages/:conversationId",
+       Component : ChatPage
       },
       {
         path :"settings",

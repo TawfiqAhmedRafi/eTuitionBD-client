@@ -6,11 +6,13 @@ import GradientButton from "../../Components/GradientButton/GradientButton"; // 
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
 import { format } from "date-fns";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-
+import { useState } from "react";
+import Swal from "sweetalert2";
 const TutorDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const [contactLoading, setContactLoading] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["tutor", id],
     queryFn: async () => {
@@ -34,6 +36,34 @@ const TutorDetails = () => {
     );
 
   const tutor = data;
+
+  const handleContactNow = async () => {
+    if (contactLoading) return;
+
+    setContactLoading(true);
+    try {
+      const res = await axiosSecure.post("/conversations", {
+        tutorId: tutor._id,
+      });
+
+      const conversationId = res.data._id;
+
+      navigate(`/dashboard/messages/${conversationId}`);
+    } catch (err) {
+      console.error("Contact error:", err);
+
+      if (err.response?.status === 401) {
+        Swal.fire("Login required", "Please login first", "warning");
+      } else if (err.response?.status === 403) {
+        Swal.fire("Forbidden", err.response.data?.message, "error");
+      } else {
+        Swal.fire("Error", "Failed to contact tutor", "error");
+      }
+    } finally {
+      setContactLoading(false);
+    }
+  };
+
   const avgRating =
     tutor.ratingCount > 0 ? tutor.ratingSum / tutor.ratingCount : 0;
 
@@ -190,8 +220,12 @@ const TutorDetails = () => {
 
         {/* Contact Button */}
         <div className="flex justify-end mt-4">
-          <GradientButton className="btn  btn-primary">
-            Contact Now
+          <GradientButton
+            className="btn btn-primary"
+            onClick={handleContactNow}
+            disabled={contactLoading}
+          >
+            {contactLoading ? "Connecting..." : "Contact Now"}
           </GradientButton>
         </div>
       </div>

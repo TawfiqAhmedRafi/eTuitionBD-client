@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   Settings,
   Star,
+  MessageCircleMore,
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
 import { FiSend } from "react-icons/fi";
@@ -89,6 +90,12 @@ const allMenuItems = [
     icon: CreditCard,
     roles: ["admin"],
   },
+  {
+    name: "Messages",
+    path: "/dashboard/messages",
+    icon: MessageCircleMore,
+    roles: ["tutor", "student"],
+  },
 
   {
     name: "Settings",
@@ -101,11 +108,10 @@ const allMenuItems = [
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
   const { role } = useUserRole();
-  
 
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) => item.roles.includes(role));
-  
+
   return (
     <aside
       className={`h-screen sticky top-0 flex flex-col
