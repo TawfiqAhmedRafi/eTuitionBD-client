@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const TutorTuitions = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
+  
   const limit = 10;
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["tutor-tuitions", page],
@@ -25,7 +26,7 @@ const TutorTuitions = () => {
 
       if (res.data?.success) {
         Swal.fire("Success", "Tuition closed successfully", "success");
-        refetch(); // react-query OR manual reload
+        refetch();
       }
     } catch (err) {
       console.error("Close tuition error:", err);
@@ -37,6 +38,8 @@ const TutorTuitions = () => {
       );
     }
   };
+
+   
 
   if (isLoading)
     return (
@@ -130,9 +133,9 @@ const TutorTuitions = () => {
                 <td className="py-2 px-2 md:px-4">
                   {tuition.status === "assigned" ? (
                     <>
-                      <button className="btn btn-sm md:btn-sm btn-primary btn-outline hover:text-white">
+                      <Link to={"/dashboard/applications/tutor"}  className="btn btn-sm md:btn-sm btn-primary btn-outline hover:text-white">
                         Contact Now
-                      </button>
+                      </Link>
                     </>
                   ) : tuition.status ==="closed" ||  tuition.status ==="completed" ? <>
                  --
