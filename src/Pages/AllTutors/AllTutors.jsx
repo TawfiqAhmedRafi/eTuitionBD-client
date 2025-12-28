@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Pagination from "../../Components/Pagination/Pagination";
@@ -9,10 +9,16 @@ import { format } from "date-fns";
 
 const AllTutors = () => {
   const axiosSecure = useAxiosSecure();
+  const [subjectInput, setSubjectInput] = useState("");
+  const [locationInput, setLocationInput] = useState("");
+  const [searching, setSearching] = useState(false);
+
   const [filters, setFilters] = useState({
     page: 1,
     limit: 9,
-    status : 'approved'
+    status: "approved",
+    subject: "",
+    location: "",
   });
 
   const { data, isLoading, isFetching, isError } = useQuery({
@@ -25,6 +31,19 @@ const AllTutors = () => {
     },
     keepPreviousData: true,
   });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilters((prev) => ({
+        ...prev,
+        subject: subjectInput.trim(),
+        district: locationInput.trim(),
+        page: 1,
+      }));
+      setSearching(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [subjectInput, locationInput]);
 
   if (isLoading) {
     return (
@@ -60,7 +79,37 @@ const AllTutors = () => {
           Discover available tutors with verified profiles
         </p>
       </div>
+      <div className="bg-base-200/80 backdrop-blur-md p-6 rounded-2xl mb-10 shadow-sm border border-base-300">
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Subject */}
+          <input
+            type="text"
+            placeholder="Search by subject"
+            value={subjectInput}
+            onChange={(e) => {
+              setSubjectInput(e.target.value);
+              setSearching(true);
+            }}
+            className="input input-bordered w-full"
+          />
 
+          {/* Location */}
+          <input
+            type="text"
+            placeholder="Search by district"
+            value={locationInput}
+            onChange={(e) => {
+              setLocationInput(e.target.value);
+              setSearching(true);
+            }}
+            className="input input-bordered w-full"
+          />
+        </div>
+
+        {(searching || isFetching) && (
+          <progress className="progress progress-primary w-full mt-4" />
+        )}
+      </div>
       {/* Tutors Grid */}
       <div className="bg-base-200 rounded-3xl p-6 md:p-8 border border-base-300">
         {tutors.length === 0 ? (
@@ -166,8 +215,8 @@ const AllTutors = () => {
                     {/* Actions */}
                     <div className="card-actions justify-between items-center">
                       <span className="text-xs text-neutral-content">
-                        Posted on {" "}
-                       {format(new Date(tutor.submittedAt),"dd MMM, yy")}
+                        Posted on{" "}
+                        {format(new Date(tutor.submittedAt), "dd MMM, yy")}
                       </span>
 
                       <Link to={`/tutors/${tutor._id}`}>
