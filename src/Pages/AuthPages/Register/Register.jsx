@@ -31,7 +31,6 @@ const Register = () => {
     const profileImg = data.photo[0];
     registerUser(data.email, data.password)
       .then(() => {
-      
         // store the image and get photoURL
         const formData = new FormData();
         formData.append("image", profileImg);
@@ -59,7 +58,6 @@ const Register = () => {
                   photoURL: photoURL,
                 })
                 .then(() => {
-                  
                   navigate(location.state || "/");
                 })
                 .catch((err) => {
@@ -77,13 +75,16 @@ const Register = () => {
   };
 
   return (
-    <div className="my-20">
+    <div className="my-20 p-5">
       <h2
-        className="text-4xl font-bold  bg-linear-to-r 
-                from-[#0043c1] via-[#11c4dc] to-[#0297f3]
-              dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]
-              bg-clip-text 
-              text-transparent"
+        className="
+    text-2xl sm:text-3xl md:text-4xl 
+    font-bold
+    bg-linear-to-r 
+    from-[#0043c1] via-[#11c4dc] to-[#0297f3]
+    dark:from-[#0b1b37] dark:via-[#11c4dc] dark:to-[#0297f3]
+    bg-clip-text text-transparent
+  "
       >
         Create an Account
       </h2>
@@ -91,18 +92,18 @@ const Register = () => {
       <form onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
           {/* Name */}
-          <label className="label">Name</label>
+          <label className="label text-sm sm:text-base">Name</label>
           <input
             type="text"
             {...register("name", { required: true })}
-            className="input w-full"
+            className="input w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
             placeholder="Your name"
           />
           {errors.email?.type === "required" && (
             <p className="text-red-500">Name is Required</p>
           )}
           {/* photo */}
-          <label className="label">Photo</label>
+          <label className="label text-sm sm:text-base">Photo</label>
 
           <input
             type="file"
@@ -114,7 +115,7 @@ const Register = () => {
             <p className="text-red-500">Photo is Required</p>
           )}
           {/* Role Selection */}
-          <label className="label">Register As</label>
+          <label className="label text-sm sm:text-base">Register As</label>
           <div className="flex gap-4 mb-3">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -139,29 +140,29 @@ const Register = () => {
 
           {errors.role && <p className="text-red-500">Please select a role</p>}
           {/* email */}
-          <label className="label">Email</label>
+          <label className="label text-sm sm:text-base">Email</label>
           <input
             type="email"
             {...register("email", { required: true })}
-            className="input w-full"
+            className="input w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
             placeholder="Email"
           />
           {errors.email?.type === "required" && (
             <p className="text-red-500">Email is Required</p>
           )}
           {/* phone */}
-          <label className="label">Phone Number </label>
+          <label className="label text-sm sm:text-base">Phone Number </label>
           <input
             type="text"
             {...register("phone", { required: true })}
-            className="input w-full"
+            className="input w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
             placeholder="Phone Number"
           />
           {errors.email?.type === "required" && (
             <p className="text-red-500">Email is Required</p>
           )}
           {/* password */}
-          <label className="label">Password</label>
+          <label className="label text-sm sm:text-base">Password</label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -171,7 +172,7 @@ const Register = () => {
                 pattern:
                   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/,
               })}
-              className="input w-full"
+              className="input w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
               placeholder="Password"
             />
             <button
@@ -195,7 +196,7 @@ const Register = () => {
             </p>
           )}
           {/* confirm password */}
-          <label className="label">Confirm Password</label>
+          <label className="label text-sm sm:text-base">Confirm Password</label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -204,7 +205,7 @@ const Register = () => {
                 validate: (value) =>
                   value === password || "Passwords do not match",
               })}
-              className="input w-full"
+              className="input w-full h-10 sm:h-11 md:h-12 text-sm sm:text-base"
               placeholder="Confirm Password"
             />
           </div>

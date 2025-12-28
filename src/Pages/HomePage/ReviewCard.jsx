@@ -17,7 +17,7 @@ const ReviewCard = ({ review }) => {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 h-64 flex flex-col justify-between">
+    <div className="bg-base-200/80 backdrop-blur rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 h-64 flex flex-col justify-between">
       
       {/* Tutor info in a row */}
       <div className="flex items-center gap-3 mb-3">
@@ -41,7 +41,7 @@ const ReviewCard = ({ review }) => {
           className="w-10 h-10 rounded-full object-cover border border-base-300 mt-1"
         />
         <div className="flex-1 flex flex-col justify-between h-full">
-          <p className="italic text-gray-700 line-clamp-4">
+          <p className="italic text-neutral-content line-clamp-4">
             "{review.review}"
           </p>
           {renderStars(review.rating)}
