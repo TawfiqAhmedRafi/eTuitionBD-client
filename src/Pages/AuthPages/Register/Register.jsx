@@ -22,12 +22,14 @@ const Register = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const { registerUser, updateUserProfile } = useAuth();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosInstance = useAxios();
 
   const handleRegistration = (data, e) => {
     e.preventDefault();
+    setLoading(true);
     const profileImg = data.photo[0];
     registerUser(data.email, data.password)
       .then(() => {
@@ -71,6 +73,9 @@ const Register = () => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -213,8 +218,8 @@ const Register = () => {
           {errors.confirmPassword && (
             <p className="text-red-500">{errors.confirmPassword.message}</p>
           )}
-          <GradientButton type="submit" className="btn btn-primary mt-4">
-            Register
+          <GradientButton type="submit" className="btn btn-primary mt-4" disabled={loading}>
+            {loading ? "Registering..." : "Register"}
           </GradientButton>
         </fieldset>
         <p>
