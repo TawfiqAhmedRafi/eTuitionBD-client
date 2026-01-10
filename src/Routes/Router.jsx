@@ -81,18 +81,14 @@ export const router = createBrowserRouter([
       {
         path: "/tuitions/:id",
         element: (
-          <PrivateRoute>
+          
             <TuitionDetails></TuitionDetails>
-          </PrivateRoute>
+          
         ),
       },
       {
         path: "/tutors/:id",
-        element: (
-          
-            <TutorDetails></TutorDetails>
-          
-        ),
+        element: <TutorDetails></TutorDetails>,
       },
     ],
   },
