@@ -62,43 +62,43 @@ const DashboardNavbar = () => {
   };
 
   const deleteAllNotifications = async () => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "All notifications will be permanently deleted!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete all",
-      cancelButtonText: "Cancel",
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "All notifications will be permanently deleted!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete all",
+    cancelButtonText: "Cancel",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    await axiosSecure.delete("/notifications");
+
+    queryClient.setQueryData(["notifications"], []);
+
+    Swal.fire({
+      icon: "success",
+      title: "Deleted!",
+      text: "All notifications have been deleted.",
+      timer: 1500,
+      showConfirmButton: false,
     });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      await axiosSecure.delete("/notifications");
-
-      queryClient.setQueryData(["notifications"], []);
-
-      Swal.fire({
-        icon: "success",
-        title: "Deleted!",
-        text: "All notifications have been deleted.",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (err) {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Failed",
-        text: "Could not delete notifications.",
-      });
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    Swal.fire({
+      icon: "error",
+      title: "Failed",
+      text: "Could not delete notifications.",
+    });
+  }
+};
 
   return (
-    <header className="sticky top-0 z-50 h-16 bg-base-300/30 backdrop-blur-lg px-6 flex items-center justify-between">
+    <header className="h-16 bg-base-100 border-b border-base-300 px-6 flex items-center justify-between">
       <h2 className="text-lg font-semibold text-base-content">Dashboard</h2>
 
       <div className="flex items-center gap-4">

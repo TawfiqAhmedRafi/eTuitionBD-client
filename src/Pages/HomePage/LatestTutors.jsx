@@ -34,7 +34,7 @@ const LatestTutors = () => {
     <section className="py-12 md:py-16 bg-base-200 rounded-2xl my-12 max-w-7xl mx-auto shadow-sm">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader
-          title="Latest Tutors in the Platform"
+          title="Recently Joined Tutors"
           subtitle="Experienced tutors recently joined"
           right={
             <Link
