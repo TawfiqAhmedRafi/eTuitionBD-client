@@ -31,7 +31,7 @@ const Footer = () => {
             <h6 className="footer-title">Platform</h6>
             <Link to="/all-tuition" className="link link-hover">Tuitions</Link>
             <Link to="/all-tutors" className="link link-hover">Tutors</Link>
-            <a className="link link-hover">Pricing</a>
+            <Link to="/pricing" className="link link-hover">Pricing</Link>
             <a className="link link-hover">Support</a>
           </nav>
 
@@ -39,8 +39,8 @@ const Footer = () => {
           <nav className="flex flex-col gap-2">
             <h6 className="footer-title">Company</h6>
             <Link to='/aboutUs' className="link link-hover">About Us</Link>
-            <a className="link link-hover">Blog</a>
-            <a className="link link-hover">Careers</a>
+            <Link to='/blog' className="link link-hover">Blog</Link>
+            <Link to='/career' className="link link-hover">Careers</Link>
             <Link to='/contact' className="link link-hover">Contact</Link>
           </nav>
 

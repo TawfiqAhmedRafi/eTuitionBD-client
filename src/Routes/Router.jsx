@@ -37,6 +37,9 @@ import VerifyOtp from "../Pages/AuthPages/VerifyOtp/VerifyOtp";
 import ResetPassword from "../Pages/AuthPages/ResetPassword/ResetPassword";
 import DashboardMessages from "../Components/DashboardMessages/DashboardMessages";
 import ChatPage from "../Components/ChatPage/ChatPage";
+import Career from "../Pages/Footer/Career";
+import Pricing from "../Pages/Footer/Pricing";
+import Blog from "../Pages/Footer/Blog";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -89,6 +92,18 @@ export const router = createBrowserRouter([
       {
         path: "/tutors/:id",
         element: <TutorDetails></TutorDetails>,
+      },
+      {
+        path: "career",
+        Component: Career,
+      },
+      {
+        path : "pricing",
+        Component : Pricing
+      },
+      {
+        path : "blog",
+        Component : Blog
       },
     ],
   },
