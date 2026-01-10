@@ -16,7 +16,7 @@ import LoadingPage from "../LoadingPage/LoadingPage";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Star } from "lucide-react";
 
-const COLORS = ["#2596be", "#0494f4", "#0b3b6b", "#3cdaa7", "#f4b400"];
+const COLORS = ["#2596be", "#0494f4", "#0b3b6b", "#3cdaa7", "#6e91a8"];
 
 const TutorDashboard = () => {
   const isMobile = window.innerWidth < 640;
@@ -49,41 +49,29 @@ const TutorDashboard = () => {
     <div className="p-2 md:p-6 space-y-10">
       {/* SUMMARY CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-        <Card
-          title="Total Tuitions"
-          value={cards.totalTuitions}
-          bg="bg-blue-500"
-        />
-        <Card
-          title="Ongoing Tuitions"
-          value={cards.ongoingTuitions}
-          bg="bg-purple-500"
-        />
-        <Card
-          title="Total Applications"
-          value={cards.totalApplications}
-          bg="bg-orange-400"
-        />
-        <Card
-          title="Accepted Applications"
-          value={cards.acceptedApplications}
-          bg="bg-green-500"
-        />
-        <Card
-          title="Total Income (BDT)"
-          value={cards.totalIncome}
-          bg="bg-pink-500"
-        />
-        <Card
-          title="Average Ratings"
-          value={
-            <div className="flex items-center gap-1">
-              <span>{cards.averageRating}</span>
-              <Star className="w-4 h-4 fill-white text-white" />
-            </div>
-          }
-          bg="bg-yellow-500"
-        />
+        {[
+          { title: "Total Tuitions", value: cards.totalTuitions },
+          { title: "Ongoing Tuitions", value: cards.ongoingTuitions },
+          { title: "Total Applications", value: cards.totalApplications },
+          { title: "Accepted Applications", value: cards.acceptedApplications },
+          { title: "Total Income (BDT)", value: cards.totalIncome },
+          {
+            title: "Average Ratings",
+            value: (
+              <div className="flex items-center gap-1">
+                <span>{cards.averageRating}</span>
+                <Star className="w-4 h-4 fill-white text-white" />
+              </div>
+            ),
+          },
+        ].map((item, index) => (
+          <Card
+            key={item.title}
+            title={item.title}
+            value={item.value}
+            color={COLORS[index % COLORS.length]}
+          />
+        ))}
       </div>
 
       {/* PIE CHART: APPLICATION STATUS */}
@@ -186,9 +174,10 @@ const TutorDashboard = () => {
 };
 
 // CARD COMPONENT
-const Card = ({ title, value, bg }) => (
+const Card = ({ title, value, color }) => (
   <div
-    className={`p-5 shadow-md rounded-xl text-white flex flex-col justify-center items-center ${bg}`}
+    style={{ backgroundColor: color }}
+    className="p-5 shadow-md rounded-xl text-white flex flex-col justify-center items-center"
   >
     <p className="text-[12px] md:text-base">{title}</p>
     <h2 className="text-2xl md:text-3xl font-bold mt-2">{value}</h2>
