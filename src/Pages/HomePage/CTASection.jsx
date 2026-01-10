@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 const CTASection = () => {
   return (
-    <section className="py-10 md:py-14 bg-base-200 rounded-2xl my-10">
+    <section className="py-10 md:py-14 bg-base-200 rounded-2xl my-10 max-w-7xl mx-auto">
       <div className="max-w-5xl mx-auto px-6">
         <div className="card bg-base-100 shadow-md rounded-2xl p-10 md:p-14 text-center border border-base-300/40 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
           <h3 className="text-3xl font-bold sora">

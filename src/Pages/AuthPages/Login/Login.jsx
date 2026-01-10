@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation, useNavigate, Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import GradientButton from "../../../Components/GradientButton/GradientButton";
+import AccentGradientButton from "../../../Components/GradientButton/AccentGradientButton";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -115,7 +116,7 @@ const Login = () => {
         </fieldset>
       </form>
       <SocialLogin></SocialLogin>
-      <button
+      <GradientButton
         type="button"
         onClick={async () => {
           const demoEmail = "ichigo@gmail.com";
@@ -132,8 +133,8 @@ const Login = () => {
         disabled={loading}
       >
         {loading ? "Logging in..." : "Login as Student"}
-      </button>
-      <button
+      </GradientButton>
+      <AccentGradientButton
         type="button"
         onClick={async () => {
           const demoEmail = "urahara@gmail.com";
@@ -150,8 +151,8 @@ const Login = () => {
         disabled={loading}
       >
         {loading ? "Logging in..." : "Login as Tutor"}
-      </button>
-      <button
+      </AccentGradientButton>
+      <GradientButton
         type="button"
         onClick={async () => {
           const demoEmail = "gojo@gmail.com";
@@ -168,7 +169,7 @@ const Login = () => {
         disabled={loading}
       >
       {loading ? "Logging in..." : "Login as Admin"}
-      </button>
+      </GradientButton>
     </div>
   );
 };

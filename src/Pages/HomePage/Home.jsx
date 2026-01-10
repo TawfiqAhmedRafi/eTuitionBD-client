@@ -5,6 +5,10 @@ import HowItWorks from "./HowItWorks";
 import WhyChooseUs from "./WhyChooseUs";
 import CTASection from "./CTASection";
 import { SectionSkeleton } from "../../Components/Skeleton/SectionSkeleton";
+import FAQ from "./FAQ";
+import Blogs from "./Blogs";
+
+
 
 // Lazy-loaded sections
 const LatestTuitions = lazy(() => import("./LatestTuitions"));
@@ -31,6 +35,10 @@ const Home = () => {
 
       <HowItWorks />
       <WhyChooseUs />
+      <FAQ></FAQ>
+      
+    
+      <Blogs></Blogs>
       <CTASection />
     </div>
   );

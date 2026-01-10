@@ -72,19 +72,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/all-tuition",
-        element: (
-          <PrivateRoute>
-            <AllTuitions></AllTuitions>
-          </PrivateRoute>
-        ),
+        element: <AllTuitions></AllTuitions>,
       },
       {
         path: "/all-tutors",
-        element: (
-          <PrivateRoute>
-            <AllTutors></AllTutors>
-          </PrivateRoute>
-        ),
+        element: <AllTutors></AllTutors>,
       },
       {
         path: "/tuitions/:id",
@@ -97,9 +89,9 @@ export const router = createBrowserRouter([
       {
         path: "/tutors/:id",
         element: (
-          <PrivateRoute>
+          
             <TutorDetails></TutorDetails>
-          </PrivateRoute>
+          
         ),
       },
     ],
@@ -127,7 +119,7 @@ export const router = createBrowserRouter([
       {
         path: "reset-password",
         Component: ResetPassword,
-      }
+      },
     ],
   },
   {
@@ -207,45 +199,53 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path :"my-tuitions/tutor",
-        element : <TutorRoute>
-          <TutorTuitions></TutorTuitions>
-        </TutorRoute>
+        path: "my-tuitions/tutor",
+        element: (
+          <TutorRoute>
+            <TutorTuitions></TutorTuitions>
+          </TutorRoute>
+        ),
       },
       {
-        path :"applications/tutor",
-        element : <TutorRoute>
-          <TutorApplication></TutorApplication>
-        </TutorRoute>
+        path: "applications/tutor",
+        element: (
+          <TutorRoute>
+            <TutorApplication></TutorApplication>
+          </TutorRoute>
+        ),
       },
       {
-        path :"revenue",
-        element : <TutorRoute>
-          <Revenue></Revenue>
-        </TutorRoute>
+        path: "revenue",
+        element: (
+          <TutorRoute>
+            <Revenue></Revenue>
+          </TutorRoute>
+        ),
       },
       {
-        path :"review",
-        element : <TutorRoute>
-          <TutorReviewsPage></TutorReviewsPage>
-        </TutorRoute>
+        path: "review",
+        element: (
+          <TutorRoute>
+            <TutorReviewsPage></TutorReviewsPage>
+          </TutorRoute>
+        ),
       },
       {
-        path :"messages",
-       Component : DashboardMessages
+        path: "messages",
+        Component: DashboardMessages,
       },
       {
-        path :"messages/:conversationId",
-       Component : ChatPage
+        path: "messages/:conversationId",
+        Component: ChatPage,
       },
       {
-        path :"settings",
-       Component : Settings
+        path: "settings",
+        Component: Settings,
       },
     ],
   },
   {
-    path : "*",
-    Component : ErrorPage
-  }
+    path: "*",
+    Component: ErrorPage,
+  },
 ]);
