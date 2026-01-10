@@ -4,6 +4,7 @@ import TuitionCard from "./TuitionCard";
 import useAxios from "../../hooks/useAxios";
 import { motion as MOTION } from "framer-motion";
 import { Link } from "react-router";
+
 const container = {
   visible: { transition: { staggerChildren: 0.12 } },
 };
@@ -28,12 +29,18 @@ const LatestTuitions = () => {
   const tuitions = data || [];
 
   return (
-    <section id="latest-tuition" className="py-10 md:py-12 bg-base-200 rounded-2xl max-w-7xl mx-auto px-6">
+    <section
+      id="latest-tuition"
+      className="py-10 md:py-12 bg-base-200 rounded-2xl max-w-7xl mx-auto px-6"
+    >
       <SectionHeader
         title="Latest Tuition Posts"
         subtitle="Recently posted tuition requests"
         right={
-          <Link className="text-sm font-medium text-primary hover:underline" to="/all-tuition">
+          <Link
+            className="text-sm font-medium text-primary hover:underline"
+            to="/all-tuition"
+          >
             Explore All →
           </Link>
         }
@@ -44,8 +51,13 @@ const LatestTuitions = () => {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="h-40 rounded-lg bg-base-200 animate-pulse"
-            />
+              className="p-4 bg-base-300 rounded-xl animate-pulse flex flex-col justify-between h-48"
+            >
+              <div className="h-5 w-3/4 bg-base-200 rounded mb-2" />
+              <div className="h-4 w-1/2 bg-base-200 rounded mb-1" />
+              <div className="h-4 w-1/3 bg-base-200 rounded mb-1" />
+              <div className="h-6 w-full bg-base-200 rounded mt-auto" />
+            </div>
           ))}
         </div>
       ) : isError ? (
@@ -70,7 +82,7 @@ const LatestTuitions = () => {
               whileHover={{ scale: 1.03 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
-              <TuitionCard key={t._id} tuition={t} />
+              <TuitionCard tuition={t} />
             </MOTION.div>
           ))}
         </MOTION.div>

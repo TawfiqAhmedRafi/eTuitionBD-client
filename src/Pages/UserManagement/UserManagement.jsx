@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Pagination from "../../Components/Pagination/Pagination";
-import { FiTrash2, FiUserCheck, FiUserX } from "react-icons/fi";
+import { FiAlertTriangle, FiTrash2, FiUserCheck, FiUserX } from "react-icons/fi";
 import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 
 const UserManagement = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
-
+  const { user: USER1 } = useAuth();
   const [filters, setFilters] = useState({
     page: 1,
     limit: 10,
@@ -234,7 +235,9 @@ const UserManagement = () => {
           <tbody>
             {users.map((user, idx) => (
               <tr key={user._id}>
-                <td className="ml-2">{(filters.page - 1) * filters.limit + idx + 1}</td>
+                <td className="ml-2">
+                  {(filters.page - 1) * filters.limit + idx + 1}
+                </td>
                 {/* Name + Photo */}
                 <td>
                   <div className="flex items-center gap-2">
@@ -294,12 +297,18 @@ const UserManagement = () => {
                 {/* Other Actions */}
                 <td>
                   <div className="flex items-center gap-2">
-                    <button
-                      className="btn btn-xs btn-error btn-outline flex items-center hover:text-white gap-1"
-                      onClick={() => handleDeleteUser(user)}
-                    >
-                      <FiTrash2 /> Delete
-                    </button>
+                    {USER1.email === "rafi70722@gmail.com" ? (
+                      <button
+                        className="btn btn-xs btn-error btn-outline flex items-center hover:text-white gap-1"
+                        onClick={() => handleDeleteUser(user)}
+                      >
+                        <FiTrash2 /> Delete
+                      </button>
+                    ) : (
+                      <span className="badge badge-sm badge-error text-white font-semibold">
+                        Protected
+                      </span>
+                    )}
 
                     {user.isBanned ? (
                       <button
@@ -323,7 +332,10 @@ const UserManagement = () => {
           </tbody>
         </table>
       </div>
-
+      <div className="mt-4 mb-2 flex items-center justify-center gap-2 text-sm text-warning font-semibold">
+  <FiAlertTriangle className="w-5 h-5" />
+  <span>Delete user is protected for security purposes.</span>
+</div>
       {/* Pagination */}
       <div className="mt-4">
         <Pagination

@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { FiTrash2, FiEye } from "react-icons/fi";
+import { FiTrash2, FiEye, FiAlertTriangle } from "react-icons/fi";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Pagination from "../../Components/Pagination/Pagination";
 import { FaEye, FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 
 const ApproveTutors = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
- 
+  const {user} = useAuth();
   const [filters, setFilters] = useState({
     status: "",
     page: 1,
@@ -210,12 +211,19 @@ const ApproveTutors = () => {
 
                 <td className="text-center whitespace-nowrap">
                   <div className="flex justify-center gap-2">
-                    <button
+                    {
+                      user.email ==="rafi70722@gmail.com"?(<button
                       onClick={() => handleDeleteTutor(tutor._id)}
                       className="btn btn-xs btn-error btn-outline hover:text-white"
                     >
                       <FaTrash></FaTrash>
-                    </button>
+                    </button>) :(
+                      <span className="badge badge-sm badge-error text-white font-semibold">
+                        Protected
+                      </span>
+                    )
+                    }
+                    
                     <Link to={`/tutors/${tutor._id}`}>
                       <button className="btn btn-xs btn-primary btn-outline hover:text-white">
                         <FaEye></FaEye>
@@ -228,7 +236,10 @@ const ApproveTutors = () => {
           </tbody>
         </table>
       </div>
-
+            <div className="mt-4 mb-2 flex items-center justify-center gap-2 text-sm text-warning font-semibold">
+              <FiAlertTriangle className="w-5 h-5" />
+              <span>Delete Tutor is protected for security purposes.</span>
+            </div>
       {/* ---------- Pagination ---------- */}
       <div className="mt-6">
         <Pagination
