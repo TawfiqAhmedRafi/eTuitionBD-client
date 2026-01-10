@@ -72,7 +72,7 @@ const Career = () => {
   };
 
   return (
-    <section className="py-16 px-6 min-h-screen">
+    <section className="py-16 px-6 bg-base-200 rounded-2xl m-5 min-h-screen">
       <SectionHeader
         title="Join Our Team"
         subtitle="Be a part of the eTuitionBD journey and make a difference in education"
@@ -83,13 +83,13 @@ const Career = () => {
         online education in Bangladesh. Explore our open positions below.
       </p>
 
-      <div className="grid md:grid-cols-2 gap-6 bg-base-200 p-10 rounded-2xl max-w-7xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-6  p-10 rounded-2xl max-w-7xl mx-auto">
         {jobs.map((job, i) => (
           <JobCard key={i} {...job} />
         ))}
       </div>
 
-      <section className="mt-16 max-w-3xl mx-auto">
+      <section className="mt-16 max-w-3xl mx-auto bg-base-100 rounded-2xl p-8 shadow-md">
         <h3 className="text-2xl font-semibold text-center text-neutral-content mb-6">
           Didn’t find a role that fits?
         </h3>

@@ -83,7 +83,7 @@ const Blog = () => {
   const closeModal = () => setActiveBlog(null);
 
   return (
-    <section className="py-16 px-6 min-h-screen">
+    <section className="py-16 px-6 bg-base-200 rounded-2xl m-5 min-h-screen">
       <SectionHeader
         title="Our Blog"
         subtitle="Insights, tips, and updates on online learning"
@@ -94,7 +94,7 @@ const Blog = () => {
         tips for both students and tutors.
       </p>
 
-      <div className="grid md:grid-cols-3 bg-base-200 p-10 rounded-2xl gap-8 max-w-7xl mx-auto">
+      <div className="grid md:grid-cols-3  rounded-2xl gap-8 max-w-7xl mx-auto">
         {blogs.map((blog, index) => (
           <BlogCard
             key={index}

@@ -14,7 +14,7 @@ const PricingCard = ({ icon: Icon, title, description }) => (
 
 const Pricing = () => {
   return (
-    <section className="py-16 px-6  min-h-screen">
+    <section className="py-16 px-6 bg-base-200 rounded-2xl m-5  min-h-screen">
       <SectionHeader
         title="Pricing & Tutor Payments"
         subtitle="Transparent fees for students and tutors"
@@ -25,7 +25,7 @@ const Pricing = () => {
         and tutors. Here's how it works:
       </p>
 
-      <div className="grid md:grid-cols-3 bg-base-200 p-10 rounded-2xl gap-6 max-w-7xl mx-auto mb-16">
+      <div className="grid md:grid-cols-3  rounded-2xl gap-6 max-w-7xl mx-auto mb-16">
         <PricingCard
           icon={FaDollarSign}
           title="Student Payments"

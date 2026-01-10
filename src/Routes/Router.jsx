@@ -40,6 +40,10 @@ import ChatPage from "../Components/ChatPage/ChatPage";
 import Career from "../Pages/Footer/Career";
 import Pricing from "../Pages/Footer/Pricing";
 import Blog from "../Pages/Footer/Blog";
+import Support from "../Pages/Footer/Support";
+import TermsAndConditions from "../Pages/Footer/TermsAndConditions";
+import PrivacyPolicy from "../Pages/Footer/PrivacyPolicy";
+import CookiePolicy from "../Pages/Footer/CookiePolicy";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -105,6 +109,22 @@ export const router = createBrowserRouter([
         path : "blog",
         Component : Blog
       },
+      {
+        path : "support",
+        Component : Support
+      },
+      {
+        path : "terms-and-conditions",
+        Component : TermsAndConditions
+      },
+      {
+        path : "privacy-policy",
+        Component : PrivacyPolicy
+      },
+      {
+        path : "cookie-policy",
+        Component : CookiePolicy
+      }
     ],
   },
   {

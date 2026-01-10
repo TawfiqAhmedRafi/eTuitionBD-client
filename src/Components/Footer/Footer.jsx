@@ -32,7 +32,7 @@ const Footer = () => {
             <Link to="/all-tuition" className="link link-hover">Tuitions</Link>
             <Link to="/all-tutors" className="link link-hover">Tutors</Link>
             <Link to="/pricing" className="link link-hover">Pricing</Link>
-            <a className="link link-hover">Support</a>
+            <Link to="/support" className="link link-hover">Support</Link>
           </nav>
 
           {/* Company */}
@@ -47,9 +47,9 @@ const Footer = () => {
           {/* Legal */}
           <nav className="flex flex-col gap-2">
             <h6 className="footer-title">Legal</h6>
-            <a className="link link-hover">Terms of Service</a>
-            <a className="link link-hover">Privacy Policy</a>
-            <a className="link link-hover">Cookie Policy</a>
+            <Link to="/terms-and-conditions" className="link link-hover">Terms of Service</Link>
+            <Link to="/privacy-policy" className="link link-hover">Privacy Policy</Link>
+            <Link to="/cookie-policy" className="link link-hover">Cookie Policy</Link>
           </nav>
 
           {/* Social */}
