@@ -12,7 +12,9 @@ const Login = () => {
   const navigate = useNavigate();
   const { signInUser } = useAuth();
   const location = useLocation();
-  const { register, handleSubmit, control } = useForm();
+  const [loading, setLoading] = useState(false);
+
+  const { register, handleSubmit, control, setValue } = useForm();
   const watchEmail = useWatch({
     control,
     name: "email",
@@ -20,12 +22,10 @@ const Login = () => {
   });
 
   const handleLogin = async (data) => {
-    
     setLoginError("");
-
+     setLoading(true); 
     try {
       await signInUser(data.email, data.password);
-     
 
       navigate(location?.state || "/");
     } catch (error) {
@@ -39,11 +39,13 @@ const Login = () => {
       } else {
         setLoginError(error.message);
       }
-    }
+    }finally {
+    setLoading(false); 
+  }
   };
 
   return (
-    <div className=" ">
+    <div className=" p-10 ">
       <h2
         className="text-4xl font-bold bg-linear-to-r 
                 from-[#0043c1] via-[#11c4dc] to-[#0297f3]
@@ -63,7 +65,7 @@ const Login = () => {
             {...register("email", {
               required: true,
             })}
-            className="input"
+            className="input w-full"
             placeholder="Email"
           />
           {/* password */}
@@ -74,7 +76,7 @@ const Login = () => {
               {...register("password", {
                 required: true,
               })}
-              className="input"
+              className="input w-full"
               placeholder="Password"
             />
             <button
@@ -97,8 +99,8 @@ const Login = () => {
               Forgot password?
             </Link>
           </div>
-          <GradientButton type="submit" className="text-lg outfit mt-4">
-            Login
+          <GradientButton type="submit" className="text-lg outfit mt-4" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </GradientButton>
           <p>
             New to eTuitionBD?
@@ -113,6 +115,60 @@ const Login = () => {
         </fieldset>
       </form>
       <SocialLogin></SocialLogin>
+      <button
+        type="button"
+        onClick={async () => {
+          const demoEmail = "ichigo@gmail.com";
+          const demoPassword = "Ichigo@1";
+
+          // Set form values using react-hook-form
+          setValue("email", demoEmail);
+          setValue("password", demoPassword);
+
+          // Call your login function directly
+          await handleLogin({ email: demoEmail, password: demoPassword });
+        }}
+        className="btn btn-primary rounded-lg btn-outline w-full mt-2"
+        disabled={loading}
+      >
+        {loading ? "Logging in..." : "Login as Student"}
+      </button>
+      <button
+        type="button"
+        onClick={async () => {
+          const demoEmail = "urahara@gmail.com";
+          const demoPassword = "Urahara@1";
+
+          // Set form values using react-hook-form
+          setValue("email", demoEmail);
+          setValue("password", demoPassword);
+
+          // Call your login function directly
+          await handleLogin({ email: demoEmail, password: demoPassword });
+        }}
+        className="btn btn-secondary rounded-lg btn-outline w-full mt-2"
+        disabled={loading}
+      >
+        {loading ? "Logging in..." : "Login as Tutor"}
+      </button>
+      <button
+        type="button"
+        onClick={async () => {
+          const demoEmail = "gojo@gmail.com";
+          const demoPassword = "Gojo@1";
+
+          // Set form values using react-hook-form
+          setValue("email", demoEmail);
+          setValue("password", demoPassword);
+
+          // Call your login function directly
+          await handleLogin({ email: demoEmail, password: demoPassword });
+        }}
+        className="btn btn-accent rounded-lg btn-outline w-full mt-2"
+        disabled={loading}
+      >
+      {loading ? "Logging in..." : "Login as Admin"}
+      </button>
     </div>
   );
 };
