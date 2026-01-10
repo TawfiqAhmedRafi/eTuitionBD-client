@@ -4,9 +4,10 @@ import GradientButton from "../../Components/GradientButton/GradientButton";
 import HeroImg from "../../assets/hero.png";
 import AccentGradientButton from "../../Components/GradientButton/AccentGradientButton";
 import { Link } from "react-router";
+import ScrollDownIndicator from "../../Components/ScrollDownIndicator/ScrollDownIndicator";
 const Hero = () => {
   return (
-    <section className="bg-base-100">
+    <section className="bg-base-100 relative">
       <div className="max-w-7xl mx-auto px-6 py-10 md:py-0  grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         <MOTION.div
           initial={{ opacity: 0, y: 28 }}
@@ -57,6 +58,7 @@ const Hero = () => {
           </div>
         </MOTION.div>
       </div>
+      <ScrollDownIndicator targetId="latest-tuition"></ScrollDownIndicator>
     </section>
   );
 };

@@ -5,6 +5,7 @@ import Pagination from "../../Components/Pagination/Pagination";
 import { Link } from "react-router";
 import GradientButton from "../../Components/GradientButton/GradientButton";
 import { format } from "date-fns";
+import TuitionsSkeletonGrid from "../../Components/Skeleton/TuitionsSkeletonGrid";
 
 const AllTuitions = () => {
   const axiosSecure = useAxiosSecure();
@@ -14,7 +15,7 @@ const AllTuitions = () => {
   const [searching, setSearching] = useState(false);
   const [filters, setFilters] = useState({
     page: 1,
-    limit: 9,
+    limit: 12,
     subject: "",
     location: "",
     classLevel: "",
@@ -50,8 +51,27 @@ const AllTuitions = () => {
 
   if (isLoading) {
     return (
-      <div className="p-10 text-center">
-        <progress className="progress progress-primary w-full" />
+      <div className="px-4 py-12">
+        {/* Header Skeleton */}
+        <div className="mb-10 space-y-2">
+          <div className="h-8 w-56 bg-base-300 rounded animate-pulse" />
+          <div className="h-4 w-80 bg-base-200 rounded animate-pulse" />
+        </div>
+
+        {/* Filters Skeleton */}
+        <div className="bg-base-200/80 p-6 rounded-2xl mb-10 border border-base-300">
+          <div className="grid md:grid-cols-4 gap-4">
+            <div className="h-12 bg-base-300 rounded animate-pulse" />
+            <div className="h-12 bg-base-300 rounded animate-pulse" />
+            <div className="h-12 bg-base-300 rounded animate-pulse" />
+            <div className="h-12 bg-base-300 rounded animate-pulse" />
+          </div>
+        </div>
+
+        {/* Grid Skeleton */}
+        <div className="bg-base-200 rounded-3xl p-6 md:p-8 border border-base-300">
+          <TuitionsSkeletonGrid count={filters.limit} />
+        </div>
       </div>
     );
   }
@@ -65,7 +85,7 @@ const AllTuitions = () => {
   const { tuitions, totalPages } = data;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className=" px-4 py-12">
       {/* ---------------- Page Header ---------------- */}
       <div className="mb-10">
         <h1
@@ -144,12 +164,18 @@ const AllTuitions = () => {
         </div>
 
         {(searching || isFetching) && (
-          <progress className="progress progress-primary w-full mt-4" />
+           <progress className="progress progress-primary w-full mt-4" />
         )}
       </div>
 
       {/* ---------------- Results Container ---------------- */}
-      <div className="bg-base-200 rounded-3xl p-6 md:p-8 border border-base-300">
+      <div className="relative bg-base-200 rounded-3xl p-6 md:p-8 border border-base-300">
+        {isFetching && (
+          <div className="absolute inset-0 z-10 bg-base-200/70 backdrop-blur-sm rounded-3xl p-6 md:p-8">
+            <TuitionsSkeletonGrid count={filters.limit} />
+          </div>
+        )}
+
         {tuitions.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-lg font-medium text-base-content">
@@ -160,11 +186,7 @@ const AllTuitions = () => {
             </p>
           </div>
         ) : (
-          <div
-            className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 transition-opacity ${
-              isFetching ? "opacity-60" : "opacity-100"
-            }`}
-          >
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-3 xl:gap-6 transition-opacity">
             {tuitions.map((tuition) => (
               <div
                 key={tuition._id}
@@ -219,10 +241,11 @@ const AllTuitions = () => {
 
                   <div className="card-actions justify-between items-center">
                     <span className="text-xs text-neutral-content">
-                      Posted on {format(new Date(tuition.postedAt),"dd MMMM ,yy")}
-                     
+                      Tuition posted on{" "}
+                      {format(new Date(tuition.postedAt), "dd MMMM ,yy")}
                     </span>
-
+                  </div>
+                  <div className="flex justify-end">
                     <Link to={`/tuitions/${tuition._id}`}>
                       <GradientButton className="btn btn-sm ">
                         View Details

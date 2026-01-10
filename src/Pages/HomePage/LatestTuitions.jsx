@@ -28,7 +28,7 @@ const LatestTuitions = () => {
   const tuitions = data || [];
 
   return (
-    <section className="py-10 md:py-12 bg-base-200 rounded-2xl max-w-7xl mx-auto px-6">
+    <section id="latest-tuition" className="py-10 md:py-12 bg-base-200 rounded-2xl max-w-7xl mx-auto px-6">
       <SectionHeader
         title="Latest Tuition Posts"
         subtitle="Recently posted tuition requests"
