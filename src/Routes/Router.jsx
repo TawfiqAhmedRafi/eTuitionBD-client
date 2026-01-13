@@ -46,6 +46,7 @@ import PrivacyPolicy from "../Pages/Footer/PrivacyPolicy";
 import CookiePolicy from "../Pages/Footer/CookiePolicy";
 import Complaint from "../Pages/DashboardHome/Complaint";
 import ComplaintBox from "../Pages/AdminDashboard/ComplaintBox";
+import MyComplaint from "../Pages/DashboardHome/MyComplaint";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -274,6 +275,10 @@ export const router = createBrowserRouter([
       {
         path: "complaints/all",
         Component: ComplaintBox,
+      },
+      {
+        path: "my-complaints",
+        Component: MyComplaint,
       },
       {
         path: "settings",

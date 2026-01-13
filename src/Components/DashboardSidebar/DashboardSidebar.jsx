@@ -12,6 +12,7 @@ import {
   Star,
   MessageCircleMore,
   AlertCircle,
+  Ticket,
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
 import { FiSend } from "react-icons/fi";
@@ -101,6 +102,12 @@ const allMenuItems = [
     name: "Complaint",
     path: "/dashboard/post-complaint",
     icon: AlertCircle,
+    roles: ["tutor", "student"],
+  },
+  {
+    name: "My Complaint",
+    path: "/dashboard/my-complaints",
+    icon: Ticket,
     roles: ["tutor", "student"],
   },
   {
