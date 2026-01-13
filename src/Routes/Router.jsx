@@ -44,6 +44,8 @@ import Support from "../Pages/Footer/Support";
 import TermsAndConditions from "../Pages/Footer/TermsAndConditions";
 import PrivacyPolicy from "../Pages/Footer/PrivacyPolicy";
 import CookiePolicy from "../Pages/Footer/CookiePolicy";
+import Complaint from "../Pages/DashboardHome/Complaint";
+import ComplaintBox from "../Pages/AdminDashboard/ComplaintBox";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -87,11 +89,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/tuitions/:id",
-        element: (
-          
-            <TuitionDetails></TuitionDetails>
-          
-        ),
+        element: <TuitionDetails></TuitionDetails>,
       },
       {
         path: "/tutors/:id",
@@ -102,29 +100,29 @@ export const router = createBrowserRouter([
         Component: Career,
       },
       {
-        path : "pricing",
-        Component : Pricing
+        path: "pricing",
+        Component: Pricing,
       },
       {
-        path : "blog",
-        Component : Blog
+        path: "blog",
+        Component: Blog,
       },
       {
-        path : "support",
-        Component : Support
+        path: "support",
+        Component: Support,
       },
       {
-        path : "terms-and-conditions",
-        Component : TermsAndConditions
+        path: "terms-and-conditions",
+        Component: TermsAndConditions,
       },
       {
-        path : "privacy-policy",
-        Component : PrivacyPolicy
+        path: "privacy-policy",
+        Component: PrivacyPolicy,
       },
       {
-        path : "cookie-policy",
-        Component : CookiePolicy
-      }
+        path: "cookie-policy",
+        Component: CookiePolicy,
+      },
     ],
   },
   {
@@ -268,6 +266,14 @@ export const router = createBrowserRouter([
       {
         path: "messages/:conversationId",
         Component: ChatPage,
+      },
+      {
+        path: "post-complaint",
+        Component: Complaint,
+      },
+      {
+        path: "complaint",
+        Component: ComplaintBox,
       },
       {
         path: "settings",
