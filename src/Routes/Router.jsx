@@ -272,7 +272,7 @@ export const router = createBrowserRouter([
         Component: Complaint,
       },
       {
-        path: "complaint",
+        path: "complaints/all",
         Component: ComplaintBox,
       },
       {

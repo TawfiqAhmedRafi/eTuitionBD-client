@@ -105,7 +105,7 @@ const allMenuItems = [
   },
   {
     name: "Complaint Box",
-    path: "/dashboard/complaint",
+    path: "/dashboard/complaints/all",
     icon: AlertCircle,
     roles: ["admin"],
   },
